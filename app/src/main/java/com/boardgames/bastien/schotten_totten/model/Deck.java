@@ -1,11 +1,12 @@
-package com.boardgames.bastien.schotten_totten;
+package com.boardgames.bastien.schotten_totten.model;
 
-import android.graphics.Color;
-
+import com.boardgames.bastien.schotten_totten.Utils;
 import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 
+import java.util.Collections;
 import java.util.EmptyStackException;
+import java.util.Random;
 import java.util.Stack;
 
 /**
@@ -16,10 +17,10 @@ public class Deck {
 
     private final Stack<Card> deckCards = new Stack<>();
 
-    public Deck() throws CardInitialisationException {
-        for (final Integer c : Utils.getAllowedColors()) {
-            for (int i = 1; i <=9; i++) {
-                this.deckCards.push(new Card(i, c));
+    public Deck() {
+        for (final Card.COLOR c : Card.COLOR.values()) {
+            for (final Card.NUMBER n : Card.NUMBER.values()) {
+                this.deckCards.push(new Card(n, c));
             }
         }
     }
@@ -32,7 +33,7 @@ public class Deck {
         }
     }
 
-    public void Shuffle() {
-        //
+    public void shuffle() {
+        Collections.shuffle(this.deckCards, new Random(System.currentTimeMillis()));
     }
 }

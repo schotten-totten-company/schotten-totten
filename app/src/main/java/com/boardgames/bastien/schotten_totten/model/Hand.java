@@ -1,4 +1,4 @@
-package com.boardgames.bastien.schotten_totten;
+package com.boardgames.bastien.schotten_totten.model;
 
 import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
@@ -14,7 +14,7 @@ public class Hand {
 
     private final List<Card> cards;
 
-    private final int MAX_HAND_SIZE = 6;
+    public final int MAX_HAND_SIZE = 6;
 
     public Hand() {
         cards = new ArrayList<Card>();
@@ -29,7 +29,7 @@ public class Hand {
 
     }
 
-    public Card pickUpCard(final int i) throws CardInitialisationException {
+    public Card playCard(final int i) throws CardInitialisationException {
         final Card cardToPickUp = new Card(cards.get(i).getNumber(), cards.get(i).getColor());
         cards.remove(i);
         return cardToPickUp;
