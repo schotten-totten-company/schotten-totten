@@ -27,6 +27,11 @@ public class Card {
         SEVEN,
         EIGHT,
         NINE;
+
+        @Override
+        public String toString() {
+            return String.valueOf(ordinal() + 1);
+        }
     }
 
     private final NUMBER number;

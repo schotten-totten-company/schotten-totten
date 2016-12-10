@@ -38,4 +38,8 @@ public class Hand {
     public int getHandSize() {
         return cards.size();
     }
+
+    public List<Card> getCards() {
+        return cards;
+    }
 }

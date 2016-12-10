@@ -21,6 +21,12 @@ public class Game implements Runnable {
 
     private final Player player2;
 
+    private int chosenCard;
+
+    private int chosenMilestone;
+
+    private PlayerType playerTurn;
+
 
     public Game(final String player1Name, final String player2Name) throws HandFullException, EmptyDeckException {
 
@@ -35,6 +41,10 @@ public class Game implements Runnable {
         }
 
         this.winner = null;
+        this.playerTurn = PlayerType.ONE;
+        this.chosenCard = -1;
+        this.chosenMilestone = -1;
+
     }
 
     public Player getPlayer1() {
@@ -48,6 +58,8 @@ public class Game implements Runnable {
     public Player getWinner() {
         return winner;
     }
+
+    public GameBoard getGameBoard() {return board; }
 
     private void play() {
 
@@ -117,6 +129,30 @@ public class Game implements Runnable {
         }
         // also wins if 5 milestones has been captured
         return (p.getCapturedMilestones().size() == 5);
+    }
+
+    public int getChosenCard() {
+        return chosenCard;
+    }
+
+    public void setChosenCard(int chosenCard) {
+        this.chosenCard = chosenCard;
+    }
+
+    public int getChosenMilestone() {
+        return chosenMilestone;
+    }
+
+    public void setChosenMilestone(int chosenMilestone) {
+        this.chosenMilestone = chosenMilestone;
+    }
+
+    public PlayerType getPlayerTurn() {
+        return playerTurn;
+    }
+
+    public void setPlayerTurn(PlayerType playerTurn) {
+        this.playerTurn = playerTurn;
     }
 
     @Override

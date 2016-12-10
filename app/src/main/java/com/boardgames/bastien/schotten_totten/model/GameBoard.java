@@ -22,6 +22,7 @@ public class GameBoard {
 
         // create deck
         this.deck = new Deck();
+        this.deck.shuffle();
 
         // create milestones
         this.milestones = new ArrayList<>(MAX_MILESTONES);

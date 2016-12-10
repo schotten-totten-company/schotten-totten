@@ -14,13 +14,14 @@ public class Milestone {
 
     private final int id;
 
+
     private final List<Card> player1Side;
 
     private final List<Card> player2Side;
 
     private PlayerType firstPlayerToReachMaxCardPerSide;
 
-    private final int MAX_CARDS_PER_SIDE = 3;
+    public final int MAX_CARDS_PER_SIDE = 3;
 
     public Milestone(final int id) {
         this.id = id;
@@ -144,5 +145,13 @@ public class Milestone {
 
     public int getId() {
         return this.id;
+    }
+
+    public List<Card> getPlayer1Side() {
+        return player1Side;
+    }
+
+    public List<Card> getPlayer2Side() {
+        return player2Side;
     }
 }
