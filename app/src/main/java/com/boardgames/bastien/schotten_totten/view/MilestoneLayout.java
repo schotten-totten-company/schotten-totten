@@ -66,7 +66,7 @@ public class MilestoneLayout extends LinearLayout {
     public void update(final Context ctx, final Milestone m) {
         for (int i = 0; i < m.getPlayer1Side().size(); i++) {
             final CardView card = new CardView(ctx, m.getPlayer1Side().get(i));
-            opponentSide.set(i, card);
+            playerSide.set(i, card);
         }
         for (int i = 0; i < m.getPlayer1Side().size(); i++) {
             opponentSide.set(i, new CardView(ctx, m.getPlayer1Side().get(i)));

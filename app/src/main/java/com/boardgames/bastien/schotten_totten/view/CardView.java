@@ -15,6 +15,7 @@ public class CardView extends TextView {
     public CardView(final Context context, final Card c) {
         this(context, c, -1);
     }
+
     public CardView(final Context context, final Card c, final int id) {
         super(context);
         setId(id);

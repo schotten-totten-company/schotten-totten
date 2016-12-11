@@ -3,9 +3,11 @@ package com.boardgames.bastien.schotten_totten;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
@@ -17,10 +19,9 @@ import com.boardgames.bastien.schotten_totten.view.MilestoneLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Game game;
-    private List<MilestoneLayout> milestonesLayout = new ArrayList<>();
     private List<CardView> handView = new ArrayList<>();
     private LinearLayout.LayoutParams margin = Margin.createMargin();
     private TextView info;
@@ -46,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
             milestones.setOrientation(LinearLayout.HORIZONTAL);
             milestones.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
             for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
-                milestonesLayout.add(new MilestoneLayout(getApplicationContext(), game.getGameBoard().getMilestones().get(i), this.game));
-                milestones.addView(milestonesLayout.get(i));
+                final MilestoneLayout milestoneLayout = new MilestoneLayout(getApplicationContext(), game.getGameBoard().getMilestones().get(i), this.game);
+                milestones.addView(milestoneLayout);
             }
             gameLayout.addView(milestones);
 
-            gameLayout.addView(new HandLayout(getApplicationContext(), game));
+            gameLayout.addView(new HandLayout(getApplicationContext(), game, this));
 
             layout.addView(gameLayout);
 
@@ -61,8 +62,16 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-//        this.game.run();
-
     }
 
+    @Override
+    public void onClick(View v) {
+
+        if (v instanceof  CardView) {
+            final CardView cardview = ((CardView) v);
+            game.setChosenCard(cardview.getId());
+            Toast.makeText(getApplicationContext(), "Card Chosen", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }
