@@ -29,17 +29,17 @@ public class MilestoneLayout extends LinearLayout {
         super(ctx);
         setOrientation(LinearLayout.VERTICAL);
         setId(m.getId());
-        for (int i = 0; i < m.MAX_CARDS_PER_SIDE; i++) {
-            final CardView card = new CardView(ctx, null);
-            opponentSide.add(card);
-            addView(opponentSide.get(i), margin);
-        }
-        final MilestoneView milestoneView = new MilestoneView(ctx, m.getId());
+//        for (int i = 0; i < m.MAX_CARDS_PER_SIDE; i++) {
+//            final CardView card = new CardView(ctx, null);
+//            opponentSide.add(card);
+//            addView(opponentSide.get(i), margin);
+//        }
+        final MilestoneCardView milestoneView = new MilestoneCardView(ctx);
         milestoneView.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        game.setChosenMilestone(((MilestoneView) v).getId());
+                        game.setChosenMilestone(((MilestoneCardView) v).getId());
                         Toast.makeText(ctx, "Milestone Chosen", Toast.LENGTH_SHORT).show();
                         if (game.getChosenCard() != -1 && game.getChosenMilestone() != -1) {
                             try {
@@ -50,26 +50,15 @@ public class MilestoneLayout extends LinearLayout {
                             } catch (MilestoneSideMaxReachedException e) {
                                 e.printStackTrace();
                             }
-                            update(ctx, game.getGameBoard().getMilestones().get(game.getChosenMilestone()));
                         }
                     }
                 });
         addView(milestoneView, margin);
-        for (int i = 0; i < m.MAX_CARDS_PER_SIDE; i++) {
-            final CardView card = new CardView(ctx, null);
-            playerSide.add(card);
-            addView(playerSide.get(i), margin);
-        }
-        update(ctx, m);
+//        for (int i = 0; i < m.MAX_CARDS_PER_SIDE; i++) {
+//            final CardView card = new CardView(ctx, null);
+//            playerSide.add(card);
+//            addView(playerSide.get(i), margin);
+//        }
     }
 
-    public void update(final Context ctx, final Milestone m) {
-        for (int i = 0; i < m.getPlayer1Side().size(); i++) {
-            final CardView card = new CardView(ctx, m.getPlayer1Side().get(i));
-            playerSide.set(i, card);
-        }
-        for (int i = 0; i < m.getPlayer1Side().size(); i++) {
-            opponentSide.set(i, new CardView(ctx, m.getPlayer1Side().get(i)));
-        }
-    }
 }

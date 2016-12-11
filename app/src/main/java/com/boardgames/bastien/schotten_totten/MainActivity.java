@@ -11,7 +11,9 @@ import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
+import com.boardgames.bastien.schotten_totten.model.Card;
 import com.boardgames.bastien.schotten_totten.view.CardView;
+import com.boardgames.bastien.schotten_totten.view.HandCardView;
 import com.boardgames.bastien.schotten_totten.view.HandLayout;
 import com.boardgames.bastien.schotten_totten.view.Margin;
 import com.boardgames.bastien.schotten_totten.view.MilestoneLayout;
@@ -22,7 +24,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Game game;
-    private List<CardView> handView = new ArrayList<>();
+    private List<HandCardView> handView = new ArrayList<>();
     private LinearLayout.LayoutParams margin = Margin.createMargin();
     private TextView info;
 
@@ -52,7 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             gameLayout.addView(milestones);
 
-            gameLayout.addView(new HandLayout(getApplicationContext(), game, this));
+            for (final Card c : game.getPlayer1().getHand().getCards()) {
+                handView.add(new HandCardView(getApplicationContext(), c, this));
+            }
+            gameLayout.addView(new HandLayout(getApplicationContext(), game, handView));
 
             layout.addView(gameLayout);
 
@@ -67,10 +72,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        if (v instanceof  CardView) {
-            final CardView cardview = ((CardView) v);
-            game.setChosenCard(cardview.getId());
-            Toast.makeText(getApplicationContext(), "Card Chosen", Toast.LENGTH_SHORT).show();
+        if (v instanceof HandCardView) {
+            final HandCardView cardView = ((HandCardView) v);
+            final int index = handView.indexOf(cardView);
+            for (final HandCardView c : handView) {
+                c.unselect();
+            }
+            if (index == game.getChosenCard()) {
+                game.setChosenCard(-1);
+            } else {
+                handView.get(index).select();
+                game.setChosenCard(index);
+            }
+//            Toast.makeText(getApplicationContext(), "Card Chosen", Toast.LENGTH_SHORT).show();
         }
 
     }

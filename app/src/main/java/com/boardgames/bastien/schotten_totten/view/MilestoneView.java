@@ -1,25 +1,20 @@
 package com.boardgames.bastien.schotten_totten.view;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.widget.TextView;
-
-import com.boardgames.bastien.schotten_totten.model.Card;
-import com.boardgames.bastien.schotten_totten.model.Milestone;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by Bastien on 10/12/2016.
+ * Created by Bastien on 11/12/2016.
  */
 
-public class MilestoneView extends CardView {
+public class MilestoneView {
 
+    private final List<PlayedCardView> playerSide = new ArrayList<>();
+    private final List<PlayedCardView> opponentSide = new ArrayList<>();
 
+//    private final MilestoneView milestone;
 
-    public MilestoneView(final Context context, final int id) {
-        super(context, null);
-        setId(id);
-        setText("[ X ]");
-        setBackgroundColor(Color.BLACK);
-        setTextColor(Color.WHITE);
+    public MilestoneView() {
+
     }
 }

@@ -22,13 +22,11 @@ public class HandLayout extends LinearLayout {
 
     private LayoutParams margin = Margin.createMargin();
 
-    public HandLayout(final Context ctx, final Game game, final OnClickListener clickListener) {
+    public HandLayout(final Context ctx, final Game game, final List<HandCardView> handView) {
         super(ctx);
         setOrientation(LinearLayout.HORIZONTAL);
         setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
-        for (int i = 0; i < game.getPlayer1().getHand().getCards().size(); i++) {
-            final CardView card = new CardView(ctx, game.getPlayer1().getHand().getCards().get(i), i+100);
-            card.setOnClickListener(clickListener);
+        for (final HandCardView card : handView) {
             addView(card);
         }
     }
