@@ -10,7 +10,11 @@ import com.boardgames.bastien.schotten_totten.model.Card;
 
 public class PlayedCardView extends CardView {
 
-    public PlayedCardView(Context context, Card c) {
+    public PlayedCardView(final Context context, final Card c) {
         super(context, c);
+    }
+
+    public PlayedCardView(final Context context) {
+        super(context, null);
     }
 }

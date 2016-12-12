@@ -21,6 +21,8 @@ public class Milestone {
 
     private PlayerType firstPlayerToReachMaxCardPerSide;
 
+    private PlayerType captured;
+
     public final int MAX_CARDS_PER_SIDE = 3;
 
     public Milestone(final int id) {
@@ -28,38 +30,28 @@ public class Milestone {
         this.player1Side = new ArrayList<>(MAX_CARDS_PER_SIDE);
         this.player2Side = new ArrayList<>(MAX_CARDS_PER_SIDE);
         this.firstPlayerToReachMaxCardPerSide = PlayerType.NONE;
+        this.captured = PlayerType.NONE;
     }
 
     public void addCard(final Card c, final PlayerType playerType) throws MilestoneSideMaxReachedException {
         switch (playerType) {
             case ONE:
-                addCardOnPlayer1Side(c, playerType);
+                addCardOnPlayerSide(c, player1Side, playerType);
                 break;
             case TWO:
-                addCardOnPlayer2Side(c, playerType);
+                addCardOnPlayerSide(c, player2Side, playerType);
                 break;
             default:
                 break;
         }
     }
 
-    private void addCardOnPlayer1Side(final Card c, final PlayerType playerType) throws MilestoneSideMaxReachedException {
-        if (player1Side.size() == MAX_CARDS_PER_SIDE) {
+    private void addCardOnPlayerSide(final Card c, final List<Card> playerSide, final PlayerType playerType) throws MilestoneSideMaxReachedException {
+        if (playerSide.size() == MAX_CARDS_PER_SIDE) {
             throw new MilestoneSideMaxReachedException(id);
         } else {
-            player1Side.add(c);
-            if (firstPlayerToReachMaxCardPerSide == null && player1Side.size() == MAX_CARDS_PER_SIDE) {
-                firstPlayerToReachMaxCardPerSide = playerType;
-            }
-        }
-    }
-
-    private void addCardOnPlayer2Side(final Card c, final PlayerType playerType) throws MilestoneSideMaxReachedException {
-        if (player2Side.size() == MAX_CARDS_PER_SIDE) {
-            throw new MilestoneSideMaxReachedException(id);
-        } else {
-            player2Side.add(c);
-            if (firstPlayerToReachMaxCardPerSide == null && player2Side.size() == MAX_CARDS_PER_SIDE) {
+            playerSide.add(c);
+            if (firstPlayerToReachMaxCardPerSide == null && playerSide.size() == MAX_CARDS_PER_SIDE) {
                 firstPlayerToReachMaxCardPerSide = playerType;
             }
         }
@@ -68,41 +60,38 @@ public class Milestone {
     public boolean reclaim(final PlayerType playerType) {
         switch (playerType) {
             case ONE:
-                if (player1Side.size() == MAX_CARDS_PER_SIDE) {
-                    if (player2Side.size() == MAX_CARDS_PER_SIDE) {
-                        final int player1SideStrength = sideStrength(player1Side);
-                        final int player2SideStrength = sideStrength(player1Side);
-                        if (player1SideStrength == player2SideStrength) {
-                            return (playerType.equals(firstPlayerToReachMaxCardPerSide));
-                        } else {
-                            return player1SideStrength > player2SideStrength;
-                        }
-                    } else {
-                        // TODO, very complex case
-                        return false;
-                    }
-                } else {
-                    return false;
+                final boolean player1Stronger = compareSideStrenght(player1Side, player2Side, playerType);
+                if (player1Stronger) {
+                    captured = playerType;
                 }
+                return player1Stronger;
             case TWO:
-                if (player2Side.size() == MAX_CARDS_PER_SIDE) {
-                    if (player1Side.size() == MAX_CARDS_PER_SIDE) {
-                        final int player1SideStrength = sideStrength(player1Side);
-                        final int player2SideStrength = sideStrength(player1Side);
-                        if (player1SideStrength == player2SideStrength) {
-                            return (playerType.equals(firstPlayerToReachMaxCardPerSide));
-                        } else {
-                            return player2SideStrength > player1SideStrength;
-                        }
-                    } else {
-                        // TODO, very complex case
-                        return false;
-                    }
-                } else {
-                    return false;
+                final boolean player2Stronger = compareSideStrenght(player2Side, player1Side, playerType);
+                if (player2Stronger) {
+                    captured = playerType;
                 }
+                return player2Stronger;
             default:
                return false;
+        }
+    }
+
+    private boolean compareSideStrenght(final List<Card> sideToCompare, final List<Card> otherSide, final PlayerType playerType){
+        if (sideToCompare.size() == MAX_CARDS_PER_SIDE) {
+            if (otherSide.size() == MAX_CARDS_PER_SIDE) {
+                final int sideToCompareStrength = sideStrength(sideToCompare);
+                final int otherSideStrength = sideStrength(otherSide);
+                if (sideToCompareStrength == otherSideStrength) {
+                    return (playerType.equals(firstPlayerToReachMaxCardPerSide));
+                } else {
+                    return sideToCompareStrength > otherSideStrength;
+                }
+            } else {
+                // TODO, very complex case
+                return true;
+            }
+        } else {
+            return false;
         }
     }
 
@@ -146,6 +135,8 @@ public class Milestone {
     public int getId() {
         return this.id;
     }
+
+    public PlayerType getCaptured() {return this.captured;}
 
     public List<Card> getPlayer1Side() {
         return player1Side;

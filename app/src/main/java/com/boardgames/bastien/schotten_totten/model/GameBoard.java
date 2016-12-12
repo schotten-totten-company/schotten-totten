@@ -26,7 +26,7 @@ public class GameBoard {
 
         // create milestones
         this.milestones = new ArrayList<>(MAX_MILESTONES);
-        for (int i = 1; i <= MAX_MILESTONES; i++) {
+        for (int i = 0; i < MAX_MILESTONES; i++) {
             milestones.add(new Milestone(i));
         }
     }

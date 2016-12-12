@@ -2,6 +2,7 @@ package com.boardgames.bastien.schotten_totten;
 
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
+import com.boardgames.bastien.schotten_totten.exceptions.NoTurnException;
 import com.boardgames.bastien.schotten_totten.model.GameBoard;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.Player;
@@ -15,18 +16,9 @@ public class Game implements Runnable {
 
     private final GameBoard board;
 
-    private Player winner;
-
     private final Player player1;
 
     private final Player player2;
-
-    private int chosenCard;
-
-    private int chosenMilestone;
-
-    private PlayerType playerTurn;
-
 
     public Game(final String player1Name, final String player2Name) throws HandFullException, EmptyDeckException {
 
@@ -40,11 +32,6 @@ public class Game implements Runnable {
             player2.getHand().addCard(board.getDeck().drawCard());
         }
 
-        this.winner = null;
-        this.playerTurn = PlayerType.ONE;
-        this.chosenCard = -1;
-        this.chosenMilestone = -1;
-
     }
 
     public Player getPlayer1() {
@@ -55,8 +42,25 @@ public class Game implements Runnable {
         return player2;
     }
 
-    public Player getWinner() {
-        return winner;
+    public Player getPlayer(final PlayerType t) throws NoTurnException {
+        switch (t) {
+            case ONE:
+                return player1;
+            case TWO:
+                return player2;
+            default:
+                throw new NoTurnException(t.toString());
+        }
+    }
+
+    public PlayerType getWinner() {
+        if (playerWinTheGame(player1)) {
+            return player1.getPlayerType();
+        } else if (playerWinTheGame(player2)) {
+            return player2.getPlayerType();
+        } else {
+            return PlayerType.NONE;
+        }
     }
 
     public GameBoard getGameBoard() {return board; }
@@ -73,7 +77,6 @@ public class Game implements Runnable {
             do {
                 // check if player 1 wins
                 if (playerWinTheGame(player1)) {
-                    this.winner = player1;
                     return;
                 }
             } while(player1.getHand().getHandSize() == player1InitialHandSize);
@@ -98,7 +101,6 @@ public class Game implements Runnable {
             do {
                 // check if player 1 wins
                 if (playerWinTheGame(player2)) {
-                    this.winner = player2;
                     return;
                 }
             } while(player2.getHand().getHandSize() == player2InitialHandSize);
@@ -129,30 +131,6 @@ public class Game implements Runnable {
         }
         // also wins if 5 milestones has been captured
         return (p.getCapturedMilestones().size() == 5);
-    }
-
-    public int getChosenCard() {
-        return chosenCard;
-    }
-
-    public void setChosenCard(int chosenCard) {
-        this.chosenCard = chosenCard;
-    }
-
-    public int getChosenMilestone() {
-        return chosenMilestone;
-    }
-
-    public void setChosenMilestone(int chosenMilestone) {
-        this.chosenMilestone = chosenMilestone;
-    }
-
-    public PlayerType getPlayerTurn() {
-        return playerTurn;
-    }
-
-    public void setPlayerTurn(PlayerType playerTurn) {
-        this.playerTurn = playerTurn;
     }
 
     @Override

@@ -19,7 +19,7 @@ public abstract class CardView extends TextView {
         setPadding(10, 10, 10, 10);
         setTextColor(Color.BLACK);
         if (c == null) {
-            setText("[ 0 ]");
+            setText("[ _ ]");
             setBackgroundColor(Color.LTGRAY);
         } else {
             update(c);
