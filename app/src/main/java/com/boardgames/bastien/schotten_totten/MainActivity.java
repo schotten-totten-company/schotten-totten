@@ -199,8 +199,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // end of the turn
                     playingPlayer = playingPlayer.equals(PlayerType.ONE)? PlayerType.TWO : PlayerType.ONE;
                     showEndOfTurnMessage(playingPlayer.toString());
-
-                    info.setText("Player " + playingPlayer.toString() + " is playing.");
                 }
 
             }
@@ -224,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             for (int i = 0; i < game.getPlayer(playingPlayer).getHand().getHandSize(); i++) {
                                 handView.get(i).update(game.getPlayer(playingPlayer).getHand().getCards().get(i));
                             }
+                            info.setText("Player " + playingPlayer.toString() + " is playing.");
                             dialog.dismiss();
                         } catch (final NoTurnException e) {
                             showErrorMessage(e.getMessage());
