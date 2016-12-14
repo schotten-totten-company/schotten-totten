@@ -40,34 +40,70 @@ public class MilestoneView {
     public void update(final Milestone m, final PlayerType playerTurn) throws NoTurnException {
         switch (playerTurn) {
             case ONE:
-                for (int i = 0; i < m.getPlayer1Side().size(); i++) {
-                    playerSide.get(i).update(m.getPlayer1Side().get(i));
-                }
-                for (int i = 0; i < m.getPlayer2Side().size(); i++) {
-                    opponentSide.get(i).update(m.getPlayer2Side().get(i));
-                }
-                if (m.getCaptured().equals(playerTurn)) {
-                    milestonePlayer.setVisibility(View.VISIBLE);
-                    milestoneOpponent.setVisibility(View.INVISIBLE);
-                    milestone.setVisibility(View.INVISIBLE);
-                }
+                updateSide(m, playerSide, opponentSide);
                 break;
             case TWO:
-                for (int i = 0; i < m.getPlayer1Side().size(); i++) {
-                    opponentSide.get(i).update(m.getPlayer1Side().get(i));
-                }
-                for (int i = 0; i < m.getPlayer2Side().size(); i++) {
-                    playerSide.get(i).update(m.getPlayer2Side().get(i));
-                }
-                if (m.getCaptured().equals(playerTurn)) {
-                    milestonePlayer.setVisibility(View.VISIBLE);
-                    milestoneOpponent.setVisibility(View.INVISIBLE);
-                    milestone.setVisibility(View.INVISIBLE);
-                }
+                updateSide(m, opponentSide, playerSide);
                 break;
             case NONE:
                 throw new NoTurnException(playerTurn.toString());
         }
+        if (m.getCaptured().equals(playerTurn)) {
+            milestonePlayer.setVisibility(View.VISIBLE);
+            milestoneOpponent.setVisibility(View.INVISIBLE);
+            milestone.setVisibility(View.INVISIBLE);
+        } else {
+            milestonePlayer.setVisibility(View.INVISIBLE);
+            milestoneOpponent.setVisibility(View.INVISIBLE);
+            milestone.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void updateSide(final Milestone m, final List<PlayedCardView> side1, final List<PlayedCardView> side2) {
+        for (int i = 0; i < m.MAX_CARDS_PER_SIDE; i++) {
+            side1.get(i).update();
+            side2.get(i).update();
+        }
+        for (int i = 0; i < m.getPlayer1Side().size(); i++) {
+            side1.get(i).update(m.getPlayer1Side().get(i));
+        }
+        for (int i = 0; i < m.getPlayer2Side().size(); i++) {
+            side2.get(i).update(m.getPlayer2Side().get(i));
+        }
+    }
+
+    public int getWidth() {
+        return milestone.getWidth();
+    }
+
+    public void increaseSize() {
+        increaseSize((float)0.1);
+    }
+
+    public void increaseSize(final float increment) {
+
+        for (final PlayedCardView playedCardView : this.playerSide) {
+            playedCardView.setTextSize(playedCardView.getTextSize() + increment);
+        }
+        for (final PlayedCardView playedCardView : this.opponentSide) {
+            playedCardView.setTextSize(playedCardView.getTextSize() + increment);
+        }
+        milestone.setTextSize(milestone.getTextSize() + increment);
+        milestonePlayer.setTextSize(milestonePlayer.getTextSize() + increment);
+        milestoneOpponent.setTextSize(milestoneOpponent.getTextSize() + increment);
+    }
+
+    public void setSize(final float size) {
+
+        for (final PlayedCardView playedCardView : this.playerSide) {
+            playedCardView.setTextSize(size);
+        }
+        for (final PlayedCardView playedCardView : this.opponentSide) {
+            playedCardView.setTextSize(size);
+        }
+        milestone.setTextSize(size);
+        milestonePlayer.setTextSize(size);
+        milestoneOpponent.setTextSize(size);
     }
 
     public List<PlayedCardView> getPlayerSide() {

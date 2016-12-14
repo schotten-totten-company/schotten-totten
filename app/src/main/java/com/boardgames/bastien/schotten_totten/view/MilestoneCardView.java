@@ -24,7 +24,7 @@ public class MilestoneCardView extends TextView {
     public MilestoneCardView(final Context context, final int i) {
         super(context);
         index = i;
-        setTextSize(15);
+        setTextSize(10);
         setPadding(10, 10, 10, 10);
         setText("[ X ]");
         setBackgroundColor(Color.BLACK);

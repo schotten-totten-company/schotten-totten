@@ -15,6 +15,6 @@ public class PlayedCardView extends CardView {
     }
 
     public PlayedCardView(final Context context) {
-        super(context, null);
+        super(context);
     }
 }

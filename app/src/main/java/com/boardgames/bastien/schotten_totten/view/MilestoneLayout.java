@@ -19,8 +19,8 @@ public class MilestoneLayout extends LinearLayout {
         setOrientation(LinearLayout.VERTICAL);
 
         addView(milestoneView.getMilestoneOpponent());
-        for (final PlayedCardView card : milestoneView.getOpponentSide()) {
-            addView(card, margin);
+        for (int i = milestoneView.getOpponentSide().size()-1; i >= 0; i--) {
+            addView(milestoneView.getOpponentSide().get(i), margin);
         }
         addView(milestoneView.getMilestone(), margin);
         for (final PlayedCardView card : milestoneView.getPlayerSide()) {

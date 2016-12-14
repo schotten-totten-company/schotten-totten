@@ -14,18 +14,23 @@ import com.boardgames.bastien.schotten_totten.model.Card;
 public abstract class CardView extends TextView {
 
     public CardView(final Context context, final Card c) {
-        super(context);
-        setTextSize(15);
-        setPadding(10, 10, 10, 10);
-        setTextColor(Color.BLACK);
-        if (c == null) {
-            setText("[ _ ]");
-            setBackgroundColor(Color.LTGRAY);
-        } else {
-            update(c);
-        }
+        this(context);
+        update(c);
     }
 
+    public CardView(final Context context) {
+        super(context);
+        setTextSize(10);
+        setPadding(10, 10, 10, 10);
+        setTextColor(Color.BLACK);
+        setText("[ _ ]");
+        setBackgroundColor(Color.LTGRAY);
+    }
+
+    public void update() {
+        setText("[ _ ]");
+        setBackgroundColor(Color.LTGRAY);
+    }
     public void update(final Card c) {
         setText("[ " + c.getNumber().toString() + " ]");
         switch (c.getColor()) {
