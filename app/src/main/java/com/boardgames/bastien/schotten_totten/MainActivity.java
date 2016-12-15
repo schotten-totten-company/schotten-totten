@@ -3,6 +3,7 @@ package com.boardgames.bastien.schotten_totten;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -62,13 +63,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             gameLayout.setMeasureWithLargestChildEnabled(true);
             gameLayout.setOrientation(LinearLayout.VERTICAL);
             info = new TextView(getApplicationContext());
+            info.setTextColor(Color.BLACK);
+            info.setTextSize(20);
             info.setText("Player " + playingPlayer.toString() + " is playing.");
+            info.setGravity(Gravity.CENTER_HORIZONTAL);
             gameLayout.addView(info);
 
             // milestones layout
             final LinearLayout milestones = new LinearLayout(getApplicationContext());
             milestones.setOrientation(LinearLayout.HORIZONTAL);
-            milestones.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
+            milestones.setGravity(Gravity.CENTER_HORIZONTAL);
             for (final Milestone m : game.getGameBoard().getMilestones()) {
                 milestoneListView.add(new MilestoneView(m, getApplicationContext(), this));
             }
@@ -80,9 +84,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for (final Card c : game.getPlayer1().getHand().getCards()) {
                 handView.add(new HandCardView(getApplicationContext(), c, this));
             }
-            gameLayout.addView(new HandLayout(getApplicationContext(), game, handView));
+            final HandLayout handLayout = new HandLayout(getApplicationContext(), game, handView);
+            gameLayout.addView(handLayout);
 
+            gameLayout.setGravity(Gravity.CENTER_HORIZONTAL);
             layout.addView(gameLayout);
+            layout.setGravity(Gravity.CENTER_HORIZONTAL);
 
             resize(milestones);
 
@@ -107,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        while(milestones.getMeasuredWidth() < screenSize.x){
 //            increaseMilestoneListViewWidth();
 //        }
-        setMilestoneListViewWidth(screenSize.x*(float)0.0146);
+        setMilestoneListViewWidth(screenSize.x*(float)0.131/milestoneListView.size());
         for (final HandCardView handcardView: handView) {
-            handcardView.setTextSize((float)0.1*screenSize.x/handView.size());
+            handcardView.setTextSize((float)0.16*screenSize.x/handView.size());
         }
     }
 
@@ -142,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
+        // manage click on a card of the hand
         if (v instanceof HandCardView) {
             final HandCardView cardView = ((HandCardView) v);
             final int index = handView.indexOf(cardView);
@@ -154,11 +162,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 handView.get(index).select();
                 selectedCard = index;
             }
-//            Toast.makeText(getApplicationContext(), "Card Chosen", Toast.LENGTH_SHORT).show();
+         // manage click on a milestone
         } else if (v instanceof MilestoneCardView) {
             final MilestoneCardView cardView = ((MilestoneCardView) v);
             final int index = cardView.getIndex();
             final Milestone m = this.game.getGameBoard().getMilestones().get(index);
+            // reclaim
             if (selectedCard == -1) {
                 // reclaim
                 final boolean reclaim = m.reclaim(playingPlayer);
@@ -171,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
                 }
+            // play a card
             } else {
                 // put card
                 try {
@@ -185,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     final Card newCard = this.game.getGameBoard().getDeck().drawCard();
                     this.game.getPlayer(playingPlayer).getHand().getCards().add(newCard);
                     handView.get(selectedCard).update(newCard);
-                    handView.get(selectedCard).unselect();
                     selectedCard = -1;
                 } catch (final EmptyDeckException | NoTurnException e) {
                     showErrorMessage(e.getMessage());
@@ -221,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             // update hand
                             for (int i = 0; i < game.getPlayer(playingPlayer).getHand().getHandSize(); i++) {
                                 handView.get(i).update(game.getPlayer(playingPlayer).getHand().getCards().get(i));
+                                handView.get(i).unselect();
                             }
                             info.setText("Player " + playingPlayer.toString() + " is playing.");
                             dialog.dismiss();
