@@ -114,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        while(milestones.getMeasuredWidth() < screenSize.x){
 //            increaseMilestoneListViewWidth();
 //        }
-        setMilestoneListViewWidth(screenSize.x*(float)0.131/milestoneListView.size());
+        setMilestoneListViewWidth(screenSize.x*(float)0.1/milestoneListView.size() - 2);
         for (final HandCardView handcardView: handView) {
-            handcardView.setTextSize((float)0.16*screenSize.x/handView.size());
+            handcardView.setTextSize((float)0.1*screenSize.x/handView.size() - 2);
         }
     }
 
