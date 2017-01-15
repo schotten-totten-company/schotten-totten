@@ -1,17 +1,11 @@
 package com.boardgames.bastien.schotten_totten.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.boardgames.bastien.schotten_totten.Game;
-import com.boardgames.bastien.schotten_totten.model.Card;
-import com.boardgames.bastien.schotten_totten.model.Milestone;
+import com.boardgames.bastien.schotten_totten.model.Game;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

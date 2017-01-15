@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,6 +23,7 @@ import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoTurnException;
 import com.boardgames.bastien.schotten_totten.model.Card;
+import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 import com.boardgames.bastien.schotten_totten.view.HandCardView;
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Game game;
     private List<HandCardView> handView = new ArrayList<>();
     private List<MilestoneView> milestoneListView = new ArrayList<>();
-    private LinearLayout.LayoutParams margin = Margin.createMargin();
     private TextView info;
+    private TextView memo;
     private int selectedCard;
     private PlayerType playingPlayer;
     private LinearLayout gameLayout;
@@ -66,8 +67,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             info.setTextColor(Color.BLACK);
             info.setTextSize(20);
             info.setText("Player " + playingPlayer.toString() + " is playing.");
-            info.setGravity(Gravity.CENTER_HORIZONTAL);
+            info.setGravity(Gravity.LEFT);
             gameLayout.addView(info);
+
+            memo = new TextView(getApplicationContext());
+            memo.setTextColor(Color.BLACK);
+            memo.setTextSize(16);
+            memo.setText(" [MEMO] ");
+            memo.setGravity(Gravity.RIGHT);
+            memo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    final String memoContent = ""
+                                                + "[4] [5] [6] : Straight Flush\n"
+                                                + "[8] [8] [8] : 3 of a Kind\n"
+                                                + "[6] [9] [2] : Flush\n"
+                                                + "[3] [4] [5] : Straight\n"
+                                                + "[1] [8] [3] : Wild Hand";
+                    showAlertMessage("MEMO", memoContent, false);
+                }
+            });
+            gameLayout.addView(memo);
 
             // milestones layout
             final LinearLayout milestones = new LinearLayout(getApplicationContext());
@@ -93,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             resize(milestones);
 
+
+
+
         } catch (HandFullException e) {
             showErrorMessage(e.getMessage());
         } catch (EmptyDeckException e) {
@@ -114,9 +138,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        while(milestones.getMeasuredWidth() < screenSize.x){
 //            increaseMilestoneListViewWidth();
 //        }
-        setMilestoneListViewWidth(screenSize.x*(float)0.1/milestoneListView.size() - 2);
+        final int mSize = milestoneListView.size();
+        setMilestoneListViewWidth((float)0.15*((screenSize.x/mSize) - (5*mSize)));
         for (final HandCardView handcardView: handView) {
-            handcardView.setTextSize((float)0.1*screenSize.x/handView.size() - 2);
+            handcardView.setTextSize(((float)0.4*screenSize.x/mSize) - (5*mSize));
         }
     }
 
@@ -162,16 +187,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 handView.get(index).select();
                 selectedCard = index;
             }
-         // manage click on a milestone
+            // manage click on a milestone
         } else if (v instanceof MilestoneCardView) {
             final MilestoneCardView cardView = ((MilestoneCardView) v);
             final int index = cardView.getIndex();
             final Milestone m = this.game.getGameBoard().getMilestones().get(index);
+            // check is the milestone has already benn captured
+            if (!m.getCaptured().equals(PlayerType.NONE)) {
+                showAlertMessage("Milestone already captured by player " + m.getCaptured().toString());
+                return;
+            }
             // reclaim
             if (selectedCard == -1) {
                 // reclaim
                 final boolean reclaim = m.reclaim(playingPlayer);
                 if (reclaim) {
+                    // capture the milestone
                     try {
                         milestoneListView.get(index).update(m, playingPlayer);
                     } catch (final NoTurnException e) {
@@ -180,36 +211,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
                 }
-            // play a card
+                // play a card
             } else {
-                // put card
                 try {
-                    final Card c = this.game.getPlayer(playingPlayer).getHand().playCard(selectedCard);
-                    m.addCard(c, playingPlayer);
-                    milestoneListView.get(index).update(m, playingPlayer);
-                } catch (final MilestoneSideMaxReachedException | NoTurnException | CardInitialisationException e) {
-                    showErrorMessage(e.getMessage());
-                }
-                // draw card;
-                try {
-                    final Card newCard = this.game.getGameBoard().getDeck().drawCard();
-                    this.game.getPlayer(playingPlayer).getHand().getCards().add(newCard);
-                    handView.get(selectedCard).update(newCard);
-                    selectedCard = -1;
-                } catch (final EmptyDeckException | NoTurnException e) {
-                    showErrorMessage(e.getMessage());
-                }
+                    m.checkSideSize(playingPlayer);
+                    // put card
+                    try {
+                        final Card c = this.game.getPlayer(playingPlayer).getHand().playCard(selectedCard);
+                        m.addCard(c, playingPlayer);
+                        milestoneListView.get(index).update(m, playingPlayer);
+                    } catch (final NoTurnException | CardInitialisationException e) {
+                        showErrorMessage(e.getMessage());
+                    }
+                    // draw card;
+                    try {
+                        final Card newCard = this.game.getGameBoard().getDeck().drawCard();
+                        this.game.getPlayer(playingPlayer).getHand().getCards().add(0, newCard);
+                        handView.get(selectedCard).update(newCard);
+                        selectedCard = -1;
+                    } catch (final EmptyDeckException | NoTurnException e) {
+                        showErrorMessage(e.getMessage());
+                    }
 
-                // check victory
-                if (!this.game.getWinner().equals(PlayerType.NONE)) {
-                    Toast.makeText(getApplicationContext(), this.game.getWinner() + " wins !!!", Toast.LENGTH_SHORT).show();
-                    showAlertMessage("End of the game", this.game.getWinner() + " wins !!!", true);
-                } else {
-                    // end of the turn
-                    playingPlayer = playingPlayer.equals(PlayerType.ONE)? PlayerType.TWO : PlayerType.ONE;
-                    showEndOfTurnMessage(playingPlayer.toString());
+                    // check victory
+                    if (!this.game.getWinner().equals(PlayerType.NONE)) {
+                        Toast.makeText(getApplicationContext(), this.game.getWinner() + " wins !!!", Toast.LENGTH_SHORT).show();
+                        showAlertMessage("End of the game", this.game.getWinner() + " wins !!!", true);
+                    } else {
+                        // end of the turn
+                        playingPlayer = playingPlayer.equals(PlayerType.ONE)? PlayerType.TWO : PlayerType.ONE;
+                        showEndOfTurnMessage(playingPlayer.toString());
+                    }
+                } catch (final MilestoneSideMaxReachedException e) {
+                    // return, cannot play here
+                    showAlertMessage(e.getMessage());
+                    return;
                 }
-
             }
         }
 
@@ -248,6 +285,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void showAlertMessage(final String title, final String message) {
         showAlertMessage(title, message, false);
+    }
+    private void showAlertMessage(final String message) {
+        showAlertMessage("Warning !!!", message, false);
     }
 
     private void showAlertMessage(final String title, final String message, final boolean finish) {

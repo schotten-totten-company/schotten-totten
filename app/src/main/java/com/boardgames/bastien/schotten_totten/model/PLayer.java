@@ -17,11 +17,8 @@ public class Player {
 
     private final PlayerType playerType;
 
-    private final List<Milestone> capturedMilestones;
-
     public Player(final String name, final PlayerType playerType) {
         this.name = name;
-        this.capturedMilestones = new ArrayList<>();
         this.hand = new Hand();
         this.isPlaying = false;
         this.playerType = playerType;
@@ -41,10 +38,6 @@ public class Player {
 
     public PlayerType getPlayerType() {
         return playerType;
-    }
-
-    public List<Milestone> getCapturedMilestones() {
-        return capturedMilestones;
     }
 
     public void setPlaying() {

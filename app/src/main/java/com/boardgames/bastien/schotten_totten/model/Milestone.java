@@ -46,12 +46,30 @@ public class Milestone {
         }
     }
 
+    public void checkSideSize(final PlayerType playerType) throws MilestoneSideMaxReachedException {
+        switch (playerType) {
+            case ONE:
+                if (player1Side.size() == MAX_CARDS_PER_SIDE) {
+                    throw new MilestoneSideMaxReachedException(id);
+                }
+                break;
+            case TWO:
+                if (player2Side.size() == MAX_CARDS_PER_SIDE) {
+                    throw new MilestoneSideMaxReachedException(id);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     private void addCardOnPlayerSide(final Card c, final List<Card> playerSide, final PlayerType playerType) throws MilestoneSideMaxReachedException {
         if (playerSide.size() == MAX_CARDS_PER_SIDE) {
             throw new MilestoneSideMaxReachedException(id);
         } else {
             playerSide.add(c);
-            if (firstPlayerToReachMaxCardPerSide == null && playerSide.size() == MAX_CARDS_PER_SIDE) {
+            if (firstPlayerToReachMaxCardPerSide.equals(PlayerType.NONE)
+                    && playerSide.size() == MAX_CARDS_PER_SIDE) {
                 firstPlayerToReachMaxCardPerSide = playerType;
             }
         }
@@ -104,14 +122,17 @@ public class Milestone {
             boolean isFlush = false;
             boolean is3OfKind = false;
             final Card.COLOR firstCardColor = side.get(0).getColor();
-            for (final Card c : side) {
-                final int n = c.getNumber().ordinal();
+            for (final Card card : side) {
+                final int n = card.getNumber().ordinal();
                 sum += n;
                 numbers.add(n);
-                isFlush = c.getColor().equals(firstCardColor);
+                isFlush = card.getColor().equals(firstCardColor);
             }
             Collections.reverse(numbers);
-            final boolean isStraight = (numbers.get(0)-numbers.get(numbers.size()))== MAX_CARDS_PER_SIDE-1;
+            boolean isStraight = false;
+            for (int i = 1; i < numbers.size(); i++) {
+                isStraight = (numbers.get(i) == numbers.get(0) - i);
+            }
 
             if (isStraight && isFlush) {
                 // straight flush

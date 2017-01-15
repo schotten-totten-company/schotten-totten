@@ -48,25 +48,35 @@ public class MilestoneView {
             case NONE:
                 throw new NoTurnException(playerTurn.toString());
         }
+        // update captured by playing player
         if (m.getCaptured().equals(playerTurn)) {
             milestonePlayer.setVisibility(View.VISIBLE);
             milestoneOpponent.setVisibility(View.INVISIBLE);
             milestone.setVisibility(View.INVISIBLE);
-        } else {
+        // update not captured
+        } else if (m.getCaptured().equals(PlayerType.NONE)) {
             milestonePlayer.setVisibility(View.INVISIBLE);
             milestoneOpponent.setVisibility(View.INVISIBLE);
             milestone.setVisibility(View.VISIBLE);
+        // update captured by opponent
+        } else {
+            milestonePlayer.setVisibility(View.INVISIBLE);
+            milestoneOpponent.setVisibility(View.VISIBLE);
+            milestone.setVisibility(View.INVISIBLE);
         }
     }
 
     private void updateSide(final Milestone m, final List<PlayedCardView> side1, final List<PlayedCardView> side2) {
+        // reset all cards on both sides
         for (int i = 0; i < m.MAX_CARDS_PER_SIDE; i++) {
             side1.get(i).update();
             side2.get(i).update();
         }
+        // update player one side
         for (int i = 0; i < m.getPlayer1Side().size(); i++) {
             side1.get(i).update(m.getPlayer1Side().get(i));
         }
+        // update player two side
         for (int i = 0; i < m.getPlayer2Side().size(); i++) {
             side2.get(i).update(m.getPlayer2Side().get(i));
         }
