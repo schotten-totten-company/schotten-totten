@@ -119,14 +119,23 @@ public class Milestone {
         } else {
             final List<Integer> numbers = new ArrayList<>();
             int sum = 0;
-            boolean isFlush = false;
+            boolean isFlush = true;
             boolean is3OfKind = false;
+
+            // check flush
             final Card.COLOR firstCardColor = side.get(0).getColor();
+            for (final Card card : side) {
+                if (!card.getColor().equals(firstCardColor)) {
+                    isFlush = false;
+                    break;
+                }
+            }
+
+            // check straight
             for (final Card card : side) {
                 final int n = card.getNumber().ordinal();
                 sum += n;
                 numbers.add(n);
-                isFlush = card.getColor().equals(firstCardColor);
             }
             Collections.reverse(numbers);
             boolean isStraight = false;
@@ -134,6 +143,7 @@ public class Milestone {
                 isStraight = (numbers.get(i) == numbers.get(0) - i);
             }
 
+            // return strength
             if (isStraight && isFlush) {
                 // straight flush
                 return sum + 500;

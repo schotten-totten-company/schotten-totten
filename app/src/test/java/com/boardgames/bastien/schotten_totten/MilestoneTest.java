@@ -116,4 +116,20 @@ public class MilestoneTest {
         Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE));
         Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO));
     }
+
+    @Test
+    public void WildHandTest_2() throws MilestoneSideMaxReachedException {
+        // play one
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.CYAN), PlayerType.ONE);
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.BLUE), PlayerType.ONE);
+        testMilestone.addCard(new Card(Card.NUMBER.TWO, Card.COLOR.CYAN), PlayerType.ONE);
+
+        // player two
+        testMilestone.addCard(new Card(Card.NUMBER.SIX, Card.COLOR.GREY), PlayerType.TWO);
+        testMilestone.addCard(new Card(Card.NUMBER.SEVEN, Card.COLOR.GREY), PlayerType.TWO);
+        testMilestone.addCard(new Card(Card.NUMBER.SIX, Card.COLOR.GREEN), PlayerType.TWO);
+
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.ONE));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.TWO));
+    }
 }
