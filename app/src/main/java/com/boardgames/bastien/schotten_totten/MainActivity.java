@@ -319,10 +319,23 @@ public class MainActivity extends AppCompatActivity {
         view.setBackgroundColor(Color.LTGRAY);
     }
 
+    private void hideHand() throws NoTurnException {
+        for (int i = 0; i < game.getPlayer(playingPlayer).getHand().getHandSize(); i++) {
+            final ImageButton handCardView = getHandImageButton(i);
+            handCardView.setVisibility(View.INVISIBLE);
+        }
+    }
+    private void showHand() throws NoTurnException {
+        for (int i = 0; i < game.getPlayer(playingPlayer).getHand().getHandSize(); i++) {
+            final ImageButton handCardView = getHandImageButton(i);
+            handCardView.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void showEndOfTurnMessage(final String message) {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("End of the turn.");
-        alertDialog.setMessage("Your turn is finished. Pass the phone to player " + message);
+        alertDialog.setMessage("Your turn is finished. Click on 'OK' and pass the phone to player " + message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -339,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             ((TextView) findViewById(R.id.textView)).setText("Player " + playingPlayer.toString() + " is playing.");
                             dialog.dismiss();
+                            showBeginningOfTheTurnMessage("Player " + message + " turn.","Click on 'OK' and play your turn.");
                         } catch (final NoTurnException e) {
                             showErrorMessage(e);
                         }
@@ -353,8 +367,24 @@ public class MainActivity extends AppCompatActivity {
         e.printStackTrace(new PrintWriter(message));
         showAlertMessage("Error : " + e.getMessage(), message.toString(), true);
     }
-    private void showAlertMessage(final String title, final String message) {
-        showAlertMessage(title, message, false);
+    private void showBeginningOfTheTurnMessage(final String title, final String message) throws NoTurnException {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        findViewById(R.id.gameLayout).setVisibility(View.VISIBLE);
+                        dialog.dismiss();
+                        try {
+                            showHand();
+                        } catch (final NoTurnException e) {
+                            showErrorMessage(e);
+                        }
+                    }
+                });
+        hideHand();
+        alertDialog.show();
     }
     private void showAlertMessage(final String message) {
         showAlertMessage("Warning !!!", message, false);
