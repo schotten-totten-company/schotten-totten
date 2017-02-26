@@ -7,6 +7,6 @@ package com.boardgames.bastien.schotten_totten.exceptions;
 public class EmptyDeckException extends Exception {
 
     public EmptyDeckException() {
-        super();
+        super("The deck is empty.");
     }
 }
