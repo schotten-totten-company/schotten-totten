@@ -120,13 +120,22 @@ public class Milestone {
             final List<Integer> numbers = new ArrayList<>();
             int sum = 0;
             boolean isFlush = true;
-            boolean is3OfKind = false;
+            boolean is3OfKind = true;
 
             // check flush
             final Card.COLOR firstCardColor = side.get(0).getColor();
             for (final Card card : side) {
                 if (!card.getColor().equals(firstCardColor)) {
                     isFlush = false;
+                    break;
+                }
+            }
+
+            // check 3 of a kind
+            final Card.NUMBER firstCardNumber = side.get(0).getNumber();
+            for (final Card card : side) {
+                if (!card.getNumber().equals(firstCardNumber)) {
+                    is3OfKind = false;
                     break;
                 }
             }
