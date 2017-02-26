@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         final ImageButton cardView = ((ImageButton) v);
-                       final int index = Integer.valueOf(
+                        final int index = Integer.valueOf(
                                 getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
                         final Milestone m = game.getGameBoard().getMilestones().get(index);
                         // check is the milestone has already benn captured
@@ -80,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
                             if (reclaim) {
                                 // capture the milestone
                                 updateMilestoneView(index);
+                                // check victory
+                                final PlayerType winner = game.getWinner();
+                                if (!winner.equals(PlayerType.NONE)) {
+                                    showAlertMessage("End of the game", winner + " wins !!!", true);
+                                }
                             } else {
                                 Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
                             }
@@ -105,15 +110,10 @@ public class MainActivity extends AppCompatActivity {
                                     showErrorMessage(e);
                                 }
 
-                                // check victory
-                                if (!game.getWinner().equals(PlayerType.NONE)) {
-                                    Toast.makeText(getApplicationContext(), game.getWinner() + " wins !!!", Toast.LENGTH_SHORT).show();
-                                    showAlertMessage("End of the game", game.getWinner() + " wins !!!", true);
-                                } else {
-                                    // end of the turn
-                                    playingPlayer = playingPlayer.equals(PlayerType.ONE)? PlayerType.TWO : PlayerType.ONE;
-                                    showEndOfTurnMessage(playingPlayer.toString());
-                                }
+                                // end of the turn
+                                playingPlayer = playingPlayer.equals(PlayerType.ONE)? PlayerType.TWO : PlayerType.ONE;
+                                showEndOfTurnMessage(playingPlayer.toString());
+
                             } catch (final MilestoneSideMaxReachedException e) {
                                 // return, cannot play here
                                 showAlertMessage(e.getMessage());
@@ -374,7 +374,6 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        findViewById(R.id.gameLayout).setVisibility(View.VISIBLE);
                         dialog.dismiss();
                         try {
                             showHand();
