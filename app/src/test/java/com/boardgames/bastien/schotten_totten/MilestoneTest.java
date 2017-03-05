@@ -86,6 +86,38 @@ public class MilestoneTest {
     }
 
     @Test
+    public void FlushVsStraightFlushTest() throws MilestoneSideMaxReachedException {
+        // play one
+        testMilestone.addCard(new Card(Card.NUMBER.THREE, Card.COLOR.YELLOW), PlayerType.ONE);
+        testMilestone.addCard(new Card(Card.NUMBER.ONE, Card.COLOR.YELLOW), PlayerType.ONE);
+        testMilestone.addCard(new Card(Card.NUMBER.TWO, Card.COLOR.YELLOW), PlayerType.ONE);
+
+        // player two
+        testMilestone.addCard(new Card(Card.NUMBER.FOUR, Card.COLOR.YELLOW), PlayerType.TWO);
+        testMilestone.addCard(new Card(Card.NUMBER.SIX, Card.COLOR.YELLOW), PlayerType.TWO);
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.YELLOW), PlayerType.TWO);
+
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO));
+    }
+
+    @Test
+    public void StraightFlushVs3OfAKindTest() throws MilestoneSideMaxReachedException {
+        // play one
+        testMilestone.addCard(new Card(Card.NUMBER.THREE, Card.COLOR.RED), PlayerType.ONE);
+        testMilestone.addCard(new Card(Card.NUMBER.FIVE, Card.COLOR.RED), PlayerType.ONE);
+        testMilestone.addCard(new Card(Card.NUMBER.FOUR, Card.COLOR.RED), PlayerType.ONE);
+
+        // player two
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.GREY), PlayerType.TWO);
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.BLUE), PlayerType.TWO);
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.CYAN), PlayerType.TWO);
+
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO));
+    }
+
+    @Test
     public void FlushTest() throws MilestoneSideMaxReachedException {
         // play one
         testMilestone.addCard(new Card(Card.NUMBER.SIX, Card.COLOR.GREEN), PlayerType.ONE);

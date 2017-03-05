@@ -146,10 +146,13 @@ public class Milestone {
                 sum += n;
                 numbers.add(n);
             }
-            Collections.reverse(numbers);
-            boolean isStraight = false;
-            for (int i = 1; i < numbers.size(); i++) {
-                isStraight = (numbers.get(i) == numbers.get(0) - i);
+            Collections.sort(numbers);
+            boolean isStraight = true;
+            for (int i = 0; i < numbers.size(); i++) {
+                if (numbers.get(i) != (numbers.get(0) + i)) {
+                    isStraight = false;
+                    break;
+                }
             }
 
             // return strength
