@@ -1,6 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
+import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.model.Card;
@@ -21,7 +22,7 @@ public class GameTest {
     private Game testGame;
 
     @Before
-    public void before() throws HandFullException, EmptyDeckException {
+    public void before() throws HandFullException, EmptyDeckException, GameCreationException {
         testGame = new Game("p1", "p2");
     }
 
