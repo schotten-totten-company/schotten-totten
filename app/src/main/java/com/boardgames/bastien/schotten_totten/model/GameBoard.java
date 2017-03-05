@@ -1,8 +1,5 @@
 package com.boardgames.bastien.schotten_totten.model;
 
-import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
-import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,8 +4,6 @@ package com.boardgames.bastien.schotten_totten.model;
  * Created by Bastien on 28/11/2016.
  */
 
-import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
-
 public class Card {
 
     public enum COLOR {

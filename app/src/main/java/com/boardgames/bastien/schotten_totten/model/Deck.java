@@ -1,7 +1,5 @@
 package com.boardgames.bastien.schotten_totten.model;
 
-import com.boardgames.bastien.schotten_totten.Utils;
-import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 
 import java.util.Collections;

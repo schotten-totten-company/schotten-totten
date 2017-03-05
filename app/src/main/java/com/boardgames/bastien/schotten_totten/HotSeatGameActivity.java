@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
-import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoTurnException;
 import com.boardgames.bastien.schotten_totten.model.Card;
