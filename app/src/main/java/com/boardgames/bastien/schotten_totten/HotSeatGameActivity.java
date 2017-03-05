@@ -2,6 +2,7 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -45,15 +46,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
             findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    final String memoContent = ""
-                            + "[4] [5] [6] : Straight Flush\n"
-                            + "[8] [8] [8] : 3 of a Kind\n"
-                            + "[6] [9] [2] : Flush\n"
-                            + "[3] [4] [5] : Straight\n"
-                            + "[1] [8] [3] : Wild Hand";
-
-                    showAlertMessage("MEMO", memoContent, false);
+                    startActivity(new Intent(HotSeatGameActivity.this, MemoActivity.class));
                 }
             });
 
