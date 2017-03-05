@@ -18,7 +18,7 @@ public class GameBoard {
 
     private final List<Milestone> milestones;
 
-    public GameBoard() throws EmptyDeckException {
+    public GameBoard() {
 
         // create deck
         this.deck = new Deck();

@@ -13,18 +13,20 @@ import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
+import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoTurnException;
 import com.boardgames.bastien.schotten_totten.model.Card;
 import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class MainActivity extends AppCompatActivity {
+public class HotSeatGameActivity extends AppCompatActivity {
 
     private Game game;
     private int selectedCard;
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launch_game);
+        setContentView(R.layout.activity_hot_seat_game);
 
         try {
             this.game = new Game("player1", "player2");
@@ -104,13 +106,21 @@ public class MainActivity extends AppCompatActivity {
                                     game.getPlayer(playingPlayer).getHand().getCards().add(0, newCard);
                                     updateHandCard(getHandImageButton(selectedCard), newCard);
                                     selectedCard = -1;
-                                } catch (final EmptyDeckException | NoTurnException e) {
+                                } catch (final EmptyDeckException e) {
+                                    showAlertMessage(e.getMessage());
+                                    selectedCard = -1;
+                                } catch (final NoTurnException e) {
                                     showErrorMessage(e);
                                 }
 
                                 // end of the turn
                                 playingPlayer = playingPlayer.equals(PlayerType.ONE)? PlayerType.TWO : PlayerType.ONE;
-                                showEndOfTurnMessage(playingPlayer.toString());
+                                try {
+                                    hideHand();
+                                    showEndOfTurnMessage(playingPlayer.toString());
+                                } catch (NoTurnException e) {
+                                    showErrorMessage(e);
+                                }
 
                             } catch (final MilestoneSideMaxReachedException e) {
                                 // return, cannot play here
@@ -123,9 +133,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            for (int i = 0; i < game.getPlayer1().getHand().getHandSize(); i++) {
+            final Hand playingPlayerHand = game.getPlayer(playingPlayer).getHand();
+            for (int i = 0; i < playingPlayerHand.getHandSize(); i++) {
                 final ImageButton handCardView = getHandImageButton(i);
-                updateHandCard(handCardView, game.getPlayer1().getHand().getCards().get(i));
+                updateHandCard(handCardView, playingPlayerHand.getCards().get(i));
                 handCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -134,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                                 getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
 
                         // unselect
-                        for (int i = 0; i < game.getPlayer1().getHand().getHandSize(); i++) {
+                        for (int i = 0; i < playingPlayerHand.getHandSize(); i++) {
                             unSelectCard(getHandImageButton(i));
                         }
 
@@ -150,9 +161,9 @@ public class MainActivity extends AppCompatActivity {
                 unSelectCard(handCardView);
             }
 
-        } catch (HandFullException e) {
+        } catch (GameCreationException e) {
             showErrorMessage(e);
-        } catch (EmptyDeckException e) {
+        } catch (NoTurnException e) {
             showErrorMessage(e);
         }
 
@@ -338,6 +349,7 @@ public class MainActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
+
                             // update board
                             for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
                                 updateMilestoneView(i);
@@ -347,10 +359,11 @@ public class MainActivity extends AppCompatActivity {
                                 final ImageButton handCardView = getHandImageButton(i);
                                 updateHandCard(handCardView, game.getPlayer(playingPlayer).getHand().getCards().get(i));
                                 unSelectCard(handCardView);
+                                handCardView.setVisibility(View.VISIBLE);
                             }
                             ((TextView) findViewById(R.id.textView)).setText("Player " + playingPlayer.toString() + " is playing.");
                             dialog.dismiss();
-                            showBeginningOfTheTurnMessage("Player " + message + " turn.","Click on 'OK' and play your turn.");
+                            //showBeginningOfTheTurnMessage("Player " + message + " turn.","Click on 'OK' and play your turn.");
                         } catch (final NoTurnException e) {
                             showErrorMessage(e);
                         }
@@ -365,24 +378,7 @@ public class MainActivity extends AppCompatActivity {
         e.printStackTrace(new PrintWriter(message));
         showAlertMessage("Error : " + e.getMessage(), message.toString(), true);
     }
-    private void showBeginningOfTheTurnMessage(final String title, final String message) throws NoTurnException {
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(message);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        try {
-                            showHand();
-                        } catch (final NoTurnException e) {
-                            showErrorMessage(e);
-                        }
-                    }
-                });
-        hideHand();
-        alertDialog.show();
-    }
+
     private void showAlertMessage(final String message) {
         showAlertMessage("Warning !!!", message, false);
     }

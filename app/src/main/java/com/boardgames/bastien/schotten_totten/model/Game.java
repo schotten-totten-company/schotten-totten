@@ -1,6 +1,7 @@
 package com.boardgames.bastien.schotten_totten.model;
 
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
+import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoTurnException;
 import com.boardgames.bastien.schotten_totten.model.GameBoard;
@@ -23,26 +24,23 @@ public class Game {
 
     private final Player player2;
 
-    public Game(final String player1Name, final String player2Name) throws HandFullException, EmptyDeckException {
+    public Game(final String player1Name, final String player2Name) throws GameCreationException {
 
         board = new GameBoard();
 
         // create players
         this.player1 = new Player(player1Name, PlayerType.ONE);
         this.player2 = new Player(player2Name, PlayerType.TWO);
-        for (int i = 0; i < player1.getHand().MAX_HAND_SIZE; i++) {
-            player1.getHand().addCard(board.getDeck().drawCard());
-            player2.getHand().addCard(board.getDeck().drawCard());
+
+        try {
+            for (int i = 0; i < player1.getHand().MAX_HAND_SIZE; i++) {
+                player1.getHand().addCard(board.getDeck().drawCard());
+                player2.getHand().addCard(board.getDeck().drawCard());
+            }
+        } catch (final EmptyDeckException | HandFullException e) {
+            throw new GameCreationException(e);
         }
 
-    }
-
-    public Player getPlayer1() {
-        return player1;
-    }
-
-    public Player getPlayer2() {
-        return player2;
     }
 
     public Player getPlayer(final PlayerType t) throws NoTurnException {
