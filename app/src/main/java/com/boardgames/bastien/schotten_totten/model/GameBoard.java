@@ -28,6 +28,18 @@ public class GameBoard {
         }
     }
 
+    public List<Card> getPlayedCards() {
+        final List<Card> playedCards = new ArrayList();
+        for (final Milestone milestone : milestones) {
+            for (final Card card : milestone.getPlayer1Side()) {
+                playedCards.add(card);
+            }
+            for (final Card card : milestone.getPlayer2Side()) {
+                playedCards.add(card);
+            }
+        }
+        return playedCards;
+    }
     public Deck getDeck() {
         return deck;
     }

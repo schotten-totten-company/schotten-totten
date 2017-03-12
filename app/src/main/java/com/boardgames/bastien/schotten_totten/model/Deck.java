@@ -15,6 +15,10 @@ public class Deck {
 
     private final Stack<Card> deckCards = new Stack<>();
 
+    public Stack<Card> getDeck() {
+        return this.deckCards;
+    }
+
     public Deck() {
         for (final Card.COLOR c : Card.COLOR.values()) {
             for (final Card.NUMBER n : Card.NUMBER.values()) {

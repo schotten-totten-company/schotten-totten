@@ -18,19 +18,26 @@ import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoTurnException;
 import com.boardgames.bastien.schotten_totten.model.Card;
+import com.boardgames.bastien.schotten_totten.model.Deck;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HotSeatGameActivity extends AppCompatActivity {
 
     private Game game;
     private int selectedCard;
     private PlayerType playingPlayer;
+    private final List<Card> allTheCards = new ArrayList(new Deck().getDeck());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +67,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
                         final int index = Integer.valueOf(
                                 getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
                         final Milestone m = game.getGameBoard().getMilestones().get(index);
-                        // check is the milestone has already benn captured
+                        // check if the milestone has already been captured
                         if (!m.getCaptured().equals(PlayerType.NONE)) {
                             showAlertMessage("Milestone already captured by player " + m.getCaptured().toString());
                             return;
@@ -68,14 +75,34 @@ public class HotSeatGameActivity extends AppCompatActivity {
                         // reclaim
                         if (selectedCard == -1) {
                             // reclaim
-                            final boolean reclaim = m.reclaim(playingPlayer);
+
+                            // get played cards
+                            final List<Card> playedCards = game.getGameBoard().getPlayedCards();
+
+                            //get not yet played cards
+                            final List<Card> cardsNotYetPlayed = new ArrayList(allTheCards);
+                            CollectionUtils.filter(cardsNotYetPlayed, new Predicate<Card>() {
+                                @Override
+                                public boolean evaluate(final Card cardToFilter) {
+                                    for (final Card playedCard : playedCards) {
+                                        if (cardToFilter.getNumber().equals(playedCard.getNumber())
+                                                && cardToFilter.getColor().equals(playedCard.getColor())) {
+                                            return false;
+                                        }
+                                    }
+                                    return true;
+                                }
+                            });
+
+                            // test reclaim
+                            final boolean reclaim = m.reclaim(playingPlayer, cardsNotYetPlayed);
                             if (reclaim) {
                                 // capture the milestone
                                 updateMilestoneView(index);
                                 // check victory
                                 final PlayerType winner = game.getWinner();
                                 if (!winner.equals(PlayerType.NONE)) {
-                                    showAlertMessage("End of the game", winner + " wins !!!", true);
+                                    showAlertMessage("End of the game", winner + " wins !!!", true, false);
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
@@ -347,11 +374,18 @@ public class HotSeatGameActivity extends AppCompatActivity {
                                 updateMilestoneView(i);
                             }
                             // update hand
-                            for (int i = 0; i < game.getPlayer(playingPlayer).getHand().getHandSize(); i++) {
+                            final Hand hand = game.getPlayer(playingPlayer).getHand();
+                            for (int i = 0; i < hand.getHandSize(); i++) {
                                 final ImageButton handCardView = getHandImageButton(i);
-                                updateHandCard(handCardView, game.getPlayer(playingPlayer).getHand().getCards().get(i));
+                                updateHandCard(handCardView, hand.getCards().get(i));
                                 unSelectCard(handCardView);
                                 handCardView.setVisibility(View.VISIBLE);
+                            }
+                            // cards if hand is not full (no more cards to draw)
+                            for (int i = hand.getHandSize(); i < hand.MAX_HAND_SIZE; i++) {
+                                final ImageButton handCardView = getHandImageButton(i);
+                                unSelectCard(handCardView);
+                                handCardView.setVisibility(View.INVISIBLE);
                             }
                             ((TextView) findViewById(R.id.textView)).setText("Player " + playingPlayer.toString() + " is playing.");
                             dialog.dismiss();
@@ -368,15 +402,17 @@ public class HotSeatGameActivity extends AppCompatActivity {
     private void showErrorMessage(final Exception e) {
         final StringWriter message = new StringWriter();
         e.printStackTrace(new PrintWriter(message));
-        showAlertMessage("Error : " + e.getMessage(), message.toString(), true);
+        showAlertMessage("Error : " + e.getMessage(), message.toString(), true, true);
     }
 
     private void showAlertMessage(final String message) {
-        showAlertMessage("Warning !!!", message, false);
+        showAlertMessage("Warning !!!", message, false, false);
     }
 
-    private void showAlertMessage(final String title, final String message, final boolean finish) {
-        findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
+    private void showAlertMessage(final String title, final String message, final boolean finish, final boolean hideBoard) {
+        if (hideBoard) {
+            findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
+        }
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);

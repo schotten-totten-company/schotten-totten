@@ -13,6 +13,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 /**
  * Created by Bastien on 15/01/2017.
  */
@@ -30,17 +32,17 @@ public class GameTest {
     public void player1WinsWith3MilestonesInARow() throws MilestoneSideMaxReachedException {
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(0), Card.NUMBER.EIGHT, PlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayerType.ONE));
+        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayerType.ONE, new ArrayList<Card>()));
         Assert.assertFalse(testGame.getWinner().equals(PlayerType.ONE));
         Assert.assertTrue(testGame.getWinner().equals(PlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(1), Card.NUMBER.FIVE, PlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(1).reclaim(PlayerType.ONE));
+        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(1).reclaim(PlayerType.ONE, new ArrayList<Card>()));
         Assert.assertFalse(testGame.getWinner().equals(PlayerType.ONE));
         Assert.assertTrue(testGame.getWinner().equals(PlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(2), Card.NUMBER.ONE, PlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(2).reclaim(PlayerType.ONE));
+        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(2).reclaim(PlayerType.ONE, new ArrayList<Card>()));
         Assert.assertTrue(testGame.getWinner().equals(PlayerType.ONE));
 
     }
@@ -49,22 +51,22 @@ public class GameTest {
     public void player1WinsWith3MilestonesInARow_2() throws MilestoneSideMaxReachedException {
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(0), Card.NUMBER.EIGHT, PlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayerType.ONE));
+        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayerType.ONE, new ArrayList<Card>()));
         Assert.assertFalse(testGame.getWinner().equals(PlayerType.ONE));
         Assert.assertTrue(testGame.getWinner().equals(PlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(5), Card.NUMBER.ONE, PlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(5).reclaim(PlayerType.ONE));
+        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(5).reclaim(PlayerType.ONE, new ArrayList<Card>()));
         Assert.assertFalse(testGame.getWinner().equals(PlayerType.ONE));
         Assert.assertTrue(testGame.getWinner().equals(PlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(4), Card.NUMBER.ONE, PlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(4).reclaim(PlayerType.ONE));
+        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(4).reclaim(PlayerType.ONE, new ArrayList<Card>()));
         Assert.assertFalse(testGame.getWinner().equals(PlayerType.ONE));
         Assert.assertTrue(testGame.getWinner().equals(PlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(6), Card.NUMBER.ONE, PlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(6).reclaim(PlayerType.ONE));
+        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(6).reclaim(PlayerType.ONE, new ArrayList<Card>()));
         Assert.assertTrue(testGame.getWinner().equals(PlayerType.ONE));
 
     }

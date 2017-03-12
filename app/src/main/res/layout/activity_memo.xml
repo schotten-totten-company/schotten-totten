@@ -40,7 +40,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="false"
-            android:backgroundTint="@drawable/empty"
             android:cropToPadding="false"
             android:scaleType="fitEnd"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />

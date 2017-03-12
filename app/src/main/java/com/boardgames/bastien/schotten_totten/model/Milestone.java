@@ -2,8 +2,11 @@ package com.boardgames.bastien.schotten_totten.model;
 
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 
+import org.apache.commons.math3.util.CombinatoricsUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -75,29 +78,32 @@ public class Milestone {
         }
     }
 
-    public boolean reclaim(final PlayerType playerType) {
+    public boolean reclaim(final PlayerType playerType, final List<Card> cardsNotYetPlayed) {
         switch (playerType) {
             case ONE:
-                final boolean player1Stronger = compareSideStrenght(player1Side, player2Side, playerType);
+                final boolean player1Stronger = compareSideStrenght(player1Side, player2Side, playerType, cardsNotYetPlayed);
                 if (player1Stronger) {
                     captured = playerType;
                 }
                 return player1Stronger;
             case TWO:
-                final boolean player2Stronger = compareSideStrenght(player2Side, player1Side, playerType);
+                final boolean player2Stronger = compareSideStrenght(player2Side, player1Side, playerType, cardsNotYetPlayed);
                 if (player2Stronger) {
                     captured = playerType;
                 }
                 return player2Stronger;
             default:
-               return false;
+                return false;
         }
     }
 
-    private boolean compareSideStrenght(final List<Card> sideToCompare, final List<Card> otherSide, final PlayerType playerType){
+    private boolean compareSideStrenght(final List<Card> sideToCompare,
+                                        final List<Card> otherSide,
+                                        final PlayerType playerType,
+                                        final List<Card> cardsNotYetPlayed){
         if (sideToCompare.size() == MAX_CARDS_PER_SIDE) {
+            final int sideToCompareStrength = sideStrength(sideToCompare);
             if (otherSide.size() == MAX_CARDS_PER_SIDE) {
-                final int sideToCompareStrength = sideStrength(sideToCompare);
                 final int otherSideStrength = sideStrength(otherSide);
                 if (sideToCompareStrength == otherSideStrength) {
                     return (playerType.equals(firstPlayerToReachMaxCardPerSide));
@@ -105,7 +111,16 @@ public class Milestone {
                     return sideToCompareStrength > otherSideStrength;
                 }
             } else {
-                // TODO, very complex case
+                final Iterator<int[]> combinationsIterator = CombinatoricsUtils.combinationsIterator(cardsNotYetPlayed.size(), MAX_CARDS_PER_SIDE - otherSide.size());
+                while(combinationsIterator.hasNext()){
+                    final List<Card> newCombination = new ArrayList(otherSide);
+                    for (final int index : combinationsIterator.next()) {
+                        newCombination.add(cardsNotYetPlayed.get(index));
+                    }
+                    if (sideToCompareStrength < sideStrength(newCombination)) {
+                        return false;
+                    }
+                }
                 return true;
             }
         } else {

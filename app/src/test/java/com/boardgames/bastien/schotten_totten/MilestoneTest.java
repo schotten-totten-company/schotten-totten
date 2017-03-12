@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 /**
  * Created by Bastien on 15/01/2017.
  */
@@ -34,8 +36,8 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.THREE, Card.COLOR.CYAN), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.THREE, Card.COLOR.YELLOW), PlayerType.TWO);
 
-        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO));
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO, new ArrayList<Card>()));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
     }
 
     @Test
@@ -50,7 +52,7 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.SEVEN, Card.COLOR.RED), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.RED), PlayerType.TWO);
 
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
     }
 
     @Test
@@ -65,8 +67,8 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.THREE, Card.COLOR.GREY), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.ONE, Card.COLOR.YELLOW), PlayerType.TWO);
 
-        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO));
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO, new ArrayList<Card>()));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
     }
 
     @Test
@@ -81,8 +83,8 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.THREE, Card.COLOR.CYAN), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.ONE, Card.COLOR.CYAN), PlayerType.TWO);
 
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.TWO));
-        Assert.assertFalse(testMilestone.reclaim(PlayerType.ONE));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.TWO, new ArrayList<Card>()));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
     }
 
     @Test
@@ -97,8 +99,8 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.SIX, Card.COLOR.YELLOW), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.YELLOW), PlayerType.TWO);
 
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE));
-        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO, new ArrayList<Card>()));
     }
 
     @Test
@@ -113,8 +115,8 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.BLUE), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.CYAN), PlayerType.TWO);
 
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE));
-        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO, new ArrayList<Card>()));
     }
 
     @Test
@@ -129,8 +131,8 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.SEVEN, Card.COLOR.YELLOW), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.FIVE, Card.COLOR.YELLOW), PlayerType.TWO);
 
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.TWO));
-        Assert.assertFalse(testMilestone.reclaim(PlayerType.ONE));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.TWO, new ArrayList<Card>()));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
     }
 
     @Test
@@ -145,8 +147,8 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.SEVEN, Card.COLOR.CYAN), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.FIVE, Card.COLOR.GREY), PlayerType.TWO);
 
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.TWO));
-        Assert.assertFalse(testMilestone.reclaim(PlayerType.ONE));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.TWO, new ArrayList<Card>()));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
     }
 
     @Test
@@ -161,8 +163,8 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.FOUR, Card.COLOR.CYAN), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.FIVE, Card.COLOR.GREY), PlayerType.TWO);
 
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE));
-        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.TWO, new ArrayList<Card>()));
     }
 
     @Test
@@ -177,7 +179,7 @@ public class MilestoneTest {
         testMilestone.addCard(new Card(Card.NUMBER.SEVEN, Card.COLOR.GREY), PlayerType.TWO);
         testMilestone.addCard(new Card(Card.NUMBER.SIX, Card.COLOR.GREEN), PlayerType.TWO);
 
-        Assert.assertFalse(testMilestone.reclaim(PlayerType.ONE));
-        Assert.assertTrue(testMilestone.reclaim(PlayerType.TWO));
+        Assert.assertFalse(testMilestone.reclaim(PlayerType.ONE, new ArrayList<Card>()));
+        Assert.assertTrue(testMilestone.reclaim(PlayerType.TWO, new ArrayList<Card>()));
     }
 }
