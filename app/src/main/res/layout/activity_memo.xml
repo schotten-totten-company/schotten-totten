@@ -19,7 +19,6 @@
         android:layout_weight="0.17"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="5dp"
         android:paddingBottom="15dp"
         android:weightSum="1">
 
