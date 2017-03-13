@@ -126,7 +126,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
                                     updateHandCard(getHandImageButton(selectedCard), newCard);
                                     selectedCard = -1;
                                 } catch (final EmptyDeckException e) {
-                                    showAlertMessage(e.getMessage());
+                                    //showAlertMessage(e.getMessage());
                                     selectedCard = -1;
                                 } catch (final NoTurnException e) {
                                     showErrorMessage(e);
