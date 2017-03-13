@@ -9,6 +9,6 @@ import com.boardgames.bastien.schotten_totten.model.Milestone;
 public class MilestoneSideMaxReachedException extends Exception {
 
     public MilestoneSideMaxReachedException(final int id) {
-        super("Miletone " + id + " side is full.");
+        super("Milestone side is full.");
     }
 }
