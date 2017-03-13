@@ -45,6 +45,12 @@
                 tools:ignore="HardcodedText" />
 
             <ImageButton
+                android:id="@+id/skipTurnButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_media_ff" />
+
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/ic_dialog_info"
@@ -54,989 +60,1012 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/board"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/board"
-            tools:ignore="InefficientWeight"
-            android:weightSum="1"
             android:layout_gravity="center|fill"
-            android:layout_margin="5dp">
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            tools:ignore="InefficientWeight">
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_height="wrap_content"
                 android:id="@+id/m0layout"
-                android:layout_margin="5dp"
                 android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
                 android:layout_weight="0.11"
-                android:layout_gravity="center">
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
                     android:id="@+id/m0CapturedMilestoneOpponentSide"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m0Card2OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m0Card1OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m0Card0OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageButton
                     android:id="@+id/m0Milestone"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m0Card0PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m0Card1PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m0Card2PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m0CapturedMilestonePlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/m1layout"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_weight="0.11"
-                android:layout_gravity="center">
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
                     android:id="@+id/m1CapturedMilestoneOpponentSide"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m1Card2OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m1Card1OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m1Card0OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageButton
                     android:id="@+id/m1Milestone"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m1Card0PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m1Card1PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m1Card2PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m1CapturedMilestonePlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_height="wrap_content"
                 android:id="@+id/m2layout"
-                android:layout_margin="5dp"
                 android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
                 android:layout_weight="0.11"
-                android:layout_gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
                     android:id="@+id/m2CapturedMilestoneOpponentSide"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m2Card2OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m2Card1OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m2Card0OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageButton
                     android:id="@+id/m2Milestone"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m2Card0PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m2Card1PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m2Card2PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m2CapturedMilestonePlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/m3layout"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_weight="0.11"
-                android:layout_gravity="center">
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
                     android:id="@+id/m3CapturedMilestoneOpponentSide"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m3Card2OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m3Card1OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m3Card0OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageButton
                     android:id="@+id/m3Milestone"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m3Card0PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m3Card1PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m3Card2PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m3CapturedMilestonePlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/m4layout"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_weight="0.11"
-                android:layout_gravity="center">
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
                     android:id="@+id/m4CapturedMilestoneOpponentSide"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m4Card2OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m4Card1OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m4Card0OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageButton
                     android:id="@+id/m4Milestone"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m4Card0PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m4Card1PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m4Card2PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m4CapturedMilestonePlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/m5layout"
-                android:layout_margin="5dp"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal|center"
-                android:layout_weight="0.11">
+                android:layout_margin="5dp"
+                android:layout_weight="0.11"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
                     android:id="@+id/m5CapturedMilestoneOpponentSide"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m5Card2OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m5Card1OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m5Card0OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageButton
                     android:id="@+id/m5Milestone"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m5Card0PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m5Card1PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m5Card2PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m5CapturedMilestonePlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/m6layout"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_weight="0.11"
-                android:layout_gravity="center">
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
                     android:id="@+id/m6CapturedMilestoneOpponentSide"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m6Card2OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m6Card1OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m6Card0OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageButton
                     android:id="@+id/m6Milestone"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m6Card0PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m6Card1PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m6Card2PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m6CapturedMilestonePlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/m7layout"
-                android:layout_margin="5dp"
-                android:layout_weight="0.11"
-                android:layout_gravity="center">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
-                    android:id="@+id/m7CapturedMilestoneOpponentSide"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
-                    android:id="@+id/m7Card2OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
-                    android:id="@+id/m7Card1OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
-                    android:id="@+id/m7Card0OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
-                    android:id="@+id/m7Milestone"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp"
-                    android:cropToPadding="true" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
-                    android:id="@+id/m7Card0PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
-                    android:id="@+id/m7Card1PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
-                    android:id="@+id/m7Card2PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
-                    android:id="@+id/m7CapturedMilestonePlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/m8layout"
+                android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_weight="0.11"
-                android:layout_gravity="center_vertical">
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/m7CapturedMilestoneOpponentSide"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
-                    android:id="@+id/m8CapturedMilestoneOpponentSide"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
                     android:layout_margin="5dp"
-                    android:adjustViewBounds="true" />
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
 
                 <ImageView
+                    android:id="@+id/m7Card2OpponentSide"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
-                    android:id="@+id/m8Card2OpponentSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
                     android:layout_margin="5dp"
-                    android:cropToPadding="true" />
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
 
                 <ImageView
+                    android:id="@+id/m7Card1OpponentSide"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
-                    android:id="@+id/m8Card1OpponentSide"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
 
                 <ImageView
+                    android:id="@+id/m7Card0OpponentSide"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
-                    android:id="@+id/m8Card0OpponentSide"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
 
                 <ImageButton
+                    android:id="@+id/m7Milestone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
-                    android:id="@+id/m8Milestone"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:background="@android:color/darker_gray"
                     android:layout_margin="5dp"
-                    android:cropToPadding="true" />
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
 
                 <ImageView
+                    android:id="@+id/m7Card0PlayerSide"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
+                    android:id="@+id/m7Card1PlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
+                    android:id="@+id/m7Card2PlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
+                    android:id="@+id/m7CapturedMilestonePlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/m8layout"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:layout_weight="0.11"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/m8CapturedMilestoneOpponentSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
+                    android:id="@+id/m8Card2OpponentSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
+                    android:id="@+id/m8Card1OpponentSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
+                    android:id="@+id/m8Card0OpponentSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageButton
+                    android:id="@+id/m8Milestone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
+
+                <ImageView
                     android:id="@+id/m8Card0PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m8Card1PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/empty"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
                     android:id="@+id/m8Card2PlayerSide"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
-                    android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
-
-                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/milestone"
-                    android:id="@+id/m8CapturedMilestonePlayerSide"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:cropToPadding="true"
                     android:background="@android:color/darker_gray"
-                    android:layout_margin="5dp" />
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty" />
+
+                <ImageView
+                    android:id="@+id/m8CapturedMilestonePlayerSide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/darker_gray"
+                    android:cropToPadding="true"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/milestone" />
             </LinearLayout>
         </LinearLayout>
 

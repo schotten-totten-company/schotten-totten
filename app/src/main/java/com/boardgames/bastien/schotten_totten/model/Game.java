@@ -3,7 +3,7 @@ package com.boardgames.bastien.schotten_totten.model;
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
-import com.boardgames.bastien.schotten_totten.exceptions.NoTurnException;
+import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,8 @@ import java.util.List;
 public class Game {
 
     private final GameBoard board;
+
+    private PlayerType playingPlayer;
 
     private final Player player1;
 
@@ -37,26 +39,53 @@ public class Game {
             throw new GameCreationException(e);
         }
 
+        playingPlayer = PlayerType.ONE;
+
     }
 
-    public Player getPlayer(final PlayerType t) throws NoTurnException {
+    public PlayerType getPlayingPlayerType() {
+        return this.playingPlayer;
+    }
+
+    public void setPlayingPlayerType(final PlayerType pType) {
+        this.playingPlayer = pType;
+    }
+
+    public void swapPlayingPlayerType() {
+        switch (playingPlayer) {
+            case ONE:
+                playingPlayer = PlayerType.TWO;
+                break;
+            case TWO:
+                playingPlayer = PlayerType.ONE;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public Player getPlayingPlayer() throws NoPlayerException {
+        return getPlayer(getPlayingPlayerType());
+    }
+
+    public Player getPlayer(final PlayerType t) throws NoPlayerException {
         switch (t) {
             case ONE:
                 return player1;
             case TWO:
                 return player2;
             default:
-                throw new NoTurnException(t.toString());
+                throw new NoPlayerException(t.toString());
         }
     }
 
-    public PlayerType getWinner() {
+    public Player getWinner() throws NoPlayerException {
         if (playerWinTheGame(player1)) {
-            return player1.getPlayerType();
+            return player1;
         } else if (playerWinTheGame(player2)) {
-            return player2.getPlayerType();
+            return player2;
         } else {
-            return PlayerType.NONE;
+            throw new NoPlayerException(PlayerType.NONE.name());
         }
     }
 

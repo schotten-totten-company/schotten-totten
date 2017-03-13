@@ -3,7 +3,7 @@ package com.boardgames.bastien.schotten_totten.view;
 import android.content.Context;
 import android.view.View;
 
-import com.boardgames.bastien.schotten_totten.exceptions.NoTurnException;
+import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
@@ -37,7 +37,7 @@ public class MilestoneView {
         milestoneOpponent.setVisibility(View.INVISIBLE);
     }
 
-    public void update(final Milestone m, final PlayerType playerTurn) throws NoTurnException {
+    public void update(final Milestone m, final PlayerType playerTurn) throws NoPlayerException {
         switch (playerTurn) {
             case ONE:
                 updateSide(m, playerSide, opponentSide);
@@ -46,7 +46,7 @@ public class MilestoneView {
                 updateSide(m, opponentSide, playerSide);
                 break;
             case NONE:
-                throw new NoTurnException(playerTurn.toString());
+                throw new NoPlayerException(playerTurn.toString());
         }
         // update captured by playing player
         if (m.getCaptured().equals(playerTurn)) {

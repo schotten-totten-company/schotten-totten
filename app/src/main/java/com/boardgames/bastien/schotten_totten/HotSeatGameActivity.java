@@ -16,7 +16,7 @@ import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationExcep
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.boardgames.bastien.schotten_totten.exceptions.NoTurnException;
+import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Card;
 import com.boardgames.bastien.schotten_totten.model.Deck;
 import com.boardgames.bastien.schotten_totten.model.Game;
@@ -36,7 +36,6 @@ public class HotSeatGameActivity extends AppCompatActivity {
 
     private Game game;
     private int selectedCard;
-    private PlayerType playingPlayer;
     private final List<Card> allTheCards = new ArrayList(new Deck().getDeck());
 
     @Override
@@ -47,9 +46,8 @@ public class HotSeatGameActivity extends AppCompatActivity {
         try {
             this.game = new Game("player1", "player2");
             selectedCard = -1;
-            playingPlayer = PlayerType.ONE;
 
-            ((TextView) findViewById(R.id.textView)).setText("Player " + playingPlayer.toString() + " is playing.");
+            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName() + " is playing.");
             findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -57,6 +55,18 @@ public class HotSeatGameActivity extends AppCompatActivity {
                 }
             });
 
+            final ImageButton skipButton = (ImageButton) findViewById(R.id.skipTurnButton);
+            skipButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        showEndOfTurnMessage(game.getPlayingPlayer().getName());
+                    } catch (final NoPlayerException e) {
+                        showErrorMessage(e);
+                    }
+                }
+            });
+            skipButton.setVisibility(View.INVISIBLE);
 
             for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
                 updateMilestoneView(i);
@@ -95,14 +105,16 @@ public class HotSeatGameActivity extends AppCompatActivity {
                             });
 
                             // test reclaim
-                            final boolean reclaim = m.reclaim(playingPlayer, cardsNotYetPlayed);
+                            final boolean reclaim = m.reclaim(game.getPlayingPlayerType(), cardsNotYetPlayed);
                             if (reclaim) {
                                 // capture the milestone
                                 updateMilestoneView(index);
+
                                 // check victory
-                                final PlayerType winner = game.getWinner();
-                                if (!winner.equals(PlayerType.NONE)) {
-                                    showAlertMessage("End of the game", winner + " wins !!!", true, false);
+                                try {
+                                    showAlertMessage("End of the game", game.getWinner().getName() + " wins !!!", true, false);
+                                } catch (final NoPlayerException e) {
+                                    // nothing to do, just continue to play
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
@@ -110,34 +122,34 @@ public class HotSeatGameActivity extends AppCompatActivity {
                             // play a card
                         } else {
                             try {
-                                m.checkSideSize(playingPlayer);
+                                m.checkSideSize(game.getPlayingPlayerType());
                                 // put card
                                 try {
-                                    final Card c = game.getPlayer(playingPlayer).getHand().playCard(selectedCard);
-                                    m.addCard(c, playingPlayer);
+                                    final Card c = game.getPlayingPlayer().getHand().playCard(selectedCard);
+                                    m.addCard(c, game.getPlayingPlayerType());
                                     updateMilestoneView(m.getId());
-                                } catch (final NoTurnException | CardInitialisationException e) {
+                                } catch (final NoPlayerException | CardInitialisationException e) {
                                     showErrorMessage(e);
                                 }
                                 // draw card;
                                 try {
                                     final Card newCard = game.getGameBoard().getDeck().drawCard();
-                                    game.getPlayer(playingPlayer).getHand().getCards().add(0, newCard);
+                                    game.getPlayingPlayer().getHand().getCards().add(0, newCard);
                                     updateHandCard(getHandImageButton(selectedCard), newCard);
                                     selectedCard = -1;
                                 } catch (final EmptyDeckException e) {
                                     //showAlertMessage(e.getMessage());
                                     selectedCard = -1;
-                                } catch (final NoTurnException e) {
+                                } catch (final NoPlayerException e) {
                                     showErrorMessage(e);
                                 }
 
                                 // end of the turn
-                                playingPlayer = playingPlayer.equals(PlayerType.ONE)? PlayerType.TWO : PlayerType.ONE;
                                 try {
+                                    game.swapPlayingPlayerType();
                                     hideHand();
-                                    showEndOfTurnMessage(playingPlayer.toString());
-                                } catch (NoTurnException e) {
+                                    showEndOfTurnMessage(game.getPlayingPlayer().getName());
+                                } catch (final NoPlayerException e) {
                                     showErrorMessage(e);
                                 }
 
@@ -152,7 +164,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
 
             }
 
-            final Hand playingPlayerHand = game.getPlayer(playingPlayer).getHand();
+            final Hand playingPlayerHand = game.getPlayingPlayer().getHand();
             for (int i = 0; i < playingPlayerHand.getHandSize(); i++) {
                 final ImageButton handCardView = getHandImageButton(i);
                 updateHandCard(handCardView, playingPlayerHand.getCards().get(i));
@@ -182,7 +194,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
 
         } catch (GameCreationException e) {
             showErrorMessage(e);
-        } catch (NoTurnException e) {
+        } catch (NoPlayerException e) {
             showErrorMessage(e);
         }
 
@@ -190,22 +202,22 @@ public class HotSeatGameActivity extends AppCompatActivity {
 
     private void selectCard(ImageButton cardView) {
         try {
-            for (int i = 0; i < game.getPlayer(playingPlayer).getHand().getHandSize(); i++) {
+            for (int i = 0; i < game.getPlayingPlayer().getHand().getHandSize(); i++) {
                 getHandImageButton(i).setAlpha((float) 0.42);
             }
             cardView.setAlpha((float) 1.0);
-        } catch (NoTurnException e) {
+        } catch (final NoPlayerException e) {
             showErrorMessage(e);
         }
     }
 
     private void unSelectCard(ImageButton cardView) {
         try {
-            for (int i = 0; i < game.getPlayer(playingPlayer).getHand().getHandSize(); i++) {
+            for (int i = 0; i < game.getPlayingPlayer().getHand().getHandSize(); i++) {
                 getHandImageButton(i).setAlpha((float) 1.0);
             }
             cardView.setAlpha((float) 1.0);
-        } catch (NoTurnException e) {
+        } catch (final NoPlayerException e) {
             showErrorMessage(e);
         }
     }
@@ -238,7 +250,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
         final int milestonePlayerSideId = getResources().getIdentifier("m" + i + "CapturedMilestonePlayerSide", "id", getPackageName());
         final int milestoneOpponentId = getResources().getIdentifier("m" + i + "CapturedMilestoneOpponentSide", "id", getPackageName());
         // update milestones views
-        if (milestone.getCaptured().equals(playingPlayer)) {
+        if (milestone.getCaptured().equals(game.getPlayingPlayerType())) {
             milestoneImageButton.setVisibility(View.INVISIBLE);
             findViewById(milestonePlayerSideId).setVisibility(View.VISIBLE);
             findViewById(milestoneOpponentId).setVisibility(View.INVISIBLE);
@@ -261,19 +273,13 @@ public class HotSeatGameActivity extends AppCompatActivity {
         }
         // update player 1 side
         for (int iP1 = 0; iP1 < milestone.getPlayer1Side().size(); iP1++) {
-            final String side = (playingPlayer.equals(PlayerType.ONE)) ? "PlayerSide": "OpponentSide";
-            final int cardId = getResources().getIdentifier("m" + i + "Card" + iP1 + side, "id", getPackageName());
-            updatePlayedCard((ImageView) findViewById(cardId), milestone.getPlayer1Side().get(iP1));
-        }
-        // update player 1 side
-        for (int iP1 = 0; iP1 < milestone.getPlayer1Side().size(); iP1++) {
-            final String side = (playingPlayer.equals(PlayerType.ONE)) ? "PlayerSide": "OpponentSide";
+            final String side = (game.getPlayingPlayerType().equals(PlayerType.ONE)) ? "PlayerSide": "OpponentSide";
             final int cardId = getResources().getIdentifier("m" + i + "Card" + iP1 + side, "id", getPackageName());
             updatePlayedCard((ImageView) findViewById(cardId), milestone.getPlayer1Side().get(iP1));
         }
         // update player 2 side
         for (int iP2 = 0; iP2 < milestone.getPlayer2Side().size(); iP2++) {
-            final String side = (playingPlayer.equals(PlayerType.TWO)) ? "PlayerSide": "OpponentSide";
+            final String side = (game.getPlayingPlayerType().equals(PlayerType.TWO)) ? "PlayerSide": "OpponentSide";
             final int cardId = getResources().getIdentifier("m" + i + "Card" + iP2 + side, "id", getPackageName());
             updatePlayedCard((ImageView) findViewById(cardId), milestone.getPlayer2Side().get(iP2));
         }
@@ -347,14 +353,14 @@ public class HotSeatGameActivity extends AppCompatActivity {
         view.setBackgroundColor(Color.LTGRAY);
     }
 
-    private void hideHand() throws NoTurnException {
-        for (int i = 0; i < game.getPlayer(playingPlayer).getHand().getHandSize(); i++) {
+    private void hideHand() throws NoPlayerException {
+        for (int i = 0; i < game.getPlayingPlayer().getHand().MAX_HAND_SIZE; i++) {
             final ImageButton handCardView = getHandImageButton(i);
             handCardView.setVisibility(View.INVISIBLE);
         }
     }
-    private void showHand() throws NoTurnException {
-        for (int i = 0; i < game.getPlayer(playingPlayer).getHand().getHandSize(); i++) {
+    private void showHand() throws NoPlayerException {
+        for (int i = 0; i < game.getPlayingPlayer().getHand().getHandSize(); i++) {
             final ImageButton handCardView = getHandImageButton(i);
             handCardView.setVisibility(View.VISIBLE);
         }
@@ -363,7 +369,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
     private void showEndOfTurnMessage(final String message) {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("End of the turn.");
-        alertDialog.setMessage("Your turn is finished. Click on 'OK' and pass the phone to player " + message);
+        alertDialog.setMessage("Your turn is finished. Pass the device to " + message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -374,7 +380,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
                                 updateMilestoneView(i);
                             }
                             // update hand
-                            final Hand hand = game.getPlayer(playingPlayer).getHand();
+                            final Hand hand = game.getPlayingPlayer().getHand();
                             for (int i = 0; i < hand.getHandSize(); i++) {
                                 final ImageButton handCardView = getHandImageButton(i);
                                 updateHandCard(handCardView, hand.getCards().get(i));
@@ -387,10 +393,26 @@ public class HotSeatGameActivity extends AppCompatActivity {
                                 unSelectCard(handCardView);
                                 handCardView.setVisibility(View.INVISIBLE);
                             }
-                            ((TextView) findViewById(R.id.textView)).setText("Player " + playingPlayer.toString() + " is playing.");
+
+                            // update playing player test
+                            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName() + " is playing.");
+
+                            // show/hide skip button
+                            findViewById(R.id.skipTurnButton).setVisibility(View.VISIBLE);
+                            for (final Milestone m : game.getGameBoard().getMilestones()) {
+                                if (m.getCaptured().equals(PlayerType.NONE)) {
+                                    try {
+                                        m.checkSideSize(game.getPlayingPlayerType());
+                                        findViewById(R.id.skipTurnButton).setVisibility(View.INVISIBLE);
+                                        break;
+                                    } catch (final MilestoneSideMaxReachedException e) {
+                                        // nothing to do, just test next milestone
+                                    }
+                                }
+                            }
                             dialog.dismiss();
                             //showBeginningOfTheTurnMessage("Player " + message + " turn.","Click on 'OK' and play your turn.");
-                        } catch (final NoTurnException e) {
+                        } catch (final NoPlayerException e) {
                             showErrorMessage(e);
                         }
                     }
