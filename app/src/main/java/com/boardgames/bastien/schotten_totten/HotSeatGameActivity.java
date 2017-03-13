@@ -39,6 +39,11 @@ public class HotSeatGameActivity extends AppCompatActivity {
     private final List<Card> allTheCards = new ArrayList(new Deck().getDeck());
 
     @Override
+    public void onBackPressed() {
+        startActivity(new Intent(HotSeatGameActivity.this, LauncherActivity.class));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hot_seat_game);
