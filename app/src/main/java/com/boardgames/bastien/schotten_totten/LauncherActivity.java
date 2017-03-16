@@ -27,7 +27,14 @@ public class LauncherActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.onLineLauncherText).setAlpha((float)0.5);
+        final TextView onlineLauncherText = (TextView) findViewById(R.id.onLineLauncherText);
+        onlineLauncherText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LauncherActivity.this, OnlineGameActivity.class));
+            }
+        });
+
         findViewById(R.id.rulesLauncherText).setAlpha((float)0.5);
         findViewById(R.id.aboutLauncherText).setAlpha((float)0.5);
         findViewById(R.id.quitLauncherText).setOnClickListener(new View.OnClickListener() {
