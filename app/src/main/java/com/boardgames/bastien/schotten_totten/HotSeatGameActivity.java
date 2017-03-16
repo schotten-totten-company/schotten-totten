@@ -123,7 +123,8 @@ public class HotSeatGameActivity extends AppCompatActivity {
                                     // nothing to do, just continue to play
                                 }
                             } else {
-                                Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
+                                showAlertMessage(getString(R.string.cannot_capture_milestone_message));
                             }
                             // play a card
                         } else {
