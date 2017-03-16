@@ -4,6 +4,7 @@ import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
+import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Card;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
@@ -29,7 +30,7 @@ public class GameTest {
     }
 
     @Test
-    public void player1WinsWith3MilestonesInARow() throws MilestoneSideMaxReachedException {
+    public void player1WinsWith3MilestonesInARow() throws MilestoneSideMaxReachedException, NoPlayerException {
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(0), Card.NUMBER.EIGHT, PlayerType.ONE);
         Assert.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayerType.ONE, new ArrayList<Card>()));
@@ -48,7 +49,7 @@ public class GameTest {
     }
 
     @Test
-    public void player1WinsWith3MilestonesInARow_2() throws MilestoneSideMaxReachedException {
+    public void player1WinsWith3MilestonesInARow_2() throws MilestoneSideMaxReachedException, NoPlayerException {
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(0), Card.NUMBER.EIGHT, PlayerType.ONE);
         Assert.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayerType.ONE, new ArrayList<Card>()));

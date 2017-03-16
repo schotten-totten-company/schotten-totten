@@ -65,7 +65,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        showEndOfTurnMessage(game.getPlayingPlayer().getName());
+                        endOfTurn();
                     } catch (final NoPlayerException e) {
                         showErrorMessage(e);
                     }
@@ -151,9 +151,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
 
                                 // end of the turn
                                 try {
-                                    game.swapPlayingPlayerType();
-                                    hideHand();
-                                    showEndOfTurnMessage(game.getPlayingPlayer().getName());
+                                    endOfTurn();
                                 } catch (final NoPlayerException e) {
                                     showErrorMessage(e);
                                 }
@@ -359,22 +357,18 @@ public class HotSeatGameActivity extends AppCompatActivity {
     }
 
     private void hideHand() throws NoPlayerException {
-        for (int i = 0; i < game.getPlayingPlayer().getHand().MAX_HAND_SIZE; i++) {
-            final ImageButton handCardView = getHandImageButton(i);
-            handCardView.setVisibility(View.INVISIBLE);
-        }
-    }
-    private void showHand() throws NoPlayerException {
-        for (int i = 0; i < game.getPlayingPlayer().getHand().getHandSize(); i++) {
-            final ImageButton handCardView = getHandImageButton(i);
-            handCardView.setVisibility(View.VISIBLE);
-        }
+//        for (int i = 0; i < game.getPlayingPlayer().getHand().MAX_HAND_SIZE; i++) {
+//            final ImageButton handCardView = getHandImageButton(i);
+//            handCardView.setVisibility(View.INVISIBLE);
+//        }
     }
 
-    private void showEndOfTurnMessage(final String message) {
+    private void endOfTurn() throws NoPlayerException {
+        game.swapPlayingPlayerType();
+        findViewById(R.id.handLayout).setVisibility(View.INVISIBLE);
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("End of the turn.");
-        alertDialog.setMessage("Your turn is finished. Pass the device to " + message);
+        alertDialog.setMessage("Your turn is finished. Pass the device to " + game.getPlayingPlayer().getName());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -384,6 +378,8 @@ public class HotSeatGameActivity extends AppCompatActivity {
                             for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
                                 updateMilestoneView(i);
                             }
+
+                            findViewById(R.id.handLayout).setVisibility(View.VISIBLE);
                             // update hand
                             final Hand hand = game.getPlayingPlayer().getHand();
                             for (int i = 0; i < hand.getHandSize(); i++) {
