@@ -4,4 +4,18 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <string name="end_of_the_turn_message">Your turn is finished. Pass the device to </string>
+    <string name="end_of_the_turn_title">End of the turn.</string>
+
+    <string name="end_of_the_game_message"> wins !!!</string>
+    <string name="end_of_the_game_title">End of the Game.</string>
+
+    <string name="milestone_already_captured_message">Milestone already captured by the opponent.</string>
+
+    <string name="warning_title">Warning !!!</string>
+
+    <string name="player1name">Player 1</string>
+    <string name="player2name">Player 2</string>
+
 </resources>

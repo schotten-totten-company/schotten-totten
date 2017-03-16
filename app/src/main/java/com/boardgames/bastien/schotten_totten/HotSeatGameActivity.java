@@ -49,10 +49,10 @@ public class HotSeatGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hot_seat_game);
 
         try {
-            this.game = new Game("player1", "player2");
+            this.game = new Game(getString(R.string.player1name), getString(R.string.player2name));
             selectedCard = -1;
 
-            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName() + " is playing.");
+            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
             findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -84,7 +84,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
                         final Milestone m = game.getGameBoard().getMilestones().get(index);
                         // check if the milestone has already been captured
                         if (!m.getCaptured().equals(PlayerType.NONE)) {
-                            showAlertMessage("Milestone already captured by player " + m.getCaptured().toString());
+                            showAlertMessage(getString(R.string.milestone_already_captured_message));
                             return;
                         }
                         // reclaim
@@ -117,7 +117,8 @@ public class HotSeatGameActivity extends AppCompatActivity {
 
                                 // check victory
                                 try {
-                                    showAlertMessage("End of the game", game.getWinner().getName() + " wins !!!", true, false);
+                                    showAlertMessage(getString(R.string.end_of_the_game_title),
+                                            game.getWinner().getName() + getString(R.string.end_of_the_game_message), true, false);
                                 } catch (final NoPlayerException e) {
                                     // nothing to do, just continue to play
                                 }
@@ -356,19 +357,12 @@ public class HotSeatGameActivity extends AppCompatActivity {
         view.setBackgroundColor(Color.LTGRAY);
     }
 
-    private void hideHand() throws NoPlayerException {
-//        for (int i = 0; i < game.getPlayingPlayer().getHand().MAX_HAND_SIZE; i++) {
-//            final ImageButton handCardView = getHandImageButton(i);
-//            handCardView.setVisibility(View.INVISIBLE);
-//        }
-    }
-
     private void endOfTurn() throws NoPlayerException {
         game.swapPlayingPlayerType();
         findViewById(R.id.handLayout).setVisibility(View.INVISIBLE);
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("End of the turn.");
-        alertDialog.setMessage("Your turn is finished. Pass the device to " + game.getPlayingPlayer().getName());
+        alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
+        alertDialog.setMessage(getString(R.string.end_of_the_turn_message) + game.getPlayingPlayer().getName());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -396,7 +390,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
                             }
 
                             // update playing player test
-                            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName() + " is playing.");
+                            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
 
                             // show/hide skip button
                             findViewById(R.id.skipTurnButton).setVisibility(View.VISIBLE);
@@ -412,7 +406,6 @@ public class HotSeatGameActivity extends AppCompatActivity {
                                 }
                             }
                             dialog.dismiss();
-                            //showBeginningOfTheTurnMessage("Player " + message + " turn.","Click on 'OK' and play your turn.");
                         } catch (final NoPlayerException e) {
                             showErrorMessage(e);
                         }
@@ -429,7 +422,7 @@ public class HotSeatGameActivity extends AppCompatActivity {
     }
 
     private void showAlertMessage(final String message) {
-        showAlertMessage("Warning !!!", message, false, false);
+        showAlertMessage(getString(R.string.warning_title), message, false, false);
     }
 
     private void showAlertMessage(final String title, final String message, final boolean finish, final boolean hideBoard) {
