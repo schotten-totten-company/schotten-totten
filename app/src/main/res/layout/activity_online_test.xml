@@ -53,23 +53,39 @@
             android:layout_height="match_parent"
             android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/grid00Button"
+            <TextView
+                android:id="@+id/grid00"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:gravity="center"
+                android:text="[  ]"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/grid01Button"
+            <TextView
+                android:id="@+id/grid01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:gravity="center"
+                android:text="[  ]"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/grid02Button"
+            <TextView
+                android:id="@+id/grid02"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:gravity="center"
+                android:text="[  ]"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
         </TableRow>
 
         <TableRow
@@ -77,23 +93,39 @@
             android:layout_height="match_parent"
             android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/grid10Button"
+            <TextView
+                android:id="@+id/grid10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:gravity="center"
+                android:text="[  ]"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/grid11Button"
+            <TextView
+                android:id="@+id/grid11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:gravity="center"
+                android:text="[  ]"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/grid12Button"
+            <TextView
+                android:id="@+id/grid12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:gravity="center"
+                android:text="[  ]"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
         </TableRow>
 
         <TableRow
@@ -101,23 +133,39 @@
             android:layout_height="match_parent"
             android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/grid20Button"
+            <TextView
+                android:id="@+id/grid20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:gravity="center"
+                android:text="[  ]"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/grid21Button"
+            <TextView
+                android:id="@+id/grid21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:gravity="center"
+                android:text="[  ]"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/grid22Button"
+            <TextView
+                android:id="@+id/grid22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:gravity="center"
+                android:text="[  ]"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
         </TableRow>
 
     </TableLayout>

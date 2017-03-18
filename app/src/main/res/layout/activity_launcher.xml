@@ -54,12 +54,23 @@
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/onLineLauncherText"
+            android:id="@+id/createOnLineLauncherText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.17"
             android:padding="10dp"
-            android:text="OnLine Game"
+            android:text="Create OnLine Game"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/joinOnlineLauncherText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17"
+            android:padding="10dp"
+            android:text="JoinOnLine Game"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30sp" />

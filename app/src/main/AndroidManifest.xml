@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.boardgames.bastien.schotten_totten">
 
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
+    </uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_milestone"
@@ -14,10 +19,15 @@
             android:launchMode="singleTask">
         </activity>
 
-        <activity android:name=".OnlineGameActivity"
+        <activity android:name=".CreateOnlineTestGameActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
+        <activity android:name=".JoinOnlineTestGameActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
+        </activity>
+
 
         <activity android:name=".MemoActivity"
             android:screenOrientation="portrait"

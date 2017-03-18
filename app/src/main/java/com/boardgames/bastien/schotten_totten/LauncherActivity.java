@@ -3,12 +3,10 @@ package com.boardgames.bastien.schotten_totten;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
-import android.view.textservice.TextInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -27,11 +25,18 @@ public class LauncherActivity extends AppCompatActivity {
             }
         });
 
-        final TextView onlineLauncherText = (TextView) findViewById(R.id.onLineLauncherText);
-        onlineLauncherText.setOnClickListener(new View.OnClickListener() {
+        final TextView createOnLineLauncherText = (TextView) findViewById(R.id.createOnLineLauncherText);
+        createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LauncherActivity.this, OnlineGameActivity.class));
+                startActivity(new Intent(LauncherActivity.this, CreateOnlineTestGameActivity.class));
+            }
+        });
+        final TextView joinOnlineLauncherText = (TextView) findViewById(R.id.joinOnlineLauncherText);
+        joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LauncherActivity.this, JoinOnlineTestGameActivity.class));
             }
         });
 
