@@ -9,18 +9,22 @@ import com.boardgames.bastien.schotten_totten.model.TicTacToe;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.MulticastSocket;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 public class JoinOnlineTestGameActivity extends OnlineTestGameActivity {
-
-    private String myIp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +34,10 @@ public class JoinOnlineTestGameActivity extends OnlineTestGameActivity {
         localPort = 8022;
         distantPort = 8011;
         symbol = "O";
-        myIp = "192.168.1.42";//getIPAddress(true);
-        otherPlayerIp = "192.168.1.3";
 
         try {
 
+            localIp = getIPAddress(true);
             Executors.newSingleThreadExecutor().submit(new GameInitClient());
             setContentView(R.layout.activity_online_test);
             ((TextView)findViewById(R.id.playingPlayerText)).setText("try to connect...");
@@ -46,7 +49,7 @@ public class JoinOnlineTestGameActivity extends OnlineTestGameActivity {
     }
 
 
-    public class GameInitClient implements Callable<TicTacToe> {
+    public class GameInitClient implements Runnable {
 
         private final ServerSocket server;
 
@@ -55,60 +58,51 @@ public class JoinOnlineTestGameActivity extends OnlineTestGameActivity {
         }
 
         @Override
-        public TicTacToe call() throws Exception {
+        public void run() {
 
             // Create the Client Socket
-            try (final Socket clientSocketToConnect = new Socket(otherPlayerIp, distantPort)) {
-                // Create the input & output streams to the server
-                final ObjectOutputStream outToServer = new ObjectOutputStream(clientSocketToConnect.getOutputStream());
-                final ObjectInputStream inFromServer = new ObjectInputStream(clientSocketToConnect.getInputStream());
-                outToServer.writeObject(playerName + "@" + myIp);
-                game = (TicTacToe)inFromServer.readObject();
-                clientSocketToConnect.close();
+            try {
+                final String prefix = localIp.substring(0, localIp.lastIndexOf(".")+1);
+                for (int i = 1; i <255; i++) {
+                    try (final Socket clientSocketToConnect = new Socket()) {
+                        distantIp = prefix + i;
+                        clientSocketToConnect.connect(new InetSocketAddress(distantIp, distantPort), 100);
 
+                        // Create the input & output streams to the server
+                        final ObjectOutputStream outToServer = new ObjectOutputStream(clientSocketToConnect.getOutputStream());
+                        final ObjectInputStream inFromServer = new ObjectInputStream(clientSocketToConnect.getInputStream());
+                        outToServer.writeObject(playerName + "@" + localIp);
+                        game = (TicTacToe)inFromServer.readObject();
+                        clientSocketToConnect.close();
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(JoinOnlineTestGameActivity.this,
+                                        "connected to server", Toast.LENGTH_LONG).show();
+                                ((TextView)findViewById(R.id.playingPlayerText)).setText(
+                                        game.getPlayingPlayer() + " turn.");
+                                updateBoard();
+                                removeListeners();
+                            }
+                        });
+
+                        Executors.newSingleThreadExecutor().submit(new GameServer(server));
+
+                        break;
+                    } catch (final SocketTimeoutException | SocketException e) {
+                        System.out.println(distantIp + " : KO");
+                    }
+                }
+            } catch (final Exception e) {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(JoinOnlineTestGameActivity.this,
-                                "connected to server", Toast.LENGTH_LONG).show();
-                        ((TextView)findViewById(R.id.playingPlayerText)).setText(
-                                game.getPlayingPlayer() + " turn.");
-                        updateBoard();
-                        removeListeners();
+                        showErrorMessage(e);
                     }
                 });
-
-                Executors.newSingleThreadExecutor().submit(new GameServer(server));
-            } catch (final Exception e) {
-                throw e;
             }
-            return game;
+
         }
     }
 
-    public static String getIPAddress(boolean useIPv4) {
-        try {
-            final List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs) {
-                    if (!addr.isLoopbackAddress()) {
-                        String sAddr = addr.getHostAddress();
-                        //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        boolean isIPv4 = sAddr.indexOf(':')<0;
 
-                        if (useIPv4) {
-                            if (isIPv4)
-                                return sAddr;
-                        } else {
-                            if (!isIPv4) {
-                                int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
-                                return delim<0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) { } // for now eat exceptions
-        return "";
-    }
 }

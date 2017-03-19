@@ -15,18 +15,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 
 public abstract class OnlineTestGameActivity extends AppCompatActivity {
 
     protected TicTacToe game;
-    protected String otherPlayerIp;
+    protected String distantIp;
+    protected String localIp;
     protected String playerName;
     protected int localPort;
     protected int distantPort;
-    protected  String symbol;
+    protected String symbol;
 
     @Override
     public void onBackPressed() {
@@ -38,6 +45,7 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
             for (int j = 0; j < 3; j++) {
                 final String content = game.getGameState().get(10*i+j);
                 final TextView button = getImageButton(i, j);
+                button.setAlpha((float)1.0);
                 switch (content) {
                     case "X":
                         button.setText("[ X ]");
@@ -67,8 +75,7 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
     }
 
     private TextView getImageButton(final int i, final int j) {
-        final int position = 10+i+j;
-        final int id = getResources().getIdentifier("grid" + position, "id", getPackageName());
+        final int id = getResources().getIdentifier("grid" + i + j, "id", getPackageName());
         return (TextView)findViewById(id);
     }
 
@@ -76,7 +83,7 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             final int index = Integer.valueOf(
-                    getResources().getResourceEntryName(v.getId()).substring(4, 5));
+                    getResources().getResourceEntryName(v.getId()).substring(4, 6));
 
             // play
             game.play(index, symbol);
@@ -86,24 +93,14 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
             removeListeners();
             // switch player
             game.switchPlayer();
-            ((TextView)findViewById(R.id.playingPlayerText)).setText(game.getPlayingPlayer() + " turn.");
+            ((TextView)findViewById(R.id.playingPlayerText)).setText(
+                    game.getPlayingPlayer() + " turn.");
 
-            try {
-                // pass
-                // Create the socket
-                final Socket clientSocketToPass = new Socket(otherPlayerIp, distantPort);
-                // Create the input & output streams to the server
-                final ObjectOutputStream outToServer = new ObjectOutputStream(clientSocketToPass.getOutputStream());
-                outToServer.writeObject(game);
-                clientSocketToPass.close();
-            } catch (final IOException e) {
-                showErrorMessage(e);
-            }
+            Executors.newSingleThreadExecutor().submit(new GameSender());
 
             // check victory
             if (game.isFinished().equals(symbol)) {
-                showAlertMessage(getString(R.string.end_of_the_game_title),
-                        playerName + getString(R.string.end_of_the_game_message), true);
+                showAlertMessage(getString(R.string.end_of_the_game_title), "You wins !!!", true);
             }
         }
     };
@@ -135,8 +132,29 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
 
     }
 
+    private class GameSender implements Runnable {
 
-    public class GameServer implements Callable<String> {
+        @Override
+        public void run() {
+            // pass
+            // Create the socket
+            try (final Socket clientSocketToPass = new Socket(distantIp, distantPort)){
+                // Create the input & output streams to the server
+                final ObjectOutputStream outToServer =
+                        new ObjectOutputStream(clientSocketToPass.getOutputStream());
+                outToServer.writeObject(game);
+                clientSocketToPass.close();
+            } catch (final Exception e) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        showErrorMessage(e);
+                    }
+                });
+            }
+        }
+    }
+
+    protected class GameServer implements Runnable {
 
         private final ServerSocket gameServer;
 
@@ -145,18 +163,20 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
         }
 
         @Override
-        public String call() throws Exception {
+        public void run() {
 
-            while (game.isFinished().isEmpty()) {
-                // Create the Client Socket
-                try (final Socket clientSocket = gameServer.accept()) {
+            try (final Socket clientSocket = gameServer.accept()) {
+                while (game.isFinished().isEmpty()) {
+                    // Create the Client Socket
                     runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(OnlineTestGameActivity.this,
-                                    "client connected", Toast.LENGTH_LONG).show();                        }
+                                    "client connected", Toast.LENGTH_LONG).show();
+                        }
                     });
                     // Create input and output streams to client
-                    final ObjectInputStream inFromClient = new ObjectInputStream(clientSocket.getInputStream());
+                    final ObjectInputStream inFromClient =
+                            new ObjectInputStream(clientSocket.getInputStream());
                     game = (TicTacToe) inFromClient.readObject();
                     clientSocket.close();
 
@@ -167,12 +187,59 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
                             updateBoard();
                         }
                     });
-                } catch (final Exception e) {
-                    throw e;
                 }
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        // check victory
+                        if (game.isFinished().equals(symbol)) {
+                            showAlertMessage(getString(R.string.end_of_the_game_title), "You wins !!!", true);
+                        } else {
+                            showAlertMessage(getString(R.string.end_of_the_game_title), "You loose !!!", true);
+                        }
+                    }
+                });
+
+                gameServer.close();
+            } catch (final Exception e) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        showErrorMessage(e);
+                    }
+                });
+            } finally {
+
             }
-            return game.isFinished();
         }
     }
 
+    protected String getIPAddress(boolean useIPv4) throws UnknownHostException {
+        try {
+            final List<NetworkInterface> interfaces =
+                    Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface intf : interfaces) {
+                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
+                for (InetAddress addr : addrs) {
+                    if (!addr.isLoopbackAddress()) {
+                        String sAddr = addr.getHostAddress();
+                        //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
+                        boolean isIPv4 = sAddr.indexOf(':')<0;
+
+                        if (useIPv4) {
+                            if (isIPv4)
+                                return sAddr;
+                        } else {
+                            if (!isIPv4) {
+                                int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
+                                return delim<0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (final Exception ex) {
+            showErrorMessage(ex);
+        }
+        throw new UnknownHostException();
+    }
 }

@@ -9,6 +9,9 @@ import com.boardgames.bastien.schotten_totten.model.TicTacToe;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Callable;
@@ -26,6 +29,7 @@ public class CreateOnlineTestGameActivity extends OnlineTestGameActivity {
         symbol = "X";
 
         try {
+            localIp = getIPAddress(true);
             // set layout
             setContentView(R.layout.activity_online_test);
             ((TextView)findViewById(R.id.playingPlayerText)).setText("Waiting for other player.");
@@ -50,7 +54,7 @@ public class CreateOnlineTestGameActivity extends OnlineTestGameActivity {
         @Override
         public TicTacToe call() throws Exception {
 
-            // Create the Client Socket
+             // Create the Client Socket
             try (final Socket clientSocket = server.accept()) {
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -59,10 +63,12 @@ public class CreateOnlineTestGameActivity extends OnlineTestGameActivity {
                     }
                 });
                 // Create input and output streams to client
-                final ObjectInputStream inFromClient = new ObjectInputStream(clientSocket.getInputStream());
-                final ObjectOutputStream outToClient = new ObjectOutputStream(clientSocket.getOutputStream());
+                final ObjectInputStream inFromClient =
+                        new ObjectInputStream(clientSocket.getInputStream());
+                final ObjectOutputStream outToClient =
+                        new ObjectOutputStream(clientSocket.getOutputStream());
                 final String ipAndName = (String)inFromClient.readObject();
-                otherPlayerIp = ipAndName.split("@")[1];
+                distantIp = ipAndName.split("@")[1];
                 game = new TicTacToe(playerName, ipAndName.split("@")[0]);
                 outToClient.writeObject(game);
                 runOnUiThread(new Runnable() {
@@ -75,7 +81,11 @@ public class CreateOnlineTestGameActivity extends OnlineTestGameActivity {
                 // launch game server
                 Executors.newSingleThreadExecutor().submit(new GameServer(server));
             } catch (final Exception e) {
-                throw e;
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        showErrorMessage(e);
+                    }
+                });
             }
             return game;
         }
