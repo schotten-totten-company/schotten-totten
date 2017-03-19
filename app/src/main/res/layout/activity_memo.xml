@@ -269,7 +269,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:cropToPadding="true"
-            app:srcCompat="@drawable/number3three" />
+            app:srcCompat="@drawable/number7seven" />
 
         <ImageView
             android:id="@+id/wildHandCard2"
@@ -279,7 +279,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:cropToPadding="true"
-            app:srcCompat="@drawable/number4four" />
+            app:srcCompat="@drawable/number1one" />
 
         <ImageView
             android:id="@+id/wildHandCard3"
@@ -289,7 +289,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:cropToPadding="true"
-            app:srcCompat="@drawable/number5five" />
+            app:srcCompat="@drawable/number3three" />
 
         <TextView
             android:id="@+id/wildHandText"
