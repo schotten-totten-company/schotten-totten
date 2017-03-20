@@ -1,6 +1,10 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +42,7 @@ public class JoinOnlineTestGameActivity extends OnlineTestGameActivity {
         try {
 
             localIp = getIPAddress(true);
+            distantIp = getIntent().getStringExtra("distantIp");
             Executors.newSingleThreadExecutor().submit(new GameInitClient());
             setContentView(R.layout.activity_online_test);
             ((TextView)findViewById(R.id.playingPlayerText)).setText("try to connect...");
@@ -48,51 +53,38 @@ public class JoinOnlineTestGameActivity extends OnlineTestGameActivity {
 
     }
 
-
     public class GameInitClient implements Runnable {
 
-        private final ServerSocket server;
-
         public GameInitClient() throws IOException {
-            server = new ServerSocket(localPort);
+            gameServer = new ServerSocket(localPort);
         }
 
         @Override
         public void run() {
 
             // Create the Client Socket
-            try {
-                final String prefix = localIp.substring(0, localIp.lastIndexOf(".")+1);
-                for (int i = 1; i <255; i++) {
-                    try (final Socket clientSocketToConnect = new Socket()) {
-                        distantIp = prefix + i;
-                        clientSocketToConnect.connect(new InetSocketAddress(distantIp, distantPort), 100);
+            try (final Socket clientSocketToConnect = new Socket(distantIp, distantPort)) {
 
-                        // Create the input & output streams to the server
-                        final ObjectOutputStream outToServer = new ObjectOutputStream(clientSocketToConnect.getOutputStream());
-                        final ObjectInputStream inFromServer = new ObjectInputStream(clientSocketToConnect.getInputStream());
-                        outToServer.writeObject(playerName + "@" + localIp);
-                        game = (TicTacToe)inFromServer.readObject();
-                        clientSocketToConnect.close();
+                // Create the input & output streams to the server
+                final ObjectOutputStream outToServer = new ObjectOutputStream(clientSocketToConnect.getOutputStream());
+                final ObjectInputStream inFromServer = new ObjectInputStream(clientSocketToConnect.getInputStream());
+                outToServer.writeObject(playerName + "@" + localIp);
+                game = (TicTacToe)inFromServer.readObject();
+                clientSocketToConnect.close();
 
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                Toast.makeText(JoinOnlineTestGameActivity.this,
-                                        "connected to server", Toast.LENGTH_LONG).show();
-                                ((TextView)findViewById(R.id.playingPlayerText)).setText(
-                                        game.getPlayingPlayer() + " turn.");
-                                updateBoard();
-                                removeListeners();
-                            }
-                        });
-
-                        Executors.newSingleThreadExecutor().submit(new GameServer(server));
-
-                        break;
-                    } catch (final SocketTimeoutException | SocketException e) {
-                        System.out.println(distantIp + " : KO");
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(JoinOnlineTestGameActivity.this,
+                                "connected to server", Toast.LENGTH_LONG).show();
+                        ((TextView)findViewById(R.id.playingPlayerText)).setText(
+                                game.getPlayingPlayer() + " turn.");
+                        updateBoard();
+                        removeListeners();
                     }
-                }
+                });
+
+                Executors.newSingleThreadExecutor().submit(new GameServer());
+
             } catch (final Exception e) {
                 runOnUiThread(new Runnable() {
                     public void run() {

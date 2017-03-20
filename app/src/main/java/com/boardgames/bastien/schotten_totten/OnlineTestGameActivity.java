@@ -34,6 +34,7 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
     protected int localPort;
     protected int distantPort;
     protected String symbol;
+    protected ServerSocket gameServer;
 
     @Override
     public void onBackPressed() {
@@ -156,39 +157,41 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
 
     protected class GameServer implements Runnable {
 
-        private final ServerSocket gameServer;
-
-        public GameServer(final ServerSocket server) {
-            gameServer = server;
-        }
-
         @Override
         public void run() {
 
-            try (final Socket clientSocket = gameServer.accept()) {
+            try {
                 while (game.isFinished().isEmpty()) {
-                    // Create the Client Socket
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(OnlineTestGameActivity.this,
-                                    "client connected", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    // Create input and output streams to client
-                    final ObjectInputStream inFromClient =
-                            new ObjectInputStream(clientSocket.getInputStream());
-                    game = (TicTacToe) inFromClient.readObject();
-                    clientSocket.close();
+                    try (final Socket clientSocket = gameServer.accept()) {
+                        // Create the Client Socket
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(OnlineTestGameActivity.this,
+                                        "your turn to play", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        // Create input and output streams to client
+                        final ObjectInputStream inFromClient =
+                                new ObjectInputStream(clientSocket.getInputStream());
+                        game = (TicTacToe) inFromClient.readObject();
+                        clientSocket.close();
 
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            ((TextView)findViewById(R.id.playingPlayerText)).setText(
-                                    game.getPlayingPlayer() + " turn.");
-                            updateBoard();
-                        }
-                    });
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                ((TextView) findViewById(R.id.playingPlayerText)).setText(
+                                        game.getPlayingPlayer() + " turn.");
+                                updateBoard();
+                            }
+                        });
+
+                    } catch (final Exception e) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                showErrorMessage(e);
+                            }
+                        });
+                    }
                 }
-
                 runOnUiThread(new Runnable() {
                     public void run() {
                         // check victory
@@ -200,15 +203,12 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
                     }
                 });
 
-                gameServer.close();
             } catch (final Exception e) {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         showErrorMessage(e);
                     }
                 });
-            } finally {
-
             }
         }
     }
@@ -217,26 +217,30 @@ public abstract class OnlineTestGameActivity extends AppCompatActivity {
         try {
             final List<NetworkInterface> interfaces =
                     Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs) {
-                    if (!addr.isLoopbackAddress()) {
-                        String sAddr = addr.getHostAddress();
-                        //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        boolean isIPv4 = sAddr.indexOf(':')<0;
 
-                        if (useIPv4) {
-                            if (isIPv4)
-                                return sAddr;
-                        } else {
-                            if (!isIPv4) {
-                                int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
-                                return delim<0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
-                            }
+            // find vpn
+            for (final NetworkInterface i : interfaces) {
+                if (i.getName().equals("ppp0")) {
+                    for (final InetAddress a : Collections.list(i.getInetAddresses())) {
+                        if (!a.isLoopbackAddress()
+                                && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+                            return a.getHostAddress();
                         }
                     }
                 }
             }
+            // find wifi
+            for (final NetworkInterface i : interfaces) {
+                if (i.getName().equals("wlan0")) {
+                    for (final InetAddress a : Collections.list(i.getInetAddresses())) {
+                        if (!a.isLoopbackAddress()
+                                && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+                            return a.getHostAddress();
+                        }
+                    }
+                }
+            }
+
         } catch (final Exception ex) {
             showErrorMessage(ex);
         }

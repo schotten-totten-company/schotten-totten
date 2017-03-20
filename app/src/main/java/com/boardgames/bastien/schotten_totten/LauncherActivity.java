@@ -36,7 +36,7 @@ public class LauncherActivity extends AppCompatActivity {
         joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LauncherActivity.this, JoinOnlineTestGameActivity.class));
+                enterDistantIp();
             }
         });
 
@@ -49,6 +49,36 @@ public class LauncherActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void enterDistantIp() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter player1 IP: ");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String distantIp = input.getText().toString();
+                final Intent joinIntent = new Intent(LauncherActivity.this, JoinOnlineTestGameActivity.class);
+                joinIntent.putExtra("distantIp", distantIp);
+                startActivity(joinIntent);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     private void enterPlayersNames() {
