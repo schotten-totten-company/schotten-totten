@@ -12,7 +12,7 @@ import java.util.List;
 public class GameAiImpl extends GameAI {
 
     @Override
-    public GameResult play(List<Milestone> milestoneList, Hand hand) {
+    public GameResult play(final List<Milestone> milestoneList, final Hand hand) {
         return new GameResult(0, 0);
     }
 }

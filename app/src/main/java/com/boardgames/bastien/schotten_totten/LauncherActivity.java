@@ -33,7 +33,7 @@ public class LauncherActivity extends AppCompatActivity {
         createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LauncherActivity.this, CreateOnlineTestGameActivity.class));
+                startActivity(new Intent(LauncherActivity.this, CreateOnlineGameActivity.class));
             }
         });
 
@@ -46,7 +46,7 @@ public class LauncherActivity extends AppCompatActivity {
         });
 
         final TextView soloLauncherText = (TextView) findViewById(R.id.soloLauncherText);
-        joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
+        soloLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LauncherActivity.this, SoloGameActivity.class));
@@ -79,7 +79,7 @@ public class LauncherActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String distantIp = input.getText().toString();
-                final Intent joinIntent = new Intent(LauncherActivity.this, JoinOnlineTestGameActivity.class);
+                final Intent joinIntent = new Intent(LauncherActivity.this, JoinOnlineGameActivity.class);
                 joinIntent.putExtra("distantIp", distantIp);
                 startActivity(joinIntent);
             }
