@@ -5,7 +5,8 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <string name="end_of_the_turn_message">Your turn is finished. Pass the device to\u0020</string>
+    <string name="end_of_the_turn_hotseat_message">Your turn is finished. Pass the device to\u0020</string>
+    <string name="end_of_the_turn_online_message">Your turn is finished. Wait for other turn.</string>
     <string name="end_of_the_turn_title">End of the turn.</string>
 
     <string name="end_of_the_game_message">\u0020wins !!!</string>

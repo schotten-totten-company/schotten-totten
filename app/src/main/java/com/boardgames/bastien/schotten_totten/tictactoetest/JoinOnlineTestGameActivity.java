@@ -1,31 +1,17 @@
-package com.boardgames.bastien.schotten_totten;
+package com.boardgames.bastien.schotten_totten.tictactoetest;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.InputType;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.boardgames.bastien.schotten_totten.R;
 import com.boardgames.bastien.schotten_totten.model.TicTacToe;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.MulticastSocket;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 public class JoinOnlineTestGameActivity extends OnlineTestGameActivity {

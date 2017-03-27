@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.boardgames.bastien.schotten_totten.tictactoetest.CreateOnlineTestGameActivity;
+import com.boardgames.bastien.schotten_totten.tictactoetest.JoinOnlineTestGameActivity;
+import com.boardgames.bastien.schotten_totten.view.SoloGameActivity;
+
 public class LauncherActivity extends AppCompatActivity {
 
     @Override
@@ -32,11 +36,20 @@ public class LauncherActivity extends AppCompatActivity {
                 startActivity(new Intent(LauncherActivity.this, CreateOnlineTestGameActivity.class));
             }
         });
+
         final TextView joinOnlineLauncherText = (TextView) findViewById(R.id.joinOnlineLauncherText);
         joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 enterDistantIp();
+            }
+        });
+
+        final TextView soloLauncherText = (TextView) findViewById(R.id.soloLauncherText);
+        joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LauncherActivity.this, SoloGameActivity.class));
             }
         });
 

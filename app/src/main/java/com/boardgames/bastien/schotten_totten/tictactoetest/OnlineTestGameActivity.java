@@ -1,4 +1,4 @@
-package com.boardgames.bastien.schotten_totten;
+package com.boardgames.bastien.schotten_totten.tictactoetest;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,9 +8,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.boardgames.bastien.schotten_totten.LauncherActivity;
+import com.boardgames.bastien.schotten_totten.R;
 import com.boardgames.bastien.schotten_totten.model.TicTacToe;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -22,7 +23,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 public abstract class OnlineTestGameActivity extends AppCompatActivity {

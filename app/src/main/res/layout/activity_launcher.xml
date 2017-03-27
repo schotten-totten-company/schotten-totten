@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.17"
             android:padding="10dp"
-            android:text="Create OnLine Game"
+            android:text="Create Online Game"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30sp" />
@@ -70,7 +70,18 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.17"
             android:padding="10dp"
-            android:text="JoinOnLine Game"
+            android:text="Join Online Game"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/soloLauncherText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17"
+            android:padding="10dp"
+            android:text="Solo Game"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30sp" />
