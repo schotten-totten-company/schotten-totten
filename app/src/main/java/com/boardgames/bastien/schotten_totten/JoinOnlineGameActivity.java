@@ -30,8 +30,8 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
             localIp = getIPAddress();
             distantIp = getIntent().getStringExtra("distantIp");
             Executors.newSingleThreadExecutor().submit(new GameInitClient());
-            setContentView(R.layout.activity_online_test);
-            ((TextView)findViewById(R.id.playingPlayerText)).setText("try to connect...");
+            setContentView(R.layout.activity_hot_seat_game);
+            ((TextView)findViewById(R.id.textView)).setText("try to connect...");
 
         } catch (final Exception e) {
             showErrorMessage(e);
@@ -57,6 +57,7 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 outToServer.writeObject(playerName + "@" + localIp);
                 game = (Game)inFromServer.readObject();
                 clientSocketToConnect.close();
+                initUI(JoinOnlineGameActivity.this);
 
                 runOnUiThread(new Runnable() {
                     public void run() {

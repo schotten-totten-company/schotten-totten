@@ -25,8 +25,8 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
         try {
             localIp = getIPAddress();
             // set layout
-            setContentView(R.layout.activity_online_test);
-            ((TextView)findViewById(R.id.playingPlayerText)).setText(localIp + " is waiting ...");
+            setContentView(R.layout.activity_hot_seat_game);
+            ((TextView)findViewById(R.id.textView)).setText(localIp + " is waiting ...");
             // init game (wait for client)
             Executors.newSingleThreadExecutor().submit(new GameInitServer());
 
@@ -62,6 +62,7 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
 
                     // create game
                     game = new Game(playerName, ipAndName.split("@")[0]);
+                    initUI(CreateOnlineGameActivity.this);
                     outToClient.writeObject(game);
 
                     updateUI();

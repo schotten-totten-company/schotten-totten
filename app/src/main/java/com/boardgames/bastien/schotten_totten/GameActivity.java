@@ -1,7 +1,9 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -33,6 +35,24 @@ public abstract class GameActivity extends AppCompatActivity {
     protected Game game;
     protected int selectedCard;
     protected final List<Card> allTheCards = new ArrayList(new Deck().getDeck());
+
+    protected void initUI(final Context c) throws NoPlayerException {
+        selectedCard = -1;
+
+        ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
+        findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(c, MemoActivity.class));
+            }
+        });
+
+        initSkipButton();
+
+        initBoard();
+
+        initHand();
+    }
 
     protected void initSkipButton() {
         final ImageButton skipButton = (ImageButton) findViewById(R.id.skipTurnButton);
@@ -338,44 +358,7 @@ public abstract class GameActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-
-                            // update board
-                            for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
-                                updateMilestoneView(i);
-                            }
-
-                            findViewById(R.id.handLayout).setVisibility(View.VISIBLE);
-                            // update hand
-                            final Hand hand = game.getPlayingPlayer().getHand();
-                            for (int i = 0; i < hand.getHandSize(); i++) {
-                                final ImageButton handCardView = getHandImageButton(i);
-                                updateHandCard(handCardView, hand.getCards().get(i));
-                                unSelectCard(handCardView);
-                                handCardView.setVisibility(View.VISIBLE);
-                            }
-                            // cards if hand is not full (no more cards to draw)
-                            for (int i = hand.getHandSize(); i < hand.MAX_HAND_SIZE; i++) {
-                                final ImageButton handCardView = getHandImageButton(i);
-                                unSelectCard(handCardView);
-                                handCardView.setVisibility(View.INVISIBLE);
-                            }
-
-                            // update playing player text
-                            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
-
-                            // show/hide skip button
-                            findViewById(R.id.skipTurnButton).setVisibility(View.VISIBLE);
-                            for (final Milestone m : game.getGameBoard().getMilestones()) {
-                                if (m.getCaptured().equals(PlayerType.NONE)) {
-                                    try {
-                                        m.checkSideSize(game.getPlayingPlayerType());
-                                        findViewById(R.id.skipTurnButton).setVisibility(View.INVISIBLE);
-                                        break;
-                                    } catch (final MilestoneSideMaxReachedException e) {
-                                        // nothing to do, just test next milestone
-                                    }
-                                }
-                            }
+                            performEnfOfTheTurnActions();
                             dialog.dismiss();
                         } catch (final NoPlayerException e) {
                             showErrorMessage(e);
@@ -383,6 +366,46 @@ public abstract class GameActivity extends AppCompatActivity {
                     }
                 });
         alertDialog.show();
+    }
+
+    protected void performEnfOfTheTurnActions() throws NoPlayerException {
+        // update board
+        for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
+            updateMilestoneView(i);
+        }
+
+        findViewById(R.id.handLayout).setVisibility(View.VISIBLE);
+        // update hand
+        final Hand hand = game.getPlayingPlayer().getHand();
+        for (int i = 0; i < hand.getHandSize(); i++) {
+            final ImageButton handCardView = getHandImageButton(i);
+            updateHandCard(handCardView, hand.getCards().get(i));
+            unSelectCard(handCardView);
+            handCardView.setVisibility(View.VISIBLE);
+        }
+        // cards if hand is not full (no more cards to draw)
+        for (int i = hand.getHandSize(); i < hand.MAX_HAND_SIZE; i++) {
+            final ImageButton handCardView = getHandImageButton(i);
+            unSelectCard(handCardView);
+            handCardView.setVisibility(View.INVISIBLE);
+        }
+
+        // update playing player text
+        ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
+
+        // show/hide skip button
+        findViewById(R.id.skipTurnButton).setVisibility(View.VISIBLE);
+        for (final Milestone m : game.getGameBoard().getMilestones()) {
+            if (m.getCaptured().equals(PlayerType.NONE)) {
+                try {
+                    m.checkSideSize(game.getPlayingPlayerType());
+                    findViewById(R.id.skipTurnButton).setVisibility(View.INVISIBLE);
+                    break;
+                } catch (final MilestoneSideMaxReachedException e) {
+                    // nothing to do, just test next milestone
+                }
+            }
+        }
     }
 
     protected void showErrorMessage(final Exception e) {

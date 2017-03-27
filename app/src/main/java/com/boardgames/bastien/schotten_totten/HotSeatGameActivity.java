@@ -23,21 +23,7 @@ public class HotSeatGameActivity extends GameActivity {
 
         try {
             this.game = new Game(getString(R.string.player1name), getString(R.string.player2name));
-            selectedCard = -1;
-
-            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
-            findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(HotSeatGameActivity.this, MemoActivity.class));
-                }
-            });
-
-            initSkipButton();
-
-            initBoard();
-
-            initHand();
+            initUI(HotSeatGameActivity.this);
 
         } catch (final GameCreationException e) {
             showErrorMessage(e);

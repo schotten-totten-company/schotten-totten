@@ -1,18 +1,13 @@
-package com.boardgames.bastien.schotten_totten.view;
+package com.boardgames.bastien.schotten_totten;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.boardgames.bastien.schotten_totten.GameActivity;
-import com.boardgames.bastien.schotten_totten.LauncherActivity;
-import com.boardgames.bastien.schotten_totten.MemoActivity;
-import com.boardgames.bastien.schotten_totten.R;
 import com.boardgames.bastien.schotten_totten.ai.GameAI;
 import com.boardgames.bastien.schotten_totten.ai.GameAiImpl;
 import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
-import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
@@ -34,21 +29,7 @@ public class SoloGameActivity extends GameActivity {
 
         try {
             this.game = new Game(getString(R.string.player1name), getString(R.string.player2name));
-            selectedCard = -1;
-
-            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
-            findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(SoloGameActivity.this, MemoActivity.class));
-                }
-            });
-
-            initSkipButton();
-
-            initBoard();
-
-            initHand();
+            initUI(SoloGameActivity.this);
 
         } catch (final Exception e) {
             showErrorMessage(e);
@@ -64,6 +45,6 @@ public class SoloGameActivity extends GameActivity {
                 CardInitialisationException |HandFullException e) {
             showErrorMessage(e);
         }
-        super.endOfTurn();
+        super.performEnfOfTheTurnActions();
     }
 }

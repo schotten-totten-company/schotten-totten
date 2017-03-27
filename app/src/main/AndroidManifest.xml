@@ -17,15 +17,19 @@
             android:launchMode="singleTask">
         </activity>
 
-        <activity android:name=".tictactoetest.CreateOnlineTestGameActivity"
+        <activity android:name=".CreateOnlineGameActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
-        <activity android:name=".tictactoetest.JoinOnlineTestGameActivity"
+        <activity android:name=".JoinOnlineGameActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
 
+        <activity android:name=".SoloGameActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
+        </activity>
 
         <activity android:name=".MemoActivity"
             android:screenOrientation="portrait"

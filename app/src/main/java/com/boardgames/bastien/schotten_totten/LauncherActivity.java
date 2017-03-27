@@ -10,10 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.boardgames.bastien.schotten_totten.tictactoetest.CreateOnlineTestGameActivity;
-import com.boardgames.bastien.schotten_totten.tictactoetest.JoinOnlineTestGameActivity;
-import com.boardgames.bastien.schotten_totten.view.SoloGameActivity;
-
 public class LauncherActivity extends AppCompatActivity {
 
     @Override
