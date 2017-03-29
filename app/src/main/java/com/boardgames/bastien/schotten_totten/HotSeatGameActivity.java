@@ -10,12 +10,6 @@ import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Game;
 
-import java.io.IOException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 public class HotSeatGameActivity extends GameActivity {
 
     @Override

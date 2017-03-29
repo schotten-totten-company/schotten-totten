@@ -2,8 +2,6 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
 import com.boardgames.bastien.schotten_totten.ai.GameAI;
 import com.boardgames.bastien.schotten_totten.ai.GameAiImpl;
