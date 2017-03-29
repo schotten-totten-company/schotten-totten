@@ -33,7 +33,6 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
         } catch (final Exception e) {
             showErrorMessage(e);
         }
-
     }
 
 

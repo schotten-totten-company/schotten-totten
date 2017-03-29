@@ -69,13 +69,8 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 Executors.newSingleThreadExecutor().submit(new GameServer());
 
             } catch (final Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        showErrorMessage(e);
-                    }
-                });
+                superCatch(e);
             }
-
         }
     }
 
