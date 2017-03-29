@@ -33,28 +33,6 @@ public abstract class OnlineGameActivity extends GameActivity {
         startActivity(new Intent(OnlineGameActivity.this, LauncherActivity.class));
     }
 
-    private class GameSender implements Runnable {
-
-        @Override
-        public void run() {
-            // pass
-            // Create the socket
-            try (final Socket clientSocketToPass = new Socket(distantIp, distantPort)){
-                // Create the input & output streams to the server
-                final ObjectOutputStream outToServer =
-                        new ObjectOutputStream(clientSocketToPass.getOutputStream());
-                outToServer.writeObject(game);
-                clientSocketToPass.close();
-            } catch (final Exception e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        showErrorMessage(e);
-                    }
-                });
-            }
-        }
-    }
-
     protected void updateUI() throws NoPlayerException {
         final String playingPlayerName = game.getPlayingPlayer().getName();
         runOnUiThread(new Runnable() {
