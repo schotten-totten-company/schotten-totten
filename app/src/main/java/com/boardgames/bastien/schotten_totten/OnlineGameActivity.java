@@ -18,6 +18,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public abstract class OnlineGameActivity extends GameActivity {
 
@@ -47,6 +48,24 @@ public abstract class OnlineGameActivity extends GameActivity {
         });
     }
 
+    private class GameSender implements Runnable {
+
+        @Override
+        public void run() {
+            // pass
+            // Create the socket
+            try (final Socket clientSocketToPass = new Socket(distantIp, distantPort)){
+                // Create the input & output streams to the server
+                final ObjectOutputStream outToServer =
+                        new ObjectOutputStream(clientSocketToPass.getOutputStream());
+                outToServer.writeObject(game);
+                clientSocketToPass.close();
+            } catch (final Exception e) {
+                superCatch(e);
+            }
+        }
+    }
+
     protected class GameServer implements Runnable {
 
         @Override
@@ -66,10 +85,14 @@ public abstract class OnlineGameActivity extends GameActivity {
                         // Create input and output streams to client
                         final ObjectInputStream inFromClient =
                                 new ObjectInputStream(clientSocket.getInputStream());
+
+                        // recieve the game
                         game = (Game) inFromClient.readObject();
                         clientSocket.close();
 
+                        // update ui
                         updateUI();
+                        enableClick();
 
                     } catch (final Exception e) {
                         runOnUiThread(new Runnable() {
@@ -145,5 +168,13 @@ public abstract class OnlineGameActivity extends GameActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void endOfTurn() throws NoPlayerException {
+        // send game
+        Executors.newSingleThreadExecutor().submit(new GameSender());
+        // disable click
+        disableClick();
     }
 }

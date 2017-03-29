@@ -35,6 +35,15 @@ public abstract class GameActivity extends AppCompatActivity {
     protected Game game;
     protected int selectedCard;
     protected final List<Card> allTheCards = new ArrayList(new Deck().getDeck());
+    private boolean isClickEnabled = true;
+
+    protected void disableClick() {
+        isClickEnabled = false;
+    }
+
+    protected void enableClick() {
+        isClickEnabled = true;
+    }
 
     protected void initUI(final Context c) {
 
@@ -65,10 +74,12 @@ public abstract class GameActivity extends AppCompatActivity {
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    endOfTurn();
-                } catch (final NoPlayerException e) {
-                    showErrorMessage(e);
+                if (isClickEnabled) {
+                    try {
+                        endOfTurn();
+                    } catch (final NoPlayerException e) {
+                        showErrorMessage(e);
+                    }
                 }
             }
         });
@@ -81,90 +92,93 @@ public abstract class GameActivity extends AppCompatActivity {
             getMilestoneImageButton(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final ImageButton cardView = ((ImageButton) v);
-                    final int index = Integer.valueOf(
-                            getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
-                    final Milestone m = game.getGameBoard().getMilestones().get(index);
-                    // check if the milestone has already been captured
-                    if (!m.getCaptured().equals(PlayerType.NONE)) {
-                        showAlertMessage(getString(R.string.milestone_already_captured_message));
-                        return;
-                    }
-                    // reclaim
-                    if (selectedCard == -1) {
-                        // reclaim
+                    if (isClickEnabled) {
 
-                        // get played cards
-                        final List<Card> playedCards = game.getGameBoard().getPlayedCards();
-
-                        //get not yet played cards
-                        final List<Card> cardsNotYetPlayed = new ArrayList(allTheCards);
-                        CollectionUtils.filter(cardsNotYetPlayed, new Predicate<Card>() {
-                            @Override
-                            public boolean evaluate(final Card cardToFilter) {
-                                for (final Card playedCard : playedCards) {
-                                    if (cardToFilter.getNumber().equals(playedCard.getNumber())
-                                            && cardToFilter.getColor().equals(playedCard.getColor())) {
-                                        return false;
-                                    }
-                                }
-                                return true;
-                            }
-                        });
-
-                        // test reclaim
-                        final boolean reclaim = m.reclaim(game.getPlayingPlayerType(), cardsNotYetPlayed);
-                        if (reclaim) {
-                            // capture the milestone
-                            updateMilestoneView(index);
-
-                            // check victory
-                            try {
-                                showAlertMessage(getString(R.string.end_of_the_game_title),
-                                        game.getWinner().getName() + getString(R.string.end_of_the_game_message), true, false);
-                            } catch (final NoPlayerException e) {
-                                // nothing to do, just continue to play
-                            }
-                        } else {
-                            //Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
-                            showAlertMessage(getString(R.string.cannot_capture_milestone_message));
-                        }
-                        // play a card
-                    } else {
-                        try {
-                            m.checkSideSize(game.getPlayingPlayerType());
-                            // put card
-                            try {
-                                final Card c = game.getPlayingPlayer().getHand().playCard(selectedCard);
-                                m.addCard(c, game.getPlayingPlayerType());
-                                updateMilestoneView(m.getId());
-                            } catch (final NoPlayerException | CardInitialisationException e) {
-                                showErrorMessage(e);
-                            }
-                            // draw card;
-                            try {
-                                final Card newCard = game.getGameBoard().getDeck().drawCard();
-                                game.getPlayingPlayer().getHand().getCards().add(0, newCard);
-                                updateHandCard(getHandImageButton(selectedCard), newCard);
-                                selectedCard = -1;
-                            } catch (final EmptyDeckException e) {
-                                //showAlertMessage(e.getMessage());
-                                selectedCard = -1;
-                            } catch (final NoPlayerException e) {
-                                showErrorMessage(e);
-                            }
-
-                            // end of the turn
-                            try {
-                                endOfTurn();
-                            } catch (final NoPlayerException e) {
-                                showErrorMessage(e);
-                            }
-
-                        } catch (final MilestoneSideMaxReachedException e) {
-                            // return, cannot play here
-                            showAlertMessage(e.getMessage());
+                        final ImageButton cardView = ((ImageButton) v);
+                        final int index = Integer.valueOf(
+                                getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
+                        final Milestone m = game.getGameBoard().getMilestones().get(index);
+                        // check if the milestone has already been captured
+                        if (!m.getCaptured().equals(PlayerType.NONE)) {
+                            showAlertMessage(getString(R.string.milestone_already_captured_message));
                             return;
+                        }
+                        // reclaim
+                        if (selectedCard == -1) {
+                            // reclaim
+
+                            // get played cards
+                            final List<Card> playedCards = game.getGameBoard().getPlayedCards();
+
+                            //get not yet played cards
+                            final List<Card> cardsNotYetPlayed = new ArrayList(allTheCards);
+                            CollectionUtils.filter(cardsNotYetPlayed, new Predicate<Card>() {
+                                @Override
+                                public boolean evaluate(final Card cardToFilter) {
+                                    for (final Card playedCard : playedCards) {
+                                        if (cardToFilter.getNumber().equals(playedCard.getNumber())
+                                                && cardToFilter.getColor().equals(playedCard.getColor())) {
+                                            return false;
+                                        }
+                                    }
+                                    return true;
+                                }
+                            });
+
+                            // test reclaim
+                            final boolean reclaim = m.reclaim(game.getPlayingPlayerType(), cardsNotYetPlayed);
+                            if (reclaim) {
+                                // capture the milestone
+                                updateMilestoneView(index);
+
+                                // check victory
+                                try {
+                                    showAlertMessage(getString(R.string.end_of_the_game_title),
+                                            game.getWinner().getName() + getString(R.string.end_of_the_game_message), true, false);
+                                } catch (final NoPlayerException e) {
+                                    // nothing to do, just continue to play
+                                }
+                            } else {
+                                //Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
+                                showAlertMessage(getString(R.string.cannot_capture_milestone_message));
+                            }
+                            // play a card
+                        } else {
+                            try {
+                                m.checkSideSize(game.getPlayingPlayerType());
+                                // put card
+                                try {
+                                    final Card c = game.getPlayingPlayer().getHand().playCard(selectedCard);
+                                    m.addCard(c, game.getPlayingPlayerType());
+                                    updateMilestoneView(m.getId());
+                                } catch (final NoPlayerException | CardInitialisationException e) {
+                                    showErrorMessage(e);
+                                }
+                                // draw card;
+                                try {
+                                    final Card newCard = game.getGameBoard().getDeck().drawCard();
+                                    game.getPlayingPlayer().getHand().getCards().add(0, newCard);
+                                    updateHandCard(getHandImageButton(selectedCard), newCard);
+                                    selectedCard = -1;
+                                } catch (final EmptyDeckException e) {
+                                    //showAlertMessage(e.getMessage());
+                                    selectedCard = -1;
+                                } catch (final NoPlayerException e) {
+                                    showErrorMessage(e);
+                                }
+
+                                // end of the turn
+                                try {
+                                    endOfTurn();
+                                } catch (final NoPlayerException e) {
+                                    showErrorMessage(e);
+                                }
+
+                            } catch (final MilestoneSideMaxReachedException e) {
+                                // return, cannot play here
+                                showAlertMessage(e.getMessage());
+                                return;
+                            }
                         }
                     }
                 }
@@ -180,21 +194,24 @@ public abstract class GameActivity extends AppCompatActivity {
             handCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final ImageButton cardView = ((ImageButton) v);
-                    final int index = Integer.valueOf(
-                            getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
+                    if (isClickEnabled) {
 
-                    // unselect
-                    for (int i = 0; i < playingPlayerHand.getHandSize(); i++) {
-                        unSelectCard(getHandImageButton(i));
-                    }
+                        final ImageButton cardView = ((ImageButton) v);
+                        final int index = Integer.valueOf(
+                                getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
 
-                    // select clicked card
-                    if (index == selectedCard) {
-                        selectedCard = -1;
-                    } else {
-                        selectCard(cardView);
-                        selectedCard = index;
+                        // unselect
+                        for (int i = 0; i < playingPlayerHand.getHandSize(); i++) {
+                            unSelectCard(getHandImageButton(i));
+                        }
+
+                        // select clicked card
+                        if (index == selectedCard) {
+                            selectedCard = -1;
+                        } else {
+                            selectCard(cardView);
+                            selectedCard = index;
+                        }
                     }
                 }
             });
@@ -355,24 +372,7 @@ public abstract class GameActivity extends AppCompatActivity {
         view.setBackgroundColor(Color.LTGRAY);
     }
 
-    protected void endOfTurn() throws NoPlayerException {
-        findViewById(R.id.handLayout).setVisibility(View.INVISIBLE);
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
-        alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + game.getPlayingPlayer().getName());
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            performEnfOfTheTurnActions();
-                            dialog.dismiss();
-                        } catch (final NoPlayerException e) {
-                            showErrorMessage(e);
-                        }
-                    }
-                });
-        alertDialog.show();
-    }
+    protected abstract void endOfTurn() throws NoPlayerException;
 
     protected void performEnfOfTheTurnActions() throws NoPlayerException {
         // update board
@@ -440,6 +440,7 @@ public abstract class GameActivity extends AppCompatActivity {
                         }
                     }
                 });
+        alertDialog.setCancelable(false);
         alertDialog.show();
 
     }
