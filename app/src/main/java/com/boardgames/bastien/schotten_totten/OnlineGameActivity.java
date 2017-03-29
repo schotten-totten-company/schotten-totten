@@ -172,9 +172,11 @@ public abstract class OnlineGameActivity extends GameActivity {
 
     @Override
     protected void endOfTurn() throws NoPlayerException {
-        // send game
-        Executors.newSingleThreadExecutor().submit(new GameSender());
+        updateUI();
         // disable click
         disableClick();
+        game.swapPlayingPlayerType();
+        // send game
+        Executors.newSingleThreadExecutor().submit(new GameSender());
     }
 }

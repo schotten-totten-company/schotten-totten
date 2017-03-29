@@ -10,6 +10,12 @@ import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Game;
 
+import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 public class HotSeatGameActivity extends GameActivity {
 
     @Override
@@ -24,17 +30,15 @@ public class HotSeatGameActivity extends GameActivity {
 
         try {
             this.game = new Game(getString(R.string.player1name), getString(R.string.player2name));
-            initUI(HotSeatGameActivity.this);
+            initUI(HotSeatGameActivity.this, this.game.getPlayingPlayer().getHand());
 
-        } catch (final GameCreationException e) {
+        } catch (final NoPlayerException | GameCreationException e) {
             showErrorMessage(e);
         }
     }
 
     @Override
     protected void endOfTurn() throws NoPlayerException {
-        game.swapPlayingPlayerType();
-        findViewById(R.id.handLayout).setVisibility(View.INVISIBLE);
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
         alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + game.getPlayingPlayer().getName());
@@ -42,7 +46,9 @@ public class HotSeatGameActivity extends GameActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            performEnfOfTheTurnActions();
+                            // swap player
+                            game.swapPlayingPlayerType();
+                            updateUI();
                             dialog.dismiss();
                         } catch (final NoPlayerException e) {
                             showErrorMessage(e);
@@ -50,6 +56,14 @@ public class HotSeatGameActivity extends GameActivity {
                     }
                 });
         alertDialog.setCancelable(false);
+
+        updateUI();
+        disableClick();
+
+        // hide hand
+        findViewById(R.id.handLayout).setVisibility(View.INVISIBLE);
+
         alertDialog.show();
+        enableClick();
     }
 }

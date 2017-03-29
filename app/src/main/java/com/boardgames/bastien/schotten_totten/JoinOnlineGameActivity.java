@@ -5,6 +5,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.model.Hand;
+import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -56,9 +58,10 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 game = (Game)inFromServer.readObject();
                 clientSocketToConnect.close();
 
+                final Hand handToUpdate = game.getPlayer(PlayerType.TWO).getHand();
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        initUI(JoinOnlineGameActivity.this);
+                        initUI(JoinOnlineGameActivity.this, handToUpdate);
                         Toast.makeText(JoinOnlineGameActivity.this,
                                 "connected to server", Toast.LENGTH_LONG).show();
                     }

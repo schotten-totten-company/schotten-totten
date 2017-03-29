@@ -5,6 +5,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.model.Hand;
+import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -63,9 +65,10 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
                     game = new Game(playerName, ipAndName.split("@")[0]);
                     outToClient.writeObject(game);
 
+                    final Hand handToUpdate = game.getPlayer(PlayerType.ONE).getHand();
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            initUI(CreateOnlineGameActivity.this);
+                            initUI(CreateOnlineGameActivity.this, handToUpdate);
                         }
                     });
 

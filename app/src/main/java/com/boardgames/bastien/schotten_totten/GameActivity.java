@@ -45,7 +45,7 @@ public abstract class GameActivity extends AppCompatActivity {
         isClickEnabled = true;
     }
 
-    protected void initUI(final Context c) {
+    protected void initUI(final Context c, final Hand handToUpdate) {
 
         try {
             selectedCard = -1;
@@ -62,7 +62,7 @@ public abstract class GameActivity extends AppCompatActivity {
 
             initBoard();
 
-            initHand();
+            initHand(handToUpdate);
 
         } catch (final NoPlayerException e) {
             showErrorMessage(e);
@@ -186,11 +186,10 @@ public abstract class GameActivity extends AppCompatActivity {
         }
     }
 
-    protected void initHand() throws NoPlayerException {
-        final Hand playingPlayerHand = game.getPlayingPlayer().getHand();
-        for (int i = 0; i < playingPlayerHand.getHandSize(); i++) {
+    protected void initHand(final Hand handToUpdate) throws NoPlayerException {
+        for (int i = 0; i < handToUpdate.getHandSize(); i++) {
             final ImageButton handCardView = getHandImageButton(i);
-            updateHandCard(handCardView, playingPlayerHand.getCards().get(i));
+            updateHandCard(handCardView, handToUpdate.getCards().get(i));
             handCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -201,7 +200,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                 getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
 
                         // unselect
-                        for (int i = 0; i < playingPlayerHand.getHandSize(); i++) {
+                        for (int i = 0; i < handToUpdate.getHandSize(); i++) {
                             unSelectCard(getHandImageButton(i));
                         }
 
@@ -374,7 +373,7 @@ public abstract class GameActivity extends AppCompatActivity {
 
     protected abstract void endOfTurn() throws NoPlayerException;
 
-    protected void performEnfOfTheTurnActions() throws NoPlayerException {
+    protected void updateUI() throws NoPlayerException {
         // update board
         for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
             updateMilestoneView(i);
@@ -413,6 +412,8 @@ public abstract class GameActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
     protected void showErrorMessage(final Exception e) {
         final StringWriter message = new StringWriter();

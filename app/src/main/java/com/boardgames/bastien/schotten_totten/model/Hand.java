@@ -16,23 +16,28 @@ public class Hand {
 
     public final int MAX_HAND_SIZE = 6;
 
+    private int drawnCardIndex = -1;
+
     public Hand() {
-        cards = new ArrayList<Card>();
+        cards = new ArrayList<>();
     }
 
     public void addCard(final Card c) throws HandFullException {
         if (cards.size() < MAX_HAND_SIZE) {
-            cards.add(c);
+            drawnCardIndex = 0;
+            cards.add(drawnCardIndex, c);
         } else {
             throw new HandFullException(MAX_HAND_SIZE);
         }
 
     }
 
+    public int getDrawnCardIndex() {
+        return drawnCardIndex;
+    }
+
     public Card playCard(final int i) throws CardInitialisationException {
-        final Card cardToPickUp = new Card(cards.get(i).getNumber(), cards.get(i).getColor());
-        cards.remove(i);
-        return cardToPickUp;
+        return cards.remove(i);
     }
 
     public int getHandSize() {
