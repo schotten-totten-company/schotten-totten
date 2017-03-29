@@ -5,8 +5,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.model.Game;
-import com.boardgames.bastien.schotten_totten.model.TicTacToe;
-import com.boardgames.bastien.schotten_totten.tictactoetest.OnlineTestGameActivity;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -57,10 +55,10 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 outToServer.writeObject(playerName + "@" + localIp);
                 game = (Game)inFromServer.readObject();
                 clientSocketToConnect.close();
-                initUI(JoinOnlineGameActivity.this);
 
                 runOnUiThread(new Runnable() {
                     public void run() {
+                        initUI(JoinOnlineGameActivity.this);
                         Toast.makeText(JoinOnlineGameActivity.this,
                                 "connected to server", Toast.LENGTH_LONG).show();
                     }

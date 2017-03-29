@@ -5,6 +5,7 @@ import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * Created by Bastien on 29/11/2016.
  */
 
-public class Game {
+public class Game implements Serializable {
 
     private final GameBoard board;
 

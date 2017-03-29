@@ -36,22 +36,28 @@ public abstract class GameActivity extends AppCompatActivity {
     protected int selectedCard;
     protected final List<Card> allTheCards = new ArrayList(new Deck().getDeck());
 
-    protected void initUI(final Context c) throws NoPlayerException {
-        selectedCard = -1;
+    protected void initUI(final Context c) {
 
-        ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
-        findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(c, MemoActivity.class));
-            }
-        });
+        try {
+            selectedCard = -1;
 
-        initSkipButton();
+            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
+            findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(c, MemoActivity.class));
+                }
+            });
 
-        initBoard();
+            initSkipButton();
 
-        initHand();
+            initBoard();
+
+            initHand();
+
+        } catch (final NoPlayerException e) {
+            showErrorMessage(e);
+        }
     }
 
     protected void initSkipButton() {

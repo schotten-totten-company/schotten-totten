@@ -2,8 +2,6 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
@@ -26,8 +24,6 @@ public class HotSeatGameActivity extends GameActivity {
             initUI(HotSeatGameActivity.this);
 
         } catch (final GameCreationException e) {
-            showErrorMessage(e);
-        } catch (final NoPlayerException e) {
             showErrorMessage(e);
         }
     }

@@ -62,15 +62,20 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
 
                     // create game
                     game = new Game(playerName, ipAndName.split("@")[0]);
-                    initUI(CreateOnlineGameActivity.this);
                     outToClient.writeObject(game);
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            initUI(CreateOnlineGameActivity.this);
+                        }
+                    });
 
                     updateUI();
 
                     // launch game server
                     Executors.newSingleThreadExecutor().submit(new GameServer());
                 } catch (final Exception e) {
-                   superCatch(e);
+                    superCatch(e);
                 }
             } catch (final Exception e) {
                 superCatch(e);
