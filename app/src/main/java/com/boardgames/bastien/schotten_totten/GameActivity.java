@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -93,6 +95,8 @@ public abstract class GameActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (isClickEnabled) {
+                        // animate
+                        v.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomout));
 
                         final ImageButton cardView = ((ImageButton) v);
                         final int index = Integer.valueOf(
@@ -194,6 +198,8 @@ public abstract class GameActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (isClickEnabled) {
+                        // animate
+                        v.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomout));
 
                         final ImageButton cardView = ((ImageButton) v);
                         final int index = Integer.valueOf(
