@@ -60,7 +60,7 @@ public abstract class GameActivity extends AppCompatActivity {
                 }
             });
 
-            initSkipButton();
+            initPassButton();
 
             initBoard();
 
@@ -71,21 +71,19 @@ public abstract class GameActivity extends AppCompatActivity {
         }
     }
 
-    protected void initSkipButton() {
-        final ImageButton skipButton = (ImageButton) findViewById(R.id.skipTurnButton);
-        skipButton.setOnClickListener(new View.OnClickListener() {
+    protected void initPassButton() {
+        final ImageButton passButton = (ImageButton) findViewById(R.id.passButton);
+        passButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isClickEnabled) {
-                    try {
-                        endOfTurn();
-                    } catch (final NoPlayerException e) {
-                        showErrorMessage(e);
-                    }
+                try {
+                    endOfTurn();
+                } catch (final NoPlayerException e) {
+                    showErrorMessage(e);
                 }
             }
         });
-        skipButton.setVisibility(View.INVISIBLE);
+        passButton.setVisibility(View.INVISIBLE);
     }
 
     protected void initBoard() {
@@ -143,7 +141,6 @@ public abstract class GameActivity extends AppCompatActivity {
                                     // nothing to do, just continue to play
                                 }
                             } else {
-                                //Toast.makeText(getApplicationContext(), String.valueOf(reclaim), Toast.LENGTH_SHORT).show();
                                 showAlertMessage(getString(R.string.cannot_capture_milestone_message));
                             }
                             // play a card
@@ -161,7 +158,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                 // draw card;
                                 try {
                                     final Card newCard = game.getGameBoard().getDeck().drawCard();
-                                    game.getPlayingPlayer().getHand().getCards().add(0, newCard);
+                                    game.getPlayingPlayer().getHand().getCards().add(selectedCard, newCard);
                                     updateHandCard(getHandImageButton(selectedCard), newCard);
                                     selectedCard = -1;
                                 } catch (final EmptyDeckException e) {
@@ -172,11 +169,10 @@ public abstract class GameActivity extends AppCompatActivity {
                                 }
 
                                 // end of the turn
-                                try {
-                                    endOfTurn();
-                                } catch (final NoPlayerException e) {
-                                    showErrorMessage(e);
-                                }
+                                disableClick();
+                                final ImageButton passButton = (ImageButton) findViewById(R.id.passButton);
+                                passButton.setVisibility(View.VISIBLE);
+                                passButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomin));
 
                             } catch (final MilestoneSideMaxReachedException e) {
                                 // return, cannot play here
@@ -405,12 +401,13 @@ public abstract class GameActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
 
         // show/hide skip button
-        findViewById(R.id.skipTurnButton).setVisibility(View.VISIBLE);
+        final ImageButton passButton = (ImageButton) findViewById(R.id.passButton);
+        passButton.setVisibility(View.VISIBLE);
         for (final Milestone m : game.getGameBoard().getMilestones()) {
             if (m.getCaptured().equals(PlayerType.NONE)) {
                 try {
                     m.checkSideSize(game.getPlayingPlayerType());
-                    findViewById(R.id.skipTurnButton).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.passButton).setVisibility(View.INVISIBLE);
                     break;
                 } catch (final MilestoneSideMaxReachedException e) {
                     // nothing to do, just test next milestone

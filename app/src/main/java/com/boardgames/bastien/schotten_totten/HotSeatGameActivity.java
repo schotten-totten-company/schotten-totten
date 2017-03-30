@@ -43,6 +43,7 @@ public class HotSeatGameActivity extends GameActivity {
                             // swap player
                             game.swapPlayingPlayerType();
                             updateUI();
+                            enableClick();
                             dialog.dismiss();
                         } catch (final NoPlayerException e) {
                             showErrorMessage(e);
@@ -58,6 +59,5 @@ public class HotSeatGameActivity extends GameActivity {
         findViewById(R.id.handLayout).setVisibility(View.INVISIBLE);
 
         alertDialog.show();
-        enableClick();
     }
 }

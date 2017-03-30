@@ -45,7 +45,7 @@
                 tools:ignore="HardcodedText" />
 
             <ImageButton
-                android:id="@+id/skipTurnButton"
+                android:id="@+id/passButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/ic_media_ff" />
