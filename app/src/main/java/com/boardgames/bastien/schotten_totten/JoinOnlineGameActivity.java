@@ -68,6 +68,7 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 });
 
                 updateUI();
+                disableClick();
 
                 Executors.newSingleThreadExecutor().submit(new GameServer());
 

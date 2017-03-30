@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Player;
+import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -34,12 +35,15 @@ public abstract class OnlineGameActivity extends GameActivity {
         startActivity(new Intent(OnlineGameActivity.this, LauncherActivity.class));
     }
 
-    protected void updateUI() throws NoPlayerException {
-        final String playingPlayerName = game.getPlayingPlayer().getName();
+    protected void updateBoardUI() throws NoPlayerException {
+        final PlayerType playingPlayerType = game.getPlayingPlayer().getPlayerType();
+        final String playingPlayerOpponentName = playingPlayerType.equals(PlayerType.ONE) ?
+                                                    game.getPlayer(PlayerType.TWO).getName() :
+                                                    game.getPlayer(PlayerType.ONE).getName();
         runOnUiThread(new Runnable() {
             public void run() {
                 // update playing player text
-                ((TextView) findViewById(R.id.textView)).setText(playingPlayerName);
+                ((TextView) findViewById(R.id.textView)).setText(playingPlayerOpponentName);
                 // update board
                 for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
                     updateMilestoneView(i);
@@ -172,9 +176,10 @@ public abstract class OnlineGameActivity extends GameActivity {
 
     @Override
     protected void endOfTurn() throws NoPlayerException {
-        updateUI();
+        updateBoardUI();
         // disable click
         disableClick();
+        // swap
         game.swapPlayingPlayerType();
         // send game
         Executors.newSingleThreadExecutor().submit(new GameSender());
