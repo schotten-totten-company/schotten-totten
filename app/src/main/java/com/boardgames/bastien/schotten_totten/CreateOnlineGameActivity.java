@@ -72,8 +72,6 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
                         }
                     });
 
-                    updateUI();
-
                     // launch game server
                     Executors.newSingleThreadExecutor().submit(new GameServer());
                 } catch (final Exception e) {

@@ -95,15 +95,19 @@ public abstract class OnlineGameActivity extends GameActivity {
                         clientSocket.close();
 
                         // update ui
-                        updateUI();
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                try {
+                                    updateUI();
+                                } catch (NoPlayerException e) {
+                                    superCatch(e);
+                                }
+                            }
+                        });
                         enableClick();
 
                     } catch (final Exception e) {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                showErrorMessage(e);
-                            }
-                        });
+                        superCatch(e);
                     }
                     // check victory
                     try {
