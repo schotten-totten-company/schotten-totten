@@ -43,7 +43,7 @@ public class MemoActivity extends AppCompatActivity {
         findViewById(R.id.closeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+               onBackPressed();
             }
         });
 
