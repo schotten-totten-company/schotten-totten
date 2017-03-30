@@ -1,10 +1,12 @@
 package com.boardgames.bastien.schotten_totten.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Bastien on 28/11/2016.
  */
 
-public class Card {
+public class Card implements Serializable {
 
     public enum COLOR {
         BLUE,

@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by Bastien on 29/11/2016.
  */
 
-public class GameBoard {
+public class GameBoard implements Serializable {
 
     public final int MAX_MILESTONES = 9;
 

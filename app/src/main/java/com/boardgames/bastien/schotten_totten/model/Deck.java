@@ -2,6 +2,7 @@ package com.boardgames.bastien.schotten_totten.model;
 
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.Random;
@@ -11,7 +12,7 @@ import java.util.Stack;
  * Created by Bastien on 28/11/2016.
  */
 
-public class Deck {
+public class Deck implements Serializable {
 
     private final Stack<Card> deckCards = new Stack<>();
 

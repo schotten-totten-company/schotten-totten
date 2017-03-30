@@ -4,6 +4,7 @@ import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReached
 
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by Bastien on 29/11/2016.
  */
 
-public class Milestone {
+public class Milestone implements Serializable {
 
     private final int id;
 

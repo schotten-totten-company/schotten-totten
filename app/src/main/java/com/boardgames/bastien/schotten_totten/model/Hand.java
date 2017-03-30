@@ -3,6 +3,8 @@ package com.boardgames.bastien.schotten_totten.model;
 import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 
+import java.io.Serializable;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
  * Created by Bastien on 28/11/2016.
  */
 
-public class Hand {
+public class Hand implements Serializable {
 
     private final List<Card> cards;
 
