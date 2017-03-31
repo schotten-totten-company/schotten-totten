@@ -17,7 +17,7 @@ public class GameAiImpl extends GameAI {
     public GameResult play(final List<Milestone> milestoneList, final Hand hand) {
         for (final Milestone m : milestoneList) {
             if(m.getPlayer2Side().size() < m.MAX_CARDS_PER_SIDE) {
-                return new GameResult(0, m.getId());
+                return new GameResult(m.getId(), 0);
             }
         }
         return new GameResult(0, 0);
