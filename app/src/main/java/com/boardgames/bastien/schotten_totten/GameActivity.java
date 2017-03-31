@@ -47,7 +47,7 @@ public abstract class GameActivity extends AppCompatActivity {
         isClickEnabled = true;
     }
 
-    protected void initUI(final Context c, final Hand handToUpdate) {
+    protected void initUI(final Hand handToUpdate) {
 
         try {
             selectedCard = -1;
@@ -56,7 +56,7 @@ public abstract class GameActivity extends AppCompatActivity {
             findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(c, MemoActivity.class));
+                    startActivity(new Intent(getApplicationContext(), MemoActivity.class));
                 }
             });
 

@@ -68,7 +68,7 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
                     final Hand handToUpdate = game.getPlayer(PlayerType.ONE).getHand();
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            initUI(CreateOnlineGameActivity.this, handToUpdate);
+                            initUI(handToUpdate);
                         }
                     });
 

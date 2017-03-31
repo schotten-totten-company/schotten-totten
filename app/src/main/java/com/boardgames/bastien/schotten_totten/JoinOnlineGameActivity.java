@@ -61,7 +61,7 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 final Hand handToUpdate = game.getPlayer(PlayerType.TWO).getHand();
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        initUI(JoinOnlineGameActivity.this, handToUpdate);
+                        initUI(handToUpdate);
                         Toast.makeText(JoinOnlineGameActivity.this,
                                 "connected to server", Toast.LENGTH_LONG).show();
                     }

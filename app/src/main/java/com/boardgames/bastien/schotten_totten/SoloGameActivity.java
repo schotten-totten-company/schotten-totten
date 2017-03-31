@@ -28,7 +28,7 @@ public class SoloGameActivity extends GameActivity {
 
         try {
             this.game = new Game(getString(R.string.player1name), getString(R.string.player2name));
-            initUI(SoloGameActivity.this, this.game.getPlayer(PlayerType.ONE).getHand());
+            initUI(this.game.getPlayer(PlayerType.ONE).getHand());
 
         } catch (final Exception e) {
             showErrorMessage(e);

@@ -24,7 +24,7 @@ public class HotSeatGameActivity extends GameActivity {
 
         try {
             this.game = new Game(getString(R.string.player1name), getString(R.string.player2name));
-            initUI(HotSeatGameActivity.this, this.game.getPlayingPlayer().getHand());
+            initUI(this.game.getPlayingPlayer().getHand());
 
         } catch (final NoPlayerException | GameCreationException e) {
             showErrorMessage(e);
