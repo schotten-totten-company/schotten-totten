@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.17"
             android:padding="10dp"
-            android:text="Create Online Game"
+            android:text="Create/Resume Online Game"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30sp" />
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.17"
             android:padding="10dp"
-            android:text="Join Online Game"
+            android:text="Join/Resume Online Game"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30sp" />
@@ -82,17 +82,6 @@
             android:layout_weight="0.17"
             android:padding="10dp"
             android:text="Solo Game"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/rulesLauncherText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.17"
-            android:padding="10dp"
-            android:text="View Rules"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30sp" />

@@ -33,13 +33,7 @@ public class LauncherActivity extends AppCompatActivity {
             }
         });
 
-        final TextView joinOnlineLauncherText = (TextView) findViewById(R.id.joinOnlineLauncherText);
-        joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enterDistantIp();
-            }
-        });
+        mangeJoinButton();
 
         final TextView soloLauncherText = (TextView) findViewById(R.id.soloLauncherText);
         soloLauncherText.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +43,6 @@ public class LauncherActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.rulesLauncherText).setAlpha((float)0.5);
         findViewById(R.id.aboutLauncherText).setAlpha((float)0.5);
         findViewById(R.id.quitLauncherText).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +51,32 @@ public class LauncherActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mangeJoinButton();
+    }
+
+    private void mangeJoinButton() {
+        final TextView joinOnlineLauncherText = (TextView) findViewById(R.id.joinOnlineLauncherText);
+        if (getIntent().getBooleanExtra("joinLaunched", false)) {
+            joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(LauncherActivity.this,
+                            JoinOnlineGameActivity.class));
+                }
+            });
+        } else {
+            joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    enterDistantIp();
+                }
+            });
+        }
     }
 
     private void enterDistantIp() {

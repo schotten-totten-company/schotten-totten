@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,30 +14,51 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 
 public class JoinOnlineGameActivity extends OnlineGameActivity {
+
+    protected boolean alreadyLaunched;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        playerName = "P2";
-        localPort = 8022;
-        distantPort = 8011;
+        if (!alreadyLaunched) {
+            playerName = "P2";
+            localPort = 8022;
+            distantPort = 8011;
 
-        try {
+            try {
 
-            localIp = getIPAddress();
-            distantIp = getIntent().getStringExtra("distantIp");
-            Executors.newSingleThreadExecutor().submit(new GameInitClient());
-            setContentView(R.layout.activity_hot_seat_game);
-            ((TextView)findViewById(R.id.textView)).setText("try to connect...");
+                localIp = getIPAddress();
+                distantIp = getIntent().getStringExtra("distantIp");
+                Executors.newSingleThreadExecutor().submit(new GameInitClient());
+                setContentView(R.layout.activity_hot_seat_game);
+                ((TextView)findViewById(R.id.textView)).setText("try to connect...");
 
-        } catch (final Exception e) {
-            showErrorMessage(e);
+            } catch (final UnknownHostException e) {
+                showAlertMessage(getString(R.string.unknown_host_title),
+                        getString(R.string.unknown_host_message), true, true);
+            } catch (final Exception e) {
+                showErrorMessage(e);
+            }
+            alreadyLaunched = false;
         }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        alreadyLaunched = false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        final Intent backFromJoin = new Intent(JoinOnlineGameActivity.this, LauncherActivity.class);
+        backFromJoin.putExtra("joinLaunched", alreadyLaunched);
+        startActivity(backFromJoin);
     }
 
     public class GameInitClient implements Runnable {
