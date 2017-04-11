@@ -44,6 +44,7 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
             } catch (final Exception e) {
                 showErrorMessage(e);
             }
+            //
             alreadyLaunched = true;
         }
     }
