@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 
 public class CreateOnlineGameActivity extends OnlineGameActivity {
@@ -32,11 +34,14 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
             // init game (wait for client)
             Executors.newSingleThreadExecutor().submit(new GameInitServer());
 
+        } catch (final UnknownHostException e) {
+            showAlertMessage(getString(R.string.unknown_host_title),
+                    getString(R.string.unknown_host_message), true, true);
         } catch (final Exception e) {
             showErrorMessage(e);
         }
-    }
 
+    }
 
     public class GameInitServer implements Runnable {
 

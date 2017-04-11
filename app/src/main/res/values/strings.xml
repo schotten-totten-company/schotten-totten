@@ -16,6 +16,10 @@
 
     <string name="warning_title">Warning !!!</string>
 
+    <string name="unknown_host_title">No local network connection</string>
+    <string name="unknown_host_message">Not connected on WLAN or VLAN,
+        please first connect to a WiFi or PPTP VPN local network.</string>
+
     <string name="cannot_capture_milestone_message">This Milestone cannot yet be captured.</string>
 
     <string name="player1name">Player 1</string>

@@ -38,13 +38,6 @@ public class MemoActivity extends AppCompatActivity {
         findViewById(R.id.wildHandCard2).setBackgroundColor(Color.RED);
         findViewById(R.id.wildHandCard3).setBackgroundColor(Color.GREEN);
 
-        findViewById(R.id.closeButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               onBackPressed();
-            }
-        });
-
     }
 
     @Override

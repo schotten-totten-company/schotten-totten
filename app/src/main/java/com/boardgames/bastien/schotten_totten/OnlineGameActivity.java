@@ -1,6 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +30,6 @@ public abstract class OnlineGameActivity extends GameActivity {
     protected int localPort;
     protected int distantPort;
     protected ServerSocket gameServer;
-
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(OnlineGameActivity.this, LauncherActivity.class));
-    }
 
     protected void updateBoardUI() throws NoPlayerException {
         final PlayerType playingPlayerType = game.getPlayingPlayer().getPlayerType();
@@ -168,7 +164,9 @@ public abstract class OnlineGameActivity extends GameActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 try {
-                    gameServer.close();
+                    if (gameServer != null) {
+                        gameServer.close();
+                    }
                     showErrorMessage(e);
                 } catch (final IOException ex) {
                     showErrorMessage(ex);
