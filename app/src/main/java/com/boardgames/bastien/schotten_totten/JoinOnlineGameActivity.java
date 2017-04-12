@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
@@ -19,13 +20,22 @@ import java.util.concurrent.Executors;
 
 public class JoinOnlineGameActivity extends OnlineGameActivity {
 
-    protected boolean alreadyLaunched;
+    protected static boolean joinAlreadyLaunched = false;
+    protected static Game localGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!alreadyLaunched) {
+        if (localGame != null) {
+            try {
+                updateUI();
+            } catch (NoPlayerException e) {
+                showErrorMessage(e);
+            }
+        }
+
+        if (!joinAlreadyLaunched) {
             playerName = "P2";
             localPort = 8022;
             distantPort = 8011;
@@ -35,7 +45,6 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 localIp = getIPAddress();
                 distantIp = getIntent().getStringExtra("distantIp");
                 Executors.newSingleThreadExecutor().submit(new GameInitClient());
-                setContentView(R.layout.activity_hot_seat_game);
                 ((TextView)findViewById(R.id.textView)).setText("try to connect...");
 
             } catch (final UnknownHostException e) {
@@ -45,20 +54,13 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 showErrorMessage(e);
             }
             //
-            alreadyLaunched = true;
+            joinAlreadyLaunched = true;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        alreadyLaunched = false;
     }
 
     @Override
     public void onBackPressed() {
         final Intent backFromJoin = new Intent(JoinOnlineGameActivity.this, LauncherActivity.class);
-        backFromJoin.putExtra("joinLaunched", alreadyLaunched);
         startActivity(backFromJoin);
     }
 
@@ -79,6 +81,7 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 final ObjectInputStream inFromServer = new ObjectInputStream(clientSocketToConnect.getInputStream());
                 outToServer.writeObject(playerName + "@" + localIp);
                 game = (Game)inFromServer.readObject();
+                localGame = game;
                 clientSocketToConnect.close();
 
                 final Hand handToUpdate = game.getPlayer(PlayerType.TWO).getHand();

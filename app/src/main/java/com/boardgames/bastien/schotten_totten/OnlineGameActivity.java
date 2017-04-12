@@ -31,6 +31,11 @@ public abstract class OnlineGameActivity extends GameActivity {
     protected int distantPort;
     protected ServerSocket gameServer;
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     protected void updateBoardUI() throws NoPlayerException {
         final PlayerType playingPlayerType = game.getPlayingPlayer().getPlayerType();
         final String playingPlayerOpponentName = playingPlayerType.equals(PlayerType.ONE) ?

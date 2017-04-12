@@ -29,7 +29,8 @@ public class LauncherActivity extends AppCompatActivity {
         createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LauncherActivity.this, CreateOnlineGameActivity.class));
+                final Intent createIntent = new Intent(LauncherActivity.this, CreateOnlineGameActivity.class);
+                startActivity(createIntent);
             }
         });
 
@@ -61,12 +62,11 @@ public class LauncherActivity extends AppCompatActivity {
 
     private void mangeJoinButton() {
         final TextView joinOnlineLauncherText = (TextView) findViewById(R.id.joinOnlineLauncherText);
-        if (getIntent().getBooleanExtra("joinLaunched", false)) {
+        if (JoinOnlineGameActivity.joinAlreadyLaunched) {
             joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(LauncherActivity.this,
-                            JoinOnlineGameActivity.class));
+                    startActivity(new Intent(LauncherActivity.this, JoinOnlineGameActivity.class));
                 }
             });
         } else {

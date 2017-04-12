@@ -24,7 +24,6 @@ public class SoloGameActivity extends GameActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hot_seat_game);
 
         try {
             this.game = new Game(getString(R.string.player1name), getString(R.string.player2name));

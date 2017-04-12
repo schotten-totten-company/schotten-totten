@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
@@ -18,29 +19,47 @@ import java.util.concurrent.Executors;
 
 public class CreateOnlineGameActivity extends OnlineGameActivity {
 
+    protected static boolean alreadyLaunched = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        playerName = "P1";
-        localPort = 8011;
-        distantPort = 8022;
-
-        try {
-            localIp = getIPAddress();
-            // set layout
-            setContentView(R.layout.activity_hot_seat_game);
-            ((TextView)findViewById(R.id.textView)).setText(localIp + " is waiting ...");
-            // init game (wait for client)
-            Executors.newSingleThreadExecutor().submit(new GameInitServer());
-
-        } catch (final UnknownHostException e) {
-            showAlertMessage(getString(R.string.unknown_host_title),
-                    getString(R.string.unknown_host_message), true, true);
-        } catch (final Exception e) {
-            showErrorMessage(e);
+        if (game != null) {
+            try {
+                updateUI();
+            } catch (NoPlayerException e) {
+                showErrorMessage(e);
+            }
         }
 
+        if (!alreadyLaunched) {
+            playerName = "P1";
+            localPort = 8011;
+            distantPort = 8022;
+
+            try {
+                localIp = getIPAddress();
+                ((TextView)findViewById(R.id.textView)).setText(localIp + " is waiting ...");
+                // init game (wait for client)
+                Executors.newSingleThreadExecutor().submit(new GameInitServer());
+
+            } catch (final UnknownHostException e) {
+                showAlertMessage(getString(R.string.unknown_host_title),
+                        getString(R.string.unknown_host_message), true, true);
+            } catch (final Exception e) {
+                showErrorMessage(e);
+            }
+
+            alreadyLaunched = true;
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        final Intent backFromJoin = new Intent(CreateOnlineGameActivity.this, LauncherActivity.class);
+        startActivity(backFromJoin);
     }
 
     public class GameInitServer implements Runnable {

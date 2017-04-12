@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -45,6 +46,12 @@ public abstract class GameActivity extends AppCompatActivity {
 
     protected void enableClick() {
         isClickEnabled = true;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_hot_seat_game);
     }
 
     protected void initUI(final Hand handToUpdate) {
