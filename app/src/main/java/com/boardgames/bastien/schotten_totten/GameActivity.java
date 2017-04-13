@@ -23,6 +23,7 @@ import com.boardgames.bastien.schotten_totten.model.Deck;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
+import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -142,8 +143,10 @@ public abstract class GameActivity extends AppCompatActivity {
 
                                 // check victory
                                 try {
+                                    final Player winner = game.getWinner();
+                                    endOfTurn();
                                     showAlertMessage(getString(R.string.end_of_the_game_title),
-                                            game.getWinner().getName() + getString(R.string.end_of_the_game_message), true, false);
+                                            winner.getName() + getString(R.string.end_of_the_game_message), true, false);
                                 } catch (final NoPlayerException e) {
                                     // nothing to do, just continue to play
                                 }

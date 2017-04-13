@@ -1,7 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.content.Intent;
-import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,7 +78,7 @@ public abstract class OnlineGameActivity extends GameActivity {
 
             try {
                 boolean isGameFinished = false;
-                while (isGameFinished) {
+                while (!isGameFinished) {
                     try (final Socket clientSocket = gameServer.accept()) {
                         // Create the Client Socket
                         runOnUiThread(new Runnable() {
@@ -186,6 +186,8 @@ public abstract class OnlineGameActivity extends GameActivity {
         updateBoardUI();
         // disable click
         disableClick();
+        final ImageButton passButton = (ImageButton) findViewById(R.id.passButton);
+        passButton.setVisibility(View.INVISIBLE);
         // swap
         game.swapPlayingPlayerType();
         // send game
