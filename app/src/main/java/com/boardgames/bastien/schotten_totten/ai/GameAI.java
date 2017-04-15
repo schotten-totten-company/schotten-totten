@@ -63,4 +63,6 @@ public abstract class GameAI {
 
     protected abstract GameResult play(final List<Milestone> milestoneList, final Hand hand);
 
+    public abstract String getName();
+
 }

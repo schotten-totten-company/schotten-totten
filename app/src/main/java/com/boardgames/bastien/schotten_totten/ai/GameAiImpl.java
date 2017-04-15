@@ -22,4 +22,9 @@ public class GameAiImpl extends GameAI {
         }
         return new GameResult(0, 0);
     }
+
+    @Override
+    public String getName() {
+        return "Naive";
+    }
 }
