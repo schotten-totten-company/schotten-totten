@@ -1,6 +1,8 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,10 +31,16 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
             localPort = 8022;
             distantPort = 8011;
 
+            waitingDialog = new ProgressDialog(JoinOnlineGameActivity.this);
+            waitingDialog.setCancelable(false);
+
             try {
 
                 localIp = getIPAddress();
                 distantIp = getIntent().getStringExtra("distantIp");
+                findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
+                waitingDialog.setTitle(localIp + " is connecting ...");
+                waitingDialog.show();
                 Executors.newSingleThreadExecutor().submit(new GameInitClient());
                 ((TextView)findViewById(R.id.textView)).setText("try to connect...");
 
@@ -62,9 +70,12 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 game = (Game)inFromServer.readObject();
                 clientSocketToConnect.close();
 
+
                 final Hand handToUpdate = game.getPlayer(PlayerType.TWO).getHand();
                 runOnUiThread(new Runnable() {
                     public void run() {
+                        waitingDialog.dismiss();
+                        findViewById(R.id.gameLayout).setVisibility(View.VISIBLE);
                         initUI(handToUpdate);
                         Toast.makeText(JoinOnlineGameActivity.this,
                                 "connected to server", Toast.LENGTH_LONG).show();

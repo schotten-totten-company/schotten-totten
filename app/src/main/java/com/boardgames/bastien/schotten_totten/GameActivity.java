@@ -80,7 +80,7 @@ public abstract class GameActivity extends AppCompatActivity {
         try {
             selectedCard = -1;
 
-            ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
+            updateTextField();
             findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -406,6 +406,11 @@ public abstract class GameActivity extends AppCompatActivity {
 
     protected abstract void endOfTurn() throws NoPlayerException;
 
+    protected void updateTextField() throws NoPlayerException {
+        ((TextView) findViewById(R.id.textView)).setText(
+                game.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message));
+    }
+
     protected void updateUI() throws NoPlayerException {
         // update board
         for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
@@ -429,7 +434,7 @@ public abstract class GameActivity extends AppCompatActivity {
         }
 
         // update playing player text
-        ((TextView) findViewById(R.id.textView)).setText(game.getPlayingPlayer().getName());
+        updateTextField();
 
         // show/hide skip button
         final ImageButton passButton = (ImageButton) findViewById(R.id.passButton);

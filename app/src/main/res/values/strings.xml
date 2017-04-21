@@ -34,7 +34,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="it_is_your_turn_message">It is your turn to play.</string>
+    <string name="it_is_your_turn_message">, it is your turn to play.</string>
     <string name="not_your_turn_message">Your opponent is playing ...</string>
 
 </resources>

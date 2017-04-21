@@ -31,7 +31,7 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
             distantPort = 8022;
 
             waitingDialog = new ProgressDialog(CreateOnlineGameActivity.this);
-            waitingDialog.setCancelable(false);
+            //waitingDialog.setCancelable(false);
 
             try {
                 localIp = getIPAddress();

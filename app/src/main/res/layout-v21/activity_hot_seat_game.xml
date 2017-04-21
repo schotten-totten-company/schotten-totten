@@ -33,15 +33,17 @@
             android:layout_gravity="center_vertical|center_horizontal">
 
             <TextView
-                android:text="TextView"
+                android:id="@+id/textView"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:id="@+id/textView"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:textSize="24sp"
                 android:elevation="0dp"
-                android:textAlignment="inherit"
+                android:foregroundGravity="center"
                 android:gravity="center_vertical"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="18sp"
                 tools:ignore="HardcodedText" />
 
             <ImageButton

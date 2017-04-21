@@ -1,6 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -32,11 +33,25 @@ public abstract class OnlineGameActivity extends GameActivity {
     protected ProgressDialog waitingDialog;
     protected PlayerType playerType;
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(OnlineGameActivity.this, LauncherActivity.class));
+    }
+
+    @Override
+    protected void updateTextField() throws NoPlayerException {
+        final PlayerType playingPlayerType = game.getPlayingPlayer().getPlayerType();
+        final String message = playingPlayerType.equals(playerType) ?
+                playerName + getString(R.string.it_is_your_turn_message) :
+                getString(R.string.not_your_turn_message) ;
+        ((TextView) findViewById(R.id.textView)).setText(message);
+    }
+
     protected void updateBoardUI() throws NoPlayerException {
         final PlayerType playingPlayerType = game.getPlayingPlayer().getPlayerType();
         final String playingPlayerOpponentName = playingPlayerType.equals(playerType) ?
-                getString(R.string.it_is_your_turn_message) :
-                getString(R.string.not_your_turn_message);
+                getString(R.string.not_your_turn_message) :
+                playerName + getString(R.string.it_is_your_turn_message) ;
         runOnUiThread(new Runnable() {
             public void run() {
                 // update playing player text
