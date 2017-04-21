@@ -17,11 +17,6 @@ public class SoloGameActivity extends GameActivity {
     private final GameAI ai = new GameAiImpl();
 
     @Override
-    public void onBackPressed() {
-        startActivity(new Intent(SoloGameActivity.this, LauncherActivity.class));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

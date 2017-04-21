@@ -81,7 +81,7 @@ public class LauncherActivity extends AppCompatActivity {
 
     private void enterDistantIp() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter player1 IP: ");
+        builder.setTitle(getString(R.string.enter_ip_message));
 
         // Set up the input
         final EditText input = new EditText(this);
@@ -90,7 +90,7 @@ public class LauncherActivity extends AppCompatActivity {
         builder.setView(input);
 
         // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String distantIp = input.getText().toString();
@@ -99,7 +99,7 @@ public class LauncherActivity extends AppCompatActivity {
                 startActivity(joinIntent);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

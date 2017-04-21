@@ -1,14 +1,12 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.Toast;
 
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Hand;
-import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
 import java.io.ObjectInputStream;
@@ -16,7 +14,6 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 public class CreateOnlineGameActivity extends OnlineGameActivity {
@@ -29,12 +26,18 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
 
         if (!alreadyLaunched) {
             playerName = "P1";
+            playerType = PlayerType.ONE;
             localPort = 8011;
             distantPort = 8022;
 
+            waitingDialog = new ProgressDialog(CreateOnlineGameActivity.this);
+            waitingDialog.setCancelable(false);
+
             try {
                 localIp = getIPAddress();
-                ((TextView)findViewById(R.id.textView)).setText(localIp + " is waiting ...");
+                findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
+                waitingDialog.setTitle(localIp + " is waiting ...");
+                waitingDialog.show();
                 // init game (wait for client)
                 Executors.newSingleThreadExecutor().submit(new GameInitServer());
 
@@ -50,12 +53,6 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        final Intent backFromJoin = new Intent(CreateOnlineGameActivity.this, LauncherActivity.class);
-        startActivity(backFromJoin);
-    }
-
     public class GameInitServer implements Runnable {
 
         @Override
@@ -66,6 +63,8 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
                 try (final Socket initClientSocket = serverSocket.accept()) {
                     runOnUiThread(new Runnable() {
                         public void run() {
+                            waitingDialog.dismiss();
+                            findViewById(R.id.gameLayout).setVisibility(View.VISIBLE);
                             Toast.makeText(CreateOnlineGameActivity.this,
                                     "other player online", Toast.LENGTH_LONG).show();
                         }

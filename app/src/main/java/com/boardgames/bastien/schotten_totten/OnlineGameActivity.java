@@ -1,6 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.os.Bundle;
+import android.app.ProgressDialog;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -11,7 +11,6 @@ import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -30,13 +29,14 @@ public abstract class OnlineGameActivity extends GameActivity {
     protected String localIp;
     protected int localPort;
     protected int distantPort;
-//    protected ServerSocket gameServer;
+    protected ProgressDialog waitingDialog;
+    protected PlayerType playerType;
 
     protected void updateBoardUI() throws NoPlayerException {
         final PlayerType playingPlayerType = game.getPlayingPlayer().getPlayerType();
-        final String playingPlayerOpponentName = playingPlayerType.equals(PlayerType.ONE) ?
-                game.getPlayer(PlayerType.TWO).getName() :
-                game.getPlayer(PlayerType.ONE).getName();
+        final String playingPlayerOpponentName = playingPlayerType.equals(playerType) ?
+                getString(R.string.it_is_your_turn_message) :
+                getString(R.string.not_your_turn_message);
         runOnUiThread(new Runnable() {
             public void run() {
                 // update playing player text

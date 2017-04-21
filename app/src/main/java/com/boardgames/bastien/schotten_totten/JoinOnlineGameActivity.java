@@ -1,11 +1,9 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
@@ -27,6 +25,7 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
 
         if (!joinAlreadyLaunched) {
             playerName = "P2";
+            playerType = PlayerType.TWO;
             localPort = 8022;
             distantPort = 8011;
 
@@ -47,13 +46,6 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
             joinAlreadyLaunched = true;
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        final Intent backFromJoin = new Intent(JoinOnlineGameActivity.this, LauncherActivity.class);
-        startActivity(backFromJoin);
-    }
-
 
     public class GameInitClient implements Runnable {
 

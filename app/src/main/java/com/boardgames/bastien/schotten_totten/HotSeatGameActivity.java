@@ -13,11 +13,6 @@ import com.boardgames.bastien.schotten_totten.model.Game;
 public class HotSeatGameActivity extends GameActivity {
 
     @Override
-    public void onBackPressed() {
-        startActivity(new Intent(HotSeatGameActivity.this, LauncherActivity.class));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

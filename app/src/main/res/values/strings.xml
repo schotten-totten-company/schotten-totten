@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">schotten-totten</string>
+    <string name="app_name">Schotten Totten</string>
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -24,5 +24,17 @@
 
     <string name="player1name">Player 1</string>
     <string name="player2name">Player 2</string>
+
+    <string name="quit_title">Are you sure you want to quit ?</string>
+
+    <string name="enter_ip_message">Enter Player 1 IP address:</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="it_is_your_turn_message">It is your turn to play.</string>
+    <string name="not_your_turn_message">Your opponent is playing ...</string>
 
 </resources>
