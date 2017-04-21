@@ -143,10 +143,7 @@ public abstract class GameActivity extends AppCompatActivity {
 
                                 // check victory
                                 try {
-                                    final Player winner = game.getWinner();
-                                    endOfTurn();
-                                    showAlertMessage(getString(R.string.end_of_the_game_title),
-                                            winner.getName() + getString(R.string.end_of_the_game_message), true, false);
+                                    endOfTheGame(game.getWinner());
                                 } catch (final NoPlayerException e) {
                                     // nothing to do, just continue to play
                                 }
@@ -194,6 +191,11 @@ public abstract class GameActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    protected void endOfTheGame(final Player winner) throws NoPlayerException {
+        showAlertMessage(getString(R.string.end_of_the_game_title),
+                winner.getName() + getString(R.string.end_of_the_game_message), true, false);
     }
 
     protected void initHand(final Hand handToUpdate) throws NoPlayerException {

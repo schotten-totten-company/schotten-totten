@@ -182,6 +182,12 @@ public abstract class OnlineGameActivity extends GameActivity {
     }
 
     @Override
+    protected void endOfTheGame(final Player winner) throws NoPlayerException {
+        endOfTurn();
+        showAlertMessage(getString(R.string.end_of_the_game_title),
+                winner.getName() + getString(R.string.end_of_the_game_message), true, false);
+    }
+    @Override
     protected void endOfTurn() throws NoPlayerException {
         updateBoardUI();
         // disable click
