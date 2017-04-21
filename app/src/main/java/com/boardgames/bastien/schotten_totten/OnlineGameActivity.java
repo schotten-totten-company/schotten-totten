@@ -2,6 +2,7 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -32,6 +33,14 @@ public abstract class OnlineGameActivity extends GameActivity {
     protected int distantPort;
     protected ProgressDialog waitingDialog;
     protected PlayerType playerType;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        waitingDialog = new ProgressDialog(OnlineGameActivity.this);
+        waitingDialog.setCancelable(true);
+        findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
+    }
 
     @Override
     public void onBackPressed() {

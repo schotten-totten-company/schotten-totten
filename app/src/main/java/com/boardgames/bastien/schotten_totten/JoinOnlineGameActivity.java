@@ -31,14 +31,10 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
             localPort = 8022;
             distantPort = 8011;
 
-            waitingDialog = new ProgressDialog(JoinOnlineGameActivity.this);
-            waitingDialog.setCancelable(false);
-
             try {
 
                 localIp = getIPAddress();
                 distantIp = getIntent().getStringExtra("distantIp");
-                findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
                 waitingDialog.setTitle(localIp + " is connecting ...");
                 waitingDialog.show();
                 Executors.newSingleThreadExecutor().submit(new GameInitClient());
