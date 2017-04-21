@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Hand;
+import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
 import java.io.ObjectInputStream;
@@ -15,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 public class CreateOnlineGameActivity extends OnlineGameActivity {
@@ -24,14 +26,6 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (game != null) {
-            try {
-                updateUI();
-            } catch (NoPlayerException e) {
-                showErrorMessage(e);
-            }
-        }
 
         if (!alreadyLaunched) {
             playerName = "P1";
@@ -67,10 +61,9 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
         @Override
         public void run() {
 
-            try {
-                gameServer = new ServerSocket(localPort);
+            try (final ServerSocket serverSocket = new ServerSocket(localPort)) {
                 // Create the Client Socket
-                try (final Socket clientSocket = gameServer.accept()) {
+                try (final Socket initClientSocket = serverSocket.accept()) {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(CreateOnlineGameActivity.this,
@@ -79,9 +72,9 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
                     });
                     // Create input and output streams to client
                     final ObjectInputStream inFromClient =
-                            new ObjectInputStream(clientSocket.getInputStream());
+                            new ObjectInputStream(initClientSocket.getInputStream());
                     final ObjectOutputStream outToClient =
-                            new ObjectOutputStream(clientSocket.getOutputStream());
+                            new ObjectOutputStream(initClientSocket.getOutputStream());
                     final String ipAndName = (String) inFromClient.readObject();
                     distantIp = ipAndName.split("@")[1];
 
@@ -96,8 +89,8 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
                         }
                     });
 
-                    // launch game server
-                    Executors.newSingleThreadExecutor().submit(new GameServer());
+                    runTheGame(serverSocket);
+
                 } catch (final Exception e) {
                     superCatch(e);
                 }

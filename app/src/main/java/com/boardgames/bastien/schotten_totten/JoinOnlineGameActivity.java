@@ -10,7 +10,6 @@ import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -21,19 +20,10 @@ import java.util.concurrent.Executors;
 public class JoinOnlineGameActivity extends OnlineGameActivity {
 
     protected static boolean joinAlreadyLaunched = false;
-    protected static Game localGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (localGame != null) {
-            try {
-                updateUI();
-            } catch (NoPlayerException e) {
-                showErrorMessage(e);
-            }
-        }
 
         if (!joinAlreadyLaunched) {
             playerName = "P2";
@@ -64,11 +54,8 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
         startActivity(backFromJoin);
     }
 
-    public class GameInitClient implements Runnable {
 
-        public GameInitClient() throws IOException {
-            gameServer = new ServerSocket(localPort);
-        }
+    public class GameInitClient implements Runnable {
 
         @Override
         public void run() {
@@ -81,7 +68,6 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 final ObjectInputStream inFromServer = new ObjectInputStream(clientSocketToConnect.getInputStream());
                 outToServer.writeObject(playerName + "@" + localIp);
                 game = (Game)inFromServer.readObject();
-                localGame = game;
                 clientSocketToConnect.close();
 
                 final Hand handToUpdate = game.getPlayer(PlayerType.TWO).getHand();
@@ -95,7 +81,9 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
 
                 disableClick();
 
-                Executors.newSingleThreadExecutor().submit(new GameServer());
+                try (final ServerSocket serverSocket = new ServerSocket(localPort)) {
+                    runTheGame(serverSocket);
+                }
 
             } catch (final Exception e) {
                 superCatch(e);

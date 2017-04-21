@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -29,18 +30,13 @@ public abstract class OnlineGameActivity extends GameActivity {
     protected String localIp;
     protected int localPort;
     protected int distantPort;
-    protected ServerSocket gameServer;
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
+//    protected ServerSocket gameServer;
 
     protected void updateBoardUI() throws NoPlayerException {
         final PlayerType playingPlayerType = game.getPlayingPlayer().getPlayerType();
         final String playingPlayerOpponentName = playingPlayerType.equals(PlayerType.ONE) ?
-                                                    game.getPlayer(PlayerType.TWO).getName() :
-                                                    game.getPlayer(PlayerType.ONE).getName();
+                game.getPlayer(PlayerType.TWO).getName() :
+                game.getPlayer(PlayerType.ONE).getName();
         runOnUiThread(new Runnable() {
             public void run() {
                 // update playing player text
@@ -57,7 +53,6 @@ public abstract class OnlineGameActivity extends GameActivity {
 
         @Override
         public void run() {
-            // pass
             // Create the socket
             try (final Socket clientSocketToPass = new Socket(distantIp, distantPort)){
                 // Create the input & output streams to the server
@@ -65,66 +60,6 @@ public abstract class OnlineGameActivity extends GameActivity {
                         new ObjectOutputStream(clientSocketToPass.getOutputStream());
                 outToServer.writeObject(game);
                 clientSocketToPass.close();
-            } catch (final Exception e) {
-                superCatch(e);
-            }
-        }
-    }
-
-    protected class GameServer implements Runnable {
-
-        @Override
-        public void run() {
-
-            try {
-                boolean isGameFinished = false;
-                while (!isGameFinished) {
-                    try (final Socket clientSocket = gameServer.accept()) {
-                        // Create the Client Socket
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                Toast.makeText(OnlineGameActivity.this,
-                                        "your turn to play", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        // Create input and output streams to client
-                        final ObjectInputStream inFromClient =
-                                new ObjectInputStream(clientSocket.getInputStream());
-
-                        // recieve the game
-                        game = (Game) inFromClient.readObject();
-                        clientSocket.close();
-
-                        // update ui
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                try {
-                                    updateUI();
-                                } catch (NoPlayerException e) {
-                                    superCatch(e);
-                                }
-                            }
-                        });
-                        enableClick();
-
-                    } catch (final Exception e) {
-                        superCatch(e);
-                    }
-                    // check victory
-                    try {
-                        final Player winner = game.getWinner();
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                showAlertMessage(getString(R.string.end_of_the_game_title),
-                                        getString(R.string.end_of_the_game_message) + winner.getName(), true, false);
-                            }
-                        });
-                        isGameFinished = true;
-                    } catch (final NoPlayerException e) {
-                        isGameFinished = false;
-                    }
-                }
-
             } catch (final Exception e) {
                 superCatch(e);
             }
@@ -168,17 +103,56 @@ public abstract class OnlineGameActivity extends GameActivity {
     protected void superCatch(final Exception e) {
         runOnUiThread(new Runnable() {
             public void run() {
-                try {
-                    if (gameServer != null) {
-                        gameServer.close();
-                    }
-                    showErrorMessage(e);
-                } catch (final IOException ex) {
-                    showErrorMessage(ex);
-                }
-
+                showErrorMessage(e);
             }
         });
+    }
+
+    protected void runTheGame(final ServerSocket serverSocket) {
+        boolean isGameFinished = false;
+        while (!isGameFinished) {
+            try (final Socket clientSocket = serverSocket.accept()) {
+                // Create the Client Socket
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(OnlineGameActivity.this,
+                                "your turn to play", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                // recieve the game
+                game = (Game) new ObjectInputStream(clientSocket.getInputStream()).readObject();
+                clientSocket.close();
+
+                // update ui
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        try {
+                            updateUI();
+                        } catch (NoPlayerException e) {
+                            superCatch(e);
+                        }
+                    }
+                });
+                enableClick();
+
+            } catch (final Exception e) {
+                superCatch(e);
+            }
+            // check victory
+            try {
+                final Player winner = game.getWinner();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        showAlertMessage(getString(R.string.end_of_the_game_title),
+                                getString(R.string.end_of_the_game_message) + winner.getName(), true, false);
+                    }
+                });
+                isGameFinished = true;
+            } catch (final NoPlayerException e) {
+                isGameFinished = false;
+            }
+        }
     }
 
     @Override
@@ -187,6 +161,7 @@ public abstract class OnlineGameActivity extends GameActivity {
         showAlertMessage(getString(R.string.end_of_the_game_title),
                 winner.getName() + getString(R.string.end_of_the_game_message), true, false);
     }
+
     @Override
     protected void endOfTurn() throws NoPlayerException {
         updateBoardUI();

@@ -19,11 +19,11 @@
 
         <activity android:name=".CreateOnlineGameActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleInstance">
+            android:launchMode="singleTask">
         </activity>
         <activity android:name=".JoinOnlineGameActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleInstance">
+            android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".SoloGameActivity"
