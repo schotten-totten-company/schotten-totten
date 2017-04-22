@@ -37,4 +37,74 @@
     <string name="it_is_your_turn_message">, it is your turn to play.</string>
     <string name="not_your_turn_message">Your opponent is playing ...</string>
 
+    <string name="rules">
+        SCOTTENTOTS (Schotten-Totten) Who with who against whom? A Tactical Card Game by Reiner Knizia Players: 2 Age: 8 and up Duration: c. 20 minutes. ASS-Spielkartenverlag No. 75006 German Edition: (P) 1999, ASS-Spielkartenverlag, D-71144 Steinenbronn, Germany; © 1998, Reiner Knizia, D-89257 Illertissen, Germany. English Translation: © 1999, Reiner Knizia and Kevin Jacklin. All rights reserved.
+        \n\n
+        From the mysterious customs of the Scottentots to resolve property disputes, or…
+        \n\n
+        THE RULES :
+        \n\n
+        From the annual disputes between South-Scottenbury and North-Scottenbury, or…
+        \n\n
+        GAME IDEA and OBJECTIVE
+        \n\n
+        Spring is in the air over the Scottish Highlands. Birds chirp peacefully above the grazing pasture between the villages of North- and South-Scottenbury. Suddenly there are heard wild battle-shouts from both north and south, and in no time the fiercest men of both villages face each other across the pasture. Armed to the teeth with bagpipes, walking sticks and clubs, they are wildly determined to put right the positions of the pasture’s boundary-stones. As the melting snows shifts the stones every year, the North-Scottenburys and South-Scottenburys are always afraid of losing valuable pasture to their unloved neighbours. The best men of both villages are 2 of 4 produced to defend their own grounds. It is up to the village elders to muster their men into powerful groups to win their battles for the individual boundary-stones. Both players attempt, on their side of the boundary-stones, to build a more powerful group than on the other side. The player who succeeds in winning three adjacent boundary-stones, or a total of five boundary-stones, captures the pasture and wins the game.
+        \n\n
+        From six clans and nine boundary-stones, or…
+        \n\n
+        GAME MATERIALS
+        \n\n
+        54 clan cards, in six colours (each colour representing a clan), each with values from 1 to 9;
+        \n\n
+        9 boundary-stone cards;
+        \n\n
+        From the moved boundary-stone and the gathering clans, or… GAME PREPARATION
+        \n\n
+        Place the nine boundary-stone cards in a horizontal line between the two players.
+        \n\n
+        Shuffle all the clan cards.
+        \n\n
+        Each player receives six cards into their hands, keeping them secret from each other.
+        \n\n
+        The remaining cards are placed as a face-down deck on one end of the boundary-stones.
+        \n\n
+        Decide who begins (when more than one game is played, the winner of the previous game will begin the new one).
+        \n\n
+        From the all-decisive battle on the sheep pasture, or…
+        \n\n
+        GAME PLAY
+        \n\n
+        Play alternates between the two sides. On your turn, select one of your cards and place it face-up on your side, behind one of the boundary-stones. Further cards played in the course of the game behind the same boundary-stone may be partially stacked on top of previous cards to save space; however the values of all cards must be clearly visible. You may not place more than three cards behind any one boundary-stone. After placing your card, refresh your hand to six cards by drawing a replacement from the face-down deck. If the deck is used up no more cards can be drawn. However, play continues. In your role as a village elder, you decide how to group the cards on your side of the boundary-stones. Your objective is to build a stronger group than your opponent’s on 3 of 4 the other side of each boundary-stone. A complete group consists of three cards. The following table shows the possible groups, ranking from strongest to weakest: 1st Group: Ordered Clan
+        \n\n
+        three cards of the same colour with consecutive
+        \n\n
+        values 2nd Group: Scottentot Team
+        \n\n
+        three cards of the same value
+        \n\n
+        3rd Group: Clan
+        \n\n
+        three cards of the same colour
+        \n\n
+        4th Group: Ordered Group
+        \n\n
+        three cards with consecutive values
+        \n\n
+        5th Group: Wild Rabble
+        \n\n
+        any other set of three cards
+        \n\n
+        A stronger group wins against a weaker group. For example, an Ordered Group loses against a Scottentot Team, but beats a Wild Rabble. If both players have groups of the same rank on either side of the boundary-stones, then the group with the higher three-card total prevails. If even these three-card totals are equal, the player who completed his group first wins (i.e. the player who completed his group last loses).
+        \n\n
+        THE BOUNDARY-STONES
+        \n\n
+        On your turn, and before you play your card, you may claim one or more boundary-stones. In order to do so, you must have a complete three-card group on your side of the respective boundary-stone. Furthermore you must be able to prove that your opponent cannot beat you there. If your opponent also has a three-card group on his side of the boundary-stone, the situation is obvious. However, if there are less than three cards on your opponent’s side you must be able to demonstrate that he cannot build a better group than yours, whatever cards he may add. For this purpose, you may exclude cards already displayed face-up, but you may not use any information from your own hand. If the two groups are of the same strength (same rank, same three-card total) the player who adds the last card loses the boundary-stone. However, his opponent many only claim it on his own turn. When claiming a boundary-stone, pick up the respective boundary-stone card, and place it in front of you, next to your victorious group. No further cards may be played at this boundary-stone.
+        \n\n
+        From winning the battles in line, or…
+        \n\n
+        GAME END
+        \n\n
+        The game ends immediately when one player has claimed three adjacent boundary-stones, or a total of any five boundary-stones. This player is the victor. No further boundary-stones may be claimed. If you play several games, the winner of each game always scores five points; the loser scores one point for each of the boundary-stones he has already claimed. In the end, the player with the higher points total wins.
+    </string>
+
 </resources>

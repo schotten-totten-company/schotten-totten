@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        SchottenTottenRelease {
+            keyAlias 'SchottenTottenKey'
+            keyPassword 'baba-keystore'
+            storeFile file('C:/Users/Bastien/CloudStation/AndroidStudio/baba-keystore.jks')
+            storePassword 'baba-keystore'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion '25.0.2'
     defaultConfig {

@@ -1,296 +1,348 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainMemoLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:layout_weight="1"
     android:background="@android:color/holo_green_dark"
-    android:gravity="center"
+    android:gravity="top|center"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
+    android:paddingBottom="0dp"
+    android:paddingTop="10dp"
     android:weightSum="1">
 
-    <LinearLayout
-        android:id="@+id/headMemoLayout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.17"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingBottom="15dp"
-        android:weightSum="1">
+        android:layout_weight="0.17">
 
-        <TextView
-            android:id="@+id/memoText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.56"
-            android:freezesText="false"
-            android:gravity="left"
-            android:text="MEMO"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="36sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/straightFlushLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="left|center_vertical"
-        android:layout_marginLeft="15dp"
-        android:layout_weight="0.17"
-        android:elevation="0dp"
-        android:gravity="center|start"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <ImageView
-            android:id="@+id/straightFlushCard1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number4four" />
+            android:orientation="vertical" >
 
-        <ImageView
-            android:id="@+id/straightFlushCard2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number5five" />
+            <LinearLayout
+                android:id="@+id/headMemoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="0.17"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="0dp"
+                android:weightSum="1">
 
-        <ImageView
-            android:id="@+id/straightFlushCard3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number6six" />
+                <TextView
+                    android:id="@+id/memoText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.56"
+                    android:foregroundGravity="center"
+                    android:freezesText="false"
+                    android:gravity="left|center"
+                    android:text=" --- MEMO ---"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textSize="36sp" />
 
-        <TextView
-            android:id="@+id/straightFlushText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:text="Straight Flush"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-    </LinearLayout>
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/threeOfAKindLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="left|center_vertical"
-        android:layout_marginLeft="15dp"
-        android:layout_weight="0.17"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp">
+            <LinearLayout
+                android:id="@+id/straightFlushLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="77dp"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="15dp"
+                android:elevation="0dp"
+                android:foregroundGravity="left|center_vertical"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/threeOfAKindCard1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number8eight" />
+                <ImageView
+                    android:id="@+id/straightFlushCard1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number4four" />
 
-        <ImageView
-            android:id="@+id/threeOfAKindCard2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number8eight" />
+                <ImageView
+                    android:id="@+id/straightFlushCard2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number5five" />
 
-        <ImageView
-            android:id="@+id/threeOfAKindCard3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number8eight" />
+                <ImageView
+                    android:id="@+id/straightFlushCard3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number6six" />
 
-        <TextView
-            android:id="@+id/threeOfAKindText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:text="3 of a Kind"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/straightFlushText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:text="Straight Flush"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/flushLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="left|center_vertical"
-        android:layout_marginLeft="15dp"
-        android:layout_weight="0.17"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp">
+            <LinearLayout
+                android:id="@+id/threeOfAKindLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="77dp"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="15dp"
+                android:foregroundGravity="center"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/flushCard1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="false"
-            app:srcCompat="@drawable/number6six" />
+                <ImageView
+                    android:id="@+id/threeOfAKindCard1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number8eight" />
 
-        <ImageView
-            android:id="@+id/flushCard2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="false"
-            app:srcCompat="@drawable/number9nine" />
+                <ImageView
+                    android:id="@+id/threeOfAKindCard2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number8eight" />
 
-        <ImageView
-            android:id="@+id/flushCard3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="false"
-            app:srcCompat="@drawable/number2two" />
+                <ImageView
+                    android:id="@+id/threeOfAKindCard3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number8eight" />
 
-        <TextView
-            android:id="@+id/flushText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:text="Flush"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/threeOfAKindText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="3 of a Kind"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/straightLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="left|center_vertical"
-        android:layout_marginLeft="15dp"
-        android:layout_weight="0.17"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp">
+            <LinearLayout
+                android:id="@+id/straightLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="77dp"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="15dp"
+                android:foregroundGravity="left|center_vertical"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/straightCard1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number3three" />
+                <ImageView
+                    android:id="@+id/straightCard1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number3three" />
 
-        <ImageView
-            android:id="@+id/straightCard2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number4four" />
+                <ImageView
+                    android:id="@+id/straightCard2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number4four" />
 
-        <ImageView
-            android:id="@+id/straightCard3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number5five" />
+                <ImageView
+                    android:id="@+id/straightCard3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number5five" />
 
-        <TextView
-            android:id="@+id/straightText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:text="Straight"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/straightText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:text="Straight"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/wildHandLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="left|center_vertical"
-        android:layout_marginLeft="15dp"
-        android:layout_weight="0.17"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp">
+            <LinearLayout
+                android:id="@+id/flushLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="77dp"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="15dp"
+                android:foregroundGravity="left|center_vertical"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/wildHandCard1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number7seven" />
+                <ImageView
+                    android:id="@+id/flushCard1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="false"
+                    app:srcCompat="@drawable/number6six" />
 
-        <ImageView
-            android:id="@+id/wildHandCard2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number1one" />
+                <ImageView
+                    android:id="@+id/flushCard2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="false"
+                    app:srcCompat="@drawable/number9nine" />
 
-        <ImageView
-            android:id="@+id/wildHandCard3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            app:srcCompat="@drawable/number3three" />
+                <ImageView
+                    android:id="@+id/flushCard3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="false"
+                    app:srcCompat="@drawable/number2two" />
 
-        <TextView
-            android:id="@+id/wildHandText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:text="Wild Hand"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/flushText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:text="Flush"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/wildHandLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="77dp"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="15dp"
+                android:foregroundGravity="left|center_vertical"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/wildHandCard1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number7seven" />
+
+                <ImageView
+                    android:id="@+id/wildHandCard2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number1one" />
+
+                <ImageView
+                    android:id="@+id/wildHandCard3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number3three" />
+
+                <TextView
+                    android:id="@+id/wildHandText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:text="Wild Hand"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="left|center_vertical"
+                android:layout_weight="0.17"
+                android:foregroundGravity="left|center_vertical"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/rulesText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="0.69"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:text="--- RULES ---"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textSize="36sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/rulesContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:layout_weight="0.17"
+                android:text="@string/rules"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
