@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
@@ -18,7 +19,7 @@ public class HotSeatGameActivity extends GameActivity {
 
         try {
             this.game = new Game(getIntent().getStringExtra("player1Name"),
-                                    getIntent().getStringExtra("player2Name"));
+                    getIntent().getStringExtra("player2Name"));
             initUI(this.game.getPlayingPlayer().getHand());
 
         } catch (final NoPlayerException | GameCreationException e) {
@@ -46,6 +47,14 @@ public class HotSeatGameActivity extends GameActivity {
                     }
                 });
         alertDialog.setCancelable(false);
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                final Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
+                button.setTextSize((float)30);
+            }
+        });
 
         updateUI();
         disableClick();
