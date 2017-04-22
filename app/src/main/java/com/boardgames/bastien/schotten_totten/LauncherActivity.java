@@ -1,6 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class LauncherActivity extends AppCompatActivity {
@@ -21,7 +23,8 @@ public class LauncherActivity extends AppCompatActivity {
         hotSeatLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LauncherActivity.this, HotSeatGameActivity.class));
+                //startActivity(new Intent(LauncherActivity.this, HotSeatGameActivity.class));
+                enterPlayersNames();
             }
         });
 
@@ -113,23 +116,31 @@ public class LauncherActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Players Names");
 
+        final LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
         // Set up the input
         final EditText player1NameInput = new EditText(this);
         player1NameInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        player1NameInput.setText("player1");
-        builder.setView(player1NameInput);
+        player1NameInput.setText(getString(R.string.player1name));
+        layout.addView(player1NameInput);
         final EditText player2NameInput = new EditText(this);
         player2NameInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        player2NameInput.setText("player2");
-        builder.setView(player2NameInput);
+        player2NameInput.setText(getString(R.string.player2name));
+        layout.addView(player2NameInput);
+
+        builder.setView(layout);
 
         // Set up the buttons
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String player1Name = player1NameInput.getText().toString();
                 final String player2Name = player2NameInput.getText().toString();
-                startActivity(new Intent(LauncherActivity.this, HotSeatGameActivity.class));
+                final Intent hotSeatIntent = new Intent(LauncherActivity.this, HotSeatGameActivity.class);
+                hotSeatIntent.putExtra("player1Name", player1Name);
+                hotSeatIntent.putExtra("player2Name", player2Name);
+                startActivity(hotSeatIntent);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
