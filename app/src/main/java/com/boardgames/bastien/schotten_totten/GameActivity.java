@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -23,6 +24,7 @@ import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import com.boardgames.bastien.schotten_totten.view.MilestoneView;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
@@ -39,6 +41,15 @@ public abstract class GameActivity extends AppCompatActivity {
     protected final List<Card> allTheCards = new ArrayList(new Deck().getDeck());
     private boolean isClickEnabled = true;
 
+    protected ImageButton passButton;
+    protected View handLayout;
+    protected TextView textView;
+    protected View gameLayout;
+
+    private final List<MilestoneView> milestoneView = new ArrayList<>();
+    private final List<ImageButton> handView = new ArrayList<>();
+
+
     protected void disableClick() {
         isClickEnabled = false;
     }
@@ -51,6 +62,10 @@ public abstract class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hot_seat_game);
+        passButton = (ImageButton) findViewById(R.id.passButton);
+        handLayout = findViewById(R.id.handLayout);
+        textView = ((TextView) findViewById(R.id.textView));
+        gameLayout = findViewById(R.id.gameLayout);
     }
 
     @Override
@@ -77,6 +92,31 @@ public abstract class GameActivity extends AppCompatActivity {
 
     protected void initUI(final Hand handToUpdate) {
 
+        for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
+            final int id = getResources().getIdentifier("m" + i + "Milestone", "id", getPackageName());
+            final ImageButton m = (ImageButton)findViewById(id);
+            final int milestonePlayerSideId = getResources().getIdentifier("m" + i + "CapturedMilestonePlayerSide", "id", getPackageName());
+            final int milestoneOpponentId = getResources().getIdentifier("m" + i + "CapturedMilestoneOpponentSide", "id", getPackageName());
+            final ImageView mPlayer = (ImageView) findViewById(milestonePlayerSideId);
+            final ImageView mOpponent = (ImageView) findViewById(milestoneOpponentId);
+            final List<ImageView> pSide = new ArrayList<>();
+            for (int j = 0; j < game.getGameBoard().getMilestones().get(i).MAX_CARDS_PER_SIDE; j++) {
+                final int pSideId = getResources().getIdentifier("m" + i + "Card" + j + "PlayerSide", "id", getPackageName());
+                pSide.add((ImageView)findViewById(pSideId));
+            }
+            final List<ImageView> oSide = new ArrayList<>();
+            for (int j = 0; j < game.getGameBoard().getMilestones().get(i).MAX_CARDS_PER_SIDE; j++) {
+                final int oSideId = getResources().getIdentifier("m" + i + "Card" + j + "OpponentSide", "id", getPackageName());
+                oSide.add((ImageView)findViewById(oSideId));
+            }
+            milestoneView.add(new MilestoneView(m, mPlayer, mOpponent, pSide, oSide));
+        }
+
+        for (int i = 0; i < handToUpdate.getHandSize(); i++) {
+            final int id = getResources().getIdentifier("h" + i, "id", getPackageName());
+            handView.add((ImageButton)findViewById(id));
+        }
+
         try {
             selectedCard = -1;
 
@@ -100,7 +140,6 @@ public abstract class GameActivity extends AppCompatActivity {
     }
 
     protected void initPassButton() {
-        final ImageButton passButton = (ImageButton) findViewById(R.id.passButton);
         passButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +156,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected void initBoard() {
         for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
             updateMilestoneView(i);
-            getMilestoneImageButton(i).setOnClickListener(new View.OnClickListener() {
+            milestoneView.get(i).getMilestone().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (isClickEnabled) {
@@ -186,7 +225,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                 try {
                                     final Card newCard = game.getGameBoard().getDeck().drawCard();
                                     game.getPlayingPlayer().getHand().getCards().add(selectedCard, newCard);
-                                    updateHandCard(getHandImageButton(selectedCard), newCard);
+                                    updateHandCard(handView.get(selectedCard), newCard);
                                     selectedCard = -1;
                                 } catch (final EmptyDeckException e) {
                                     //showAlertMessage(e.getMessage());
@@ -197,7 +236,6 @@ public abstract class GameActivity extends AppCompatActivity {
 
                                 // end of the turn
                                 disableClick();
-                                final ImageButton passButton = (ImageButton) findViewById(R.id.passButton);
                                 passButton.setVisibility(View.VISIBLE);
                                 passButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomin));
 
@@ -219,7 +257,7 @@ public abstract class GameActivity extends AppCompatActivity {
 
     protected void initHand(final Hand handToUpdate) throws NoPlayerException {
         for (int i = 0; i < handToUpdate.getHandSize(); i++) {
-            final ImageButton handCardView = getHandImageButton(i);
+            final ImageButton handCardView = handView.get(i);
             updateHandCard(handCardView, handToUpdate.getCards().get(i));
             handCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -234,7 +272,7 @@ public abstract class GameActivity extends AppCompatActivity {
 
                         // unselect
                         for (int i = 0; i < handToUpdate.getHandSize(); i++) {
-                            unSelectCard(getHandImageButton(i));
+                            unSelectCard(handView.get(i));
                         }
 
                         // select clicked card
@@ -254,7 +292,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected void selectCard(ImageButton cardView) {
         try {
             for (int i = 0; i < game.getPlayingPlayer().getHand().getHandSize(); i++) {
-                getHandImageButton(i).setAlpha((float) 0.42);
+                handView.get(i).setAlpha((float) 0.42);
             }
             cardView.setAlpha((float) 1.0);
         } catch (final NoPlayerException e) {
@@ -265,7 +303,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected void unSelectCard(ImageButton cardView) {
         try {
             for (int i = 0; i < game.getPlayingPlayer().getHand().getHandSize(); i++) {
-                getHandImageButton(i).setAlpha((float) 1.0);
+                handView.get(i).setAlpha((float) 1.0);
             }
             cardView.setAlpha((float) 1.0);
         } catch (final NoPlayerException e) {
@@ -273,66 +311,47 @@ public abstract class GameActivity extends AppCompatActivity {
         }
     }
 
-    protected ImageButton getMilestoneImageButton(final int i) {
-        final int id = getResources().getIdentifier("m" + i + "Milestone", "id", getPackageName());
-        return (ImageButton)findViewById(id);
-    }
-
-    protected ImageButton getHandImageButton(final int i) {
-        final int id = getResources().getIdentifier("h" + i, "id", getPackageName());
-        return (ImageButton)findViewById(id);
-    }
-
-    protected ImageView getCardImageViewPlayerSide(final int i, final int j) {
-        final int id = getResources().getIdentifier("m" + i + "Card" + j + "PlayerSide", "id", getPackageName());
-        return (ImageView)findViewById(id);
-    }
-
-    protected ImageView getCardImageViewOpponentSide(final int i, final int j) {
-        final int id = getResources().getIdentifier("m" + i + "Card" + j + "OpponentSide", "id", getPackageName());
-        return (ImageView)findViewById(id);
-    }
-
     protected void updateMilestoneView(final int i) {
 
         // get milestone
         final Milestone milestone = game.getGameBoard().getMilestones().get(i);
-        final ImageButton milestoneImageButton = getMilestoneImageButton(i);
-        final int milestonePlayerSideId = getResources().getIdentifier("m" + i + "CapturedMilestonePlayerSide", "id", getPackageName());
-        final int milestoneOpponentId = getResources().getIdentifier("m" + i + "CapturedMilestoneOpponentSide", "id", getPackageName());
+        final ImageButton milestoneImageButton = milestoneView.get(i).getMilestone();
+        final ImageView milestonePlayerSide = milestoneView.get(i).getMilestonePlayer();
+        final ImageView milestoneOpponentSide = milestoneView.get(i).getMilestoneOpponent();
         // update milestones views
         if (milestone.getCaptured().equals(game.getPlayingPlayerType())) {
             milestoneImageButton.setVisibility(View.INVISIBLE);
-            findViewById(milestonePlayerSideId).setVisibility(View.VISIBLE);
-            findViewById(milestoneOpponentId).setVisibility(View.INVISIBLE);
+            milestonePlayerSide.setVisibility(View.VISIBLE);
+            milestoneOpponentSide.setVisibility(View.INVISIBLE);
         } else if (milestone.getCaptured().equals(PlayerType.NONE)) {
             milestoneImageButton.setVisibility(View.VISIBLE);
-            findViewById(milestonePlayerSideId).setVisibility(View.INVISIBLE);
-            findViewById(milestoneOpponentId).setVisibility(View.INVISIBLE);
+            milestonePlayerSide.setVisibility(View.INVISIBLE);
+            milestoneOpponentSide.setVisibility(View.INVISIBLE);
         } else {
             milestoneImageButton.setVisibility(View.INVISIBLE);
-            findViewById(milestonePlayerSideId).setVisibility(View.INVISIBLE);
-            findViewById(milestoneOpponentId).setVisibility(View.VISIBLE);
+            milestonePlayerSide.setVisibility(View.INVISIBLE);
+            milestoneOpponentSide.setVisibility(View.VISIBLE);
         }
+
+        final List<ImageView> playerSide = milestoneView.get(i).getPlayerSide();
+        final List<ImageView> opponentSide = milestoneView.get(i).getOpponentSide();
 
         // reset all cards on both sides
         for (int j = 0; j < milestone.MAX_CARDS_PER_SIDE; j++) {
-            final ImageView cardPlayerSide = getCardImageViewPlayerSide(i, j);
-            final ImageView cardOpponentSide = getCardImageViewOpponentSide(i, j);
-            resetPlayedCard(cardOpponentSide);
-            resetPlayedCard(cardPlayerSide);
+            resetPlayedCard(playerSide.get(j));
+            resetPlayedCard(opponentSide.get(j));
         }
         // update player 1 side
         for (int iP1 = 0; iP1 < milestone.getPlayer1Side().size(); iP1++) {
-            final String side = (game.getPlayingPlayerType().equals(PlayerType.ONE)) ? "PlayerSide": "OpponentSide";
-            final int cardId = getResources().getIdentifier("m" + i + "Card" + iP1 + side, "id", getPackageName());
-            updatePlayedCard((ImageView) findViewById(cardId), milestone.getPlayer1Side().get(iP1));
+            final List<ImageView> side = (game.getPlayingPlayerType().equals(PlayerType.ONE)) ?
+                                            playerSide: opponentSide;
+            updatePlayedCard(side.get(iP1), milestone.getPlayer1Side().get(iP1));
         }
         // update player 2 side
         for (int iP2 = 0; iP2 < milestone.getPlayer2Side().size(); iP2++) {
-            final String side = (game.getPlayingPlayerType().equals(PlayerType.TWO)) ? "PlayerSide": "OpponentSide";
-            final int cardId = getResources().getIdentifier("m" + i + "Card" + iP2 + side, "id", getPackageName());
-            updatePlayedCard((ImageView) findViewById(cardId), milestone.getPlayer2Side().get(iP2));
+            final List<ImageView> side = (game.getPlayingPlayerType().equals(PlayerType.TWO)) ?
+                                        playerSide: opponentSide;
+            updatePlayedCard(side.get(iP2), milestone.getPlayer2Side().get(iP2));
         }
 
     }
@@ -407,8 +426,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected abstract void endOfTurn() throws NoPlayerException;
 
     protected void updateTextField() throws NoPlayerException {
-        ((TextView) findViewById(R.id.textView)).setText(
-                game.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message));
+        textView.setText(game.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message));
     }
 
     protected void updateUI() throws NoPlayerException {
@@ -417,18 +435,18 @@ public abstract class GameActivity extends AppCompatActivity {
             updateMilestoneView(i);
         }
 
-        findViewById(R.id.handLayout).setVisibility(View.VISIBLE);
+        handLayout.setVisibility(View.VISIBLE);
         // update hand
         final Hand hand = game.getPlayingPlayer().getHand();
         for (int i = 0; i < hand.getHandSize(); i++) {
-            final ImageButton handCardView = getHandImageButton(i);
+            final ImageButton handCardView = handView.get(i);
             updateHandCard(handCardView, hand.getCards().get(i));
             unSelectCard(handCardView);
             handCardView.setVisibility(View.VISIBLE);
         }
         // cards if hand is not full (no more cards to draw)
         for (int i = hand.getHandSize(); i < hand.MAX_HAND_SIZE; i++) {
-            final ImageButton handCardView = getHandImageButton(i);
+            final ImageButton handCardView = handView.get(i);
             unSelectCard(handCardView);
             handCardView.setVisibility(View.INVISIBLE);
         }
@@ -437,13 +455,12 @@ public abstract class GameActivity extends AppCompatActivity {
         updateTextField();
 
         // show/hide skip button
-        final ImageButton passButton = (ImageButton) findViewById(R.id.passButton);
         passButton.setVisibility(View.VISIBLE);
         for (final Milestone m : game.getGameBoard().getMilestones()) {
             if (m.getCaptured().equals(PlayerType.NONE)) {
                 try {
                     m.checkSideSize(game.getPlayingPlayerType());
-                    findViewById(R.id.passButton).setVisibility(View.INVISIBLE);
+                    passButton.setVisibility(View.INVISIBLE);
                     break;
                 } catch (final MilestoneSideMaxReachedException e) {
                     // nothing to do, just test next milestone
@@ -465,7 +482,7 @@ public abstract class GameActivity extends AppCompatActivity {
     }
     protected void showAlertMessage(final String title, final String message, final boolean finish, final boolean hideBoard) {
         if (hideBoard) {
-            findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
+            gameLayout.setVisibility(View.INVISIBLE);
         }
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
@@ -473,7 +490,7 @@ public abstract class GameActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        findViewById(R.id.gameLayout).setVisibility(View.VISIBLE);
+                        gameLayout.setVisibility(View.VISIBLE);
                         dialog.dismiss();
                         if (finish) {
                             finish();

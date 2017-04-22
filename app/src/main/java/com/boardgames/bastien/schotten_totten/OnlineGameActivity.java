@@ -191,7 +191,6 @@ public abstract class OnlineGameActivity extends GameActivity {
         updateBoardUI();
         // disable click
         disableClick();
-        final ImageButton passButton = (ImageButton) findViewById(R.id.passButton);
         passButton.setVisibility(View.INVISIBLE);
         // swap
         game.swapPlayingPlayerType();

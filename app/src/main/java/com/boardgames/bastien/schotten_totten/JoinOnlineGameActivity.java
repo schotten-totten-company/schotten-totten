@@ -38,7 +38,7 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 waitingDialog.setTitle(localIp + " is connecting ...");
                 waitingDialog.show();
                 Executors.newSingleThreadExecutor().submit(new GameInitClient());
-                ((TextView)findViewById(R.id.textView)).setText("try to connect...");
+                textView.setText("try to connect...");
 
             } catch (final UnknownHostException e) {
                 showAlertMessage(getString(R.string.unknown_host_title),
@@ -71,7 +71,7 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         waitingDialog.dismiss();
-                        findViewById(R.id.gameLayout).setVisibility(View.VISIBLE);
+                        gameLayout.setVisibility(View.VISIBLE);
                         initUI(handToUpdate);
                         Toast.makeText(JoinOnlineGameActivity.this,
                                 "connected to server", Toast.LENGTH_LONG).show();

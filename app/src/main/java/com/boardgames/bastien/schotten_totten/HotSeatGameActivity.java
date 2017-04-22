@@ -50,7 +50,7 @@ public class HotSeatGameActivity extends GameActivity {
         disableClick();
 
         // hide hand
-        findViewById(R.id.handLayout).setVisibility(View.INVISIBLE);
+        handLayout.setVisibility(View.INVISIBLE);
 
         alertDialog.show();
     }

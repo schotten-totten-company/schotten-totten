@@ -60,7 +60,7 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             waitingDialog.dismiss();
-                            findViewById(R.id.gameLayout).setVisibility(View.VISIBLE);
+                            gameLayout.setVisibility(View.VISIBLE);
                             Toast.makeText(CreateOnlineGameActivity.this,
                                     "other player online", Toast.LENGTH_LONG).show();
                         }
