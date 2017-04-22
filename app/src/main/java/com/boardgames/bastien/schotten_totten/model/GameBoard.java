@@ -16,6 +16,7 @@ public class GameBoard implements Serializable {
 
     private final List<Milestone> milestones;
 
+    private Card lastPlayedCard;
     public GameBoard() {
 
         // create deck
@@ -27,6 +28,13 @@ public class GameBoard implements Serializable {
         for (int i = 0; i < MAX_MILESTONES; i++) {
             milestones.add(new Milestone(i));
         }
+    }
+
+    public void updateLastPlayedCard(final Card c) {
+        this.lastPlayedCard = c;
+    }
+    public Card getLastPlayedCard() {
+        return this.lastPlayedCard;
     }
 
     public List<Card> getPlayedCards() {

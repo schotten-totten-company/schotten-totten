@@ -18,7 +18,6 @@ public class Milestone implements Serializable {
 
     private final int id;
 
-
     private final List<Card> player1Side;
 
     private final List<Card> player2Side;

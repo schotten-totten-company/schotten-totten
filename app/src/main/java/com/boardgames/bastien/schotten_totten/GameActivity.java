@@ -20,6 +20,7 @@ import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Card;
 import com.boardgames.bastien.schotten_totten.model.Deck;
 import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.model.GameBoard;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.Player;
@@ -209,7 +210,7 @@ public abstract class GameActivity extends AppCompatActivity {
                             } else {
                                 showAlertMessage(getString(R.string.cannot_capture_milestone_message));
                             }
-                            // play a card
+                        // play a card
                         } else {
                             try {
                                 m.checkSideSize(game.getPlayingPlayerType());
@@ -217,6 +218,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                 try {
                                     final Card c = game.getPlayingPlayer().getHand().playCard(selectedCard);
                                     m.addCard(c, game.getPlayingPlayerType());
+                                    game.getGameBoard().updateLastPlayedCard(c);
                                     updateMilestoneView(m.getId());
                                 } catch (final NoPlayerException | CardInitialisationException e) {
                                     showErrorMessage(e);
@@ -251,8 +253,17 @@ public abstract class GameActivity extends AppCompatActivity {
     }
 
     protected void endOfTheGame(final Player winner) throws NoPlayerException {
-        showAlertMessage(getString(R.string.end_of_the_game_title),
-                winner.getName() + getString(R.string.end_of_the_game_message), true, false);
+        showAlertMessage(getString(R.string.end_of_the_game_title), winner.getName() + getString(R.string.end_of_the_game_message), false, false);
+        passButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        textView.setText(getString(R.string.end_of_the_game_title));
+        disableClick();
+        passButton.setVisibility(View.VISIBLE);
+        passButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomin));
     }
 
     protected void initHand(final Hand handToUpdate) throws NoPlayerException {
@@ -313,8 +324,10 @@ public abstract class GameActivity extends AppCompatActivity {
 
     protected void updateMilestoneView(final int i) {
 
+        final GameBoard gameBoard = game.getGameBoard();
+
         // get milestone
-        final Milestone milestone = game.getGameBoard().getMilestones().get(i);
+        final Milestone milestone = gameBoard.getMilestones().get(i);
         final ImageButton milestoneImageButton = milestoneView.get(i).getMilestone();
         final ImageView milestonePlayerSide = milestoneView.get(i).getMilestonePlayer();
         final ImageView milestoneOpponentSide = milestoneView.get(i).getMilestoneOpponent();
@@ -345,26 +358,38 @@ public abstract class GameActivity extends AppCompatActivity {
         for (int iP1 = 0; iP1 < milestone.getPlayer1Side().size(); iP1++) {
             final List<ImageView> side = (game.getPlayingPlayerType().equals(PlayerType.ONE)) ?
                                             playerSide: opponentSide;
-            updatePlayedCard(side.get(iP1), milestone.getPlayer1Side().get(iP1));
+            final Card card = milestone.getPlayer1Side().get(iP1);
+            updatePlayedCard(side.get(iP1), card);
+            if (!game.getPlayingPlayerType().equals(PlayerType.ONE)
+                    && card.getColor().equals(gameBoard.getLastPlayedCard().getColor())
+                    && card.getNumber().equals(gameBoard.getLastPlayedCard().getNumber())) {
+                side.get(iP1).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomout));
+            }
         }
         // update player 2 side
         for (int iP2 = 0; iP2 < milestone.getPlayer2Side().size(); iP2++) {
             final List<ImageView> side = (game.getPlayingPlayerType().equals(PlayerType.TWO)) ?
                                         playerSide: opponentSide;
-            updatePlayedCard(side.get(iP2), milestone.getPlayer2Side().get(iP2));
+            final Card card =milestone.getPlayer2Side().get(iP2);
+            updatePlayedCard(side.get(iP2), card);
+            if (!game.getPlayingPlayerType().equals(PlayerType.TWO)
+                    && card.getColor().equals(gameBoard.getLastPlayedCard().getColor())
+                    && card.getNumber().equals(gameBoard.getLastPlayedCard().getNumber())) {
+                side.get(iP2).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomout));
+            }
         }
 
     }
 
-    protected void updatePlayedCard(final ImageView view, final Card card) {
+    private void updatePlayedCard(final ImageView view, final Card card) {
         updateCard(view, card);
     }
 
-    protected void updateHandCard(final ImageButton view, final Card card) {
+    private void updateHandCard(final ImageButton view, final Card card) {
         updateCard(view, card);
     }
 
-    protected void updateCard(final ImageView view, final Card card) {
+    private void updateCard(final ImageView view, final Card card) {
         switch (card.getNumber()) {
             case ONE:
                 view.setImageResource(R.drawable.number1one);
@@ -418,7 +443,7 @@ public abstract class GameActivity extends AppCompatActivity {
         }
     }
 
-    protected void resetPlayedCard(final ImageView view) {
+    private void resetPlayedCard(final ImageView view) {
         view.setImageResource(R.drawable.empty);
         view.setBackgroundColor(Color.LTGRAY);
     }

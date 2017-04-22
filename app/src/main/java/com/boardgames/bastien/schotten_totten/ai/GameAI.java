@@ -37,6 +37,9 @@ public abstract class GameAI {
         // get card to play from the hand
         final Card cardToPlay = playingPlayer.getHand().playCard(gameRes.handIndexOfCardToPlay());
 
+        // update last played card
+        game.getGameBoard().updateLastPlayedCard(cardToPlay);
+
         // put it on the board
         game.getGameBoard().getMilestones().get(gameRes.getMilestoneToAdd())
                 .addCard(cardToPlay, playingPlayer.getPlayerType());
