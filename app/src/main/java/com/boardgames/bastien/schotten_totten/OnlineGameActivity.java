@@ -38,14 +38,14 @@ public abstract class OnlineGameActivity extends GameActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         waitingDialog = new ProgressDialog(OnlineGameActivity.this);
-        waitingDialog.setCancelable(true);
+        waitingDialog.setCancelable(false);// set to true for dev
         findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
     }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(OnlineGameActivity.this, LauncherActivity.class));
-    }
+//    @Override
+//    public void onBackPressed() {
+//        startActivity(new Intent(OnlineGameActivity.this, LauncherActivity.class));
+//    }
 
     @Override
     protected void updateTextField() throws NoPlayerException {
