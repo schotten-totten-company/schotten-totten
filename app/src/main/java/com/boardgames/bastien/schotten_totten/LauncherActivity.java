@@ -1,7 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +10,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
+import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import com.boardgames.bastien.schotten_totten.server.GameClient;
+
+import java.util.concurrent.ExecutionException;
 
 public class LauncherActivity extends AppCompatActivity {
 
@@ -32,8 +38,40 @@ public class LauncherActivity extends AppCompatActivity {
         createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent createIntent = new Intent(LauncherActivity.this, CreateOnlineGameActivity.class);
+                final Intent createIntent = new Intent(LauncherActivity.this, CreateLanGameActivity.class);
                 startActivity(createIntent);
+            }
+        });
+
+        final TextView createServerLauncherText = (TextView) findViewById(R.id.createServerLauncherTest);
+        createServerLauncherText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+
+                final Intent joinServerIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                new GameClient().createGame("game01", new Game("P1", "P2"));
+                joinServerIntent.putExtra("gameName", "game01");
+                joinServerIntent.putExtra("type", PlayerType.ONE);
+                startActivity(joinServerIntent);
+                } catch (final GameCreationException e) {
+                    e.printStackTrace();
+                } catch (final ExecutionException e) {
+                    e.printStackTrace();
+                } catch (final InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        final TextView joinServerLauncherText = (TextView) findViewById(R.id.joinServerLauncherText);
+        joinServerLauncherText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent joinServerIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                joinServerIntent.putExtra("gameName", "game01");
+                joinServerIntent.putExtra("type", PlayerType.TWO);
+                startActivity(joinServerIntent);
             }
         });
 
@@ -65,11 +103,11 @@ public class LauncherActivity extends AppCompatActivity {
 
     private void mangeJoinButton() {
         final TextView joinOnlineLauncherText = (TextView) findViewById(R.id.joinOnlineLauncherText);
-        if (JoinOnlineGameActivity.joinAlreadyLaunched) {
+        if (JoinLanGameActivity.joinAlreadyLaunched) {
             joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(LauncherActivity.this, JoinOnlineGameActivity.class));
+                    startActivity(new Intent(LauncherActivity.this, JoinLanGameActivity.class));
                 }
             });
         } else {
@@ -97,7 +135,7 @@ public class LauncherActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String distantIp = input.getText().toString();
-                final Intent joinIntent = new Intent(LauncherActivity.this, JoinOnlineGameActivity.class);
+                final Intent joinIntent = new Intent(LauncherActivity.this, JoinLanGameActivity.class);
                 joinIntent.putExtra("distantIp", distantIp);
                 startActivity(joinIntent);
             }

@@ -1,9 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.model.Game;
@@ -17,7 +15,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 
-public class JoinOnlineGameActivity extends OnlineGameActivity {
+public class JoinLanGameActivity extends LanGameActivity {
 
     protected static boolean joinAlreadyLaunched = false;
 
@@ -73,7 +71,7 @@ public class JoinOnlineGameActivity extends OnlineGameActivity {
                         waitingDialog.dismiss();
                         gameLayout.setVisibility(View.VISIBLE);
                         initUI(handToUpdate);
-                        Toast.makeText(JoinOnlineGameActivity.this,
+                        Toast.makeText(JoinLanGameActivity.this,
                                 "connected to server", Toast.LENGTH_LONG).show();
                     }
                 });

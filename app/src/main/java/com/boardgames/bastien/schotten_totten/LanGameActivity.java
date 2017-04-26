@@ -1,10 +1,8 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-public abstract class OnlineGameActivity extends GameActivity {
+public abstract class LanGameActivity extends GameActivity {
 
     protected String playerName;
     protected String distantIp;
@@ -37,7 +35,7 @@ public abstract class OnlineGameActivity extends GameActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        waitingDialog = new ProgressDialog(OnlineGameActivity.this);
+        waitingDialog = new ProgressDialog(LanGameActivity.this);
         waitingDialog.setCancelable(false);// set to true for dev
         findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
     }
@@ -139,7 +137,7 @@ public abstract class OnlineGameActivity extends GameActivity {
                 // Create the Client Socket
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(OnlineGameActivity.this,
+                        Toast.makeText(LanGameActivity.this,
                                 "your turn to play", Toast.LENGTH_LONG).show();
                     }
                 });
