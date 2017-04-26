@@ -19,6 +19,10 @@
     <string name="unknown_host_title">No local network connection</string>
     <string name="unknown_host_message">Not connected on WLAN or VLAN,
         please first connect to a WiFi or PPTP VPN local network.</string>
+    <string name="game_do_not_exist">\u0020do not exist.</string>
+    <string name="game_already_exist">\u0020already exist.</string>
+
+    <string name="game_name">Game_</string>
 
     <string name="cannot_capture_milestone_message">This Milestone cannot yet be captured.</string>
 

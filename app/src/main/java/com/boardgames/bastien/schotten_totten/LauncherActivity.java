@@ -15,10 +15,13 @@ import android.widget.TextView;
 
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import com.boardgames.bastien.schotten_totten.server.GameAlreadyExistsException;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
+import com.boardgames.bastien.schotten_totten.server.GameDoNotExistException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.concurrent.ExecutionException;
 
 public class LauncherActivity extends AppCompatActivity {
 
@@ -144,20 +147,27 @@ public class LauncherActivity extends AppCompatActivity {
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setText("game-" + System.currentTimeMillis());
+        input.setText(getString(R.string.game_name) + System.currentTimeMillis());
         builder.setView(input);
 
         // Set up the buttons
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                final String gameName = input.getText().toString();
                 try {
-                    final String gameName = input.getText().toString();
                     new GameClient().createGame(gameName, new Game("P1", "P2"));
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     joinIntent.putExtra("gameName", gameName);
                     joinIntent.putExtra("type", PlayerType.ONE.toString());
                     startActivity(joinIntent);
+                } catch (final ExecutionException e) {
+                    if (e.getCause() instanceof GameAlreadyExistsException) {
+                        showError(getString(R.string.warning_title),
+                                gameName + getString(R.string.game_already_exist));
+                    } else {
+                        showError(e);
+                    }
                 } catch (Exception e) {
                     showError(e);
                 }
@@ -183,7 +193,7 @@ public class LauncherActivity extends AppCompatActivity {
         // Set up the input
         final EditText gameNameInput = new EditText(this);
         gameNameInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        gameNameInput.setText("game-");
+        gameNameInput.setText(getString(R.string.game_name));
         layout.addView(gameNameInput);
 
         final RadioGroup radioGroup = new RadioGroup(this);
@@ -267,16 +277,20 @@ public class LauncherActivity extends AppCompatActivity {
     private final void showError(final Exception e) {
         final StringWriter message = new StringWriter();
         e.printStackTrace(new PrintWriter(message));
+        showError("Error : " + e.getMessage(), message.toString());
+    }
+
+    private final void showError(final String title, final String message) {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Error : " + e.getMessage());
-        alertDialog.setMessage(message.toString());
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
-        //alertDialog.setCancelable(false);
+        alertDialog.setCancelable(false);
         alertDialog.show();
     }
 }

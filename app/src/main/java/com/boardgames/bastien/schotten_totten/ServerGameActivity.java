@@ -6,6 +6,7 @@ import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
+import com.boardgames.bastien.schotten_totten.server.GameDoNotExistException;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -30,6 +31,13 @@ public class ServerGameActivity extends GameActivity {
             updateTextField();
             if (!this.game.getPlayingPlayerType().equals(type)) {
                 disableClick();
+            }
+        } catch (final ExecutionException e) {
+            if (e.getCause() instanceof GameDoNotExistException) {
+                showAlertMessage(getString(R.string.warning_title),
+                        gameName + getString(R.string.game_do_not_exist),true, true);
+            } else {
+                showErrorMessage(e);
             }
         } catch (final Exception e) {
             showErrorMessage(e);
