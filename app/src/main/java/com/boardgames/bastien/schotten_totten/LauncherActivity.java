@@ -9,14 +9,16 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
 
-import java.util.concurrent.ExecutionException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class LauncherActivity extends AppCompatActivity {
 
@@ -47,20 +49,7 @@ public class LauncherActivity extends AppCompatActivity {
         createServerLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-
-                final Intent joinServerIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                new GameClient().createGame("game01", new Game("P1", "P2"));
-                joinServerIntent.putExtra("gameName", "game01");
-                joinServerIntent.putExtra("type", PlayerType.ONE);
-                startActivity(joinServerIntent);
-                } catch (final GameCreationException e) {
-                    e.printStackTrace();
-                } catch (final ExecutionException e) {
-                    e.printStackTrace();
-                } catch (final InterruptedException e) {
-                    e.printStackTrace();
-                }
+                enterGameName();
             }
         });
 
@@ -68,10 +57,7 @@ public class LauncherActivity extends AppCompatActivity {
         joinServerLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent joinServerIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                joinServerIntent.putExtra("gameName", "game01");
-                joinServerIntent.putExtra("type", PlayerType.TWO);
-                startActivity(joinServerIntent);
+                joinGame();
             }
         });
 
@@ -150,6 +136,93 @@ public class LauncherActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void enterGameName() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.choose_game_name));
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText("game-" + System.currentTimeMillis());
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    final String gameName = input.getText().toString();
+                    new GameClient().createGame(gameName, new Game("P1", "P2"));
+                    final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                    joinIntent.putExtra("gameName", gameName);
+                    joinIntent.putExtra("type", PlayerType.ONE.toString());
+                    startActivity(joinIntent);
+                } catch (Exception e) {
+                    showError(e);
+                }
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void joinGame() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.enter_game_name));
+
+        final LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        // Set up the input
+        final EditText gameNameInput = new EditText(this);
+        gameNameInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        gameNameInput.setText("game-");
+        layout.addView(gameNameInput);
+
+        final RadioGroup radioGroup = new RadioGroup(this);
+        final RadioButton p1Button = new RadioButton(this);
+        p1Button.setText("ONE");
+        p1Button.setChecked(true);
+        radioGroup.addView(p1Button);
+        final RadioButton p2Button = new RadioButton(this);
+        p2Button.setText("TWO");
+        radioGroup.addView(p2Button);
+        radioGroup.check(p1Button.getId());
+        layout.addView(radioGroup);
+
+        builder.setView(layout);
+
+        // Set up the buttons
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String gameName = gameNameInput.getText().toString();
+                final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                joinIntent.putExtra("gameName", gameName);
+                final RadioButton selectedButton =
+                        (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+                joinIntent.putExtra("type", selectedButton.getText().toString());
+                startActivity(joinIntent);
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
     private void enterPlayersNames() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Players Names");
@@ -189,5 +262,21 @@ public class LauncherActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private final void showError(final Exception e) {
+        final StringWriter message = new StringWriter();
+        e.printStackTrace(new PrintWriter(message));
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Error : " + e.getMessage());
+        alertDialog.setMessage(message.toString());
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        //alertDialog.setCancelable(false);
+        alertDialog.show();
     }
 }

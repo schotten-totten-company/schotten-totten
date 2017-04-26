@@ -3,14 +3,13 @@ package com.boardgames.bastien.schotten_totten;
 import android.os.Bundle;
 
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class ServerGameActivity extends GameActivity {
 
@@ -27,8 +26,11 @@ public class ServerGameActivity extends GameActivity {
 
         try {
             this.game = client.getGame(gameName);
-            initUI(this.game.getPlayer(PlayerType.ONE).getHand());
-
+            initUI(this.game.getPlayer(type).getHand());
+            updateTextField();
+            if (!this.game.getPlayingPlayerType().equals(type)) {
+                disableClick();
+            }
         } catch (final Exception e) {
             showErrorMessage(e);
         }
@@ -41,24 +43,34 @@ public class ServerGameActivity extends GameActivity {
         game.swapPlayingPlayerType();
         try {
             client.updateGame(gameName, game);
-            final Future<Game> future =
-                    Executors.newSingleThreadExecutor().submit(new GameClientThread());
-            game = future.get();
-
+            Executors.newSingleThreadExecutor().submit(new GameClientThread());
         } catch (final ExecutionException | InterruptedException e) {
             showErrorMessage(e);
         }
-        enableClick();
-        updateUI();
+        updateTextField();
     }
 
-    private class GameClientThread implements Callable<Game> {
+    private class GameClientThread implements Callable<Boolean> {
         @Override
-        public Game call() throws Exception {
+        public Boolean call() throws Exception {
             while(!client.getGame(gameName).getPlayingPlayerType().equals(type)) {
                 Thread.sleep(5000);
             }
-            return client.getGame(gameName);
+            game = client.getGame(gameName);
+            enableClick();
+            updateUI();
+            return true;
+        }
+    }
+
+    @Override
+    protected void endOfTheGame(final Player winner) throws NoPlayerException {
+        super.endOfTheGame(winner);
+        try {
+            client.deleteGame(gameName);
+            Executors.newSingleThreadExecutor().submit(new GameClientThread());
+        } catch (final ExecutionException | InterruptedException e) {
+            showErrorMessage(e);
         }
     }
 }

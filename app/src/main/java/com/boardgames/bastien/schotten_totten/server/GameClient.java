@@ -4,7 +4,6 @@ import com.boardgames.bastien.schotten_totten.model.Game;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;

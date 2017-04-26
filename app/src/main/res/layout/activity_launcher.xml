@@ -51,7 +51,7 @@
             android:text="Hot Seat Game"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/createOnLineLauncherText"
@@ -63,7 +63,7 @@
             android:text="Create LAN Game"
             android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/joinOnlineLauncherText"
@@ -75,7 +75,7 @@
             android:text="Join LAN Game"
             android:textAlignment="textEnd"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/createServerLauncherTest"
@@ -87,7 +87,7 @@
             android:text="Create Game on Server"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/joinServerLauncherText"
@@ -99,7 +99,7 @@
             android:text="JoinGame on Server"
             android:textAlignment="textEnd"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/soloLauncherText"
@@ -110,7 +110,7 @@
             android:text="Solo Game"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/aboutLauncherText"
@@ -121,7 +121,7 @@
             android:text="About ?"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/quitLauncherText"
@@ -132,7 +132,7 @@
             android:text="Quit"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
     </LinearLayout>
 
 </LinearLayout>
