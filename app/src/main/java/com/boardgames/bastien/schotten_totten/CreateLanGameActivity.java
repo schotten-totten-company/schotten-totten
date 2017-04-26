@@ -1,6 +1,5 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -16,7 +15,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 
-public class CreateOnlineGameActivity extends OnlineGameActivity {
+public class CreateLanGameActivity extends LanGameActivity {
 
     protected static boolean alreadyLaunched = false;
 
@@ -61,7 +60,7 @@ public class CreateOnlineGameActivity extends OnlineGameActivity {
                         public void run() {
                             waitingDialog.dismiss();
                             gameLayout.setVisibility(View.VISIBLE);
-                            Toast.makeText(CreateOnlineGameActivity.this,
+                            Toast.makeText(CreateLanGameActivity.this,
                                     "other player online", Toast.LENGTH_LONG).show();
                         }
                     });

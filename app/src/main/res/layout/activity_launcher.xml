@@ -57,10 +57,11 @@
             android:id="@+id/createOnLineLauncherText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
             android:layout_weight="0.17"
             android:padding="10dp"
-            android:text="Player1 Online Game"
-            android:textAlignment="center"
+            android:text="Create LAN Game"
+            android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30sp" />
 
@@ -68,10 +69,35 @@
             android:id="@+id/joinOnlineLauncherText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
             android:layout_weight="0.17"
             android:padding="10dp"
-            android:text="Player2 Online Game"
-            android:textAlignment="center"
+            android:text="Join LAN Game"
+            android:textAlignment="textEnd"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/createServerLauncherTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_weight="0.17"
+            android:padding="10dp"
+            android:text="Create Game on Server"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/joinServerLauncherText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_weight="0.17"
+            android:padding="10dp"
+            android:text="JoinGame on Server"
+            android:textAlignment="textEnd"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30sp" />
 

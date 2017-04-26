@@ -17,16 +17,21 @@
             android:launchMode="singleTask">
         </activity>
 
-        <activity android:name=".CreateOnlineGameActivity"
+        <activity android:name=".CreateLanGameActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
-        <activity android:name=".JoinOnlineGameActivity"
+        <activity android:name=".JoinLanGameActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".SoloGameActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
+        </activity>
+
+        <activity android:name=".ServerGameActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
