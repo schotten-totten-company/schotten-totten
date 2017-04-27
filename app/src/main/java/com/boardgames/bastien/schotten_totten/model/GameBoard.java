@@ -1,5 +1,8 @@
 package com.boardgames.bastien.schotten_totten.model;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,8 @@ public class GameBoard implements Serializable {
     public final int MAX_MILESTONES = 9;
 
     private final Deck deck;
+
+    private final List<Card> allTheCards = new ArrayList(new Deck().getDeck());
 
     private final List<Milestone> milestones;
 
@@ -37,7 +42,7 @@ public class GameBoard implements Serializable {
         return this.lastPlayedCard;
     }
 
-    public List<Card> getPlayedCards() {
+    private List<Card> getPlayedCards() {
         final List<Card> playedCards = new ArrayList();
         for (final Milestone milestone : milestones) {
             for (final Card card : milestone.getPlayer1Side()) {
@@ -49,6 +54,25 @@ public class GameBoard implements Serializable {
         }
         return playedCards;
     }
+
+    public List<Card> getCardsNotYetPlayed() {
+        //get not yet played cards
+        final List<Card> cardsNotYetPlayed = new ArrayList(allTheCards);
+        CollectionUtils.filter(cardsNotYetPlayed, new Predicate<Card>() {
+            @Override
+            public boolean evaluate(final Card cardToFilter) {
+                for (final Card playedCard : getPlayedCards()) {
+                    if (cardToFilter.getNumber().equals(playedCard.getNumber())
+                            && cardToFilter.getColor().equals(playedCard.getColor())) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+        return cardsNotYetPlayed;
+    }
+
     public Deck getDeck() {
         return deck;
     }

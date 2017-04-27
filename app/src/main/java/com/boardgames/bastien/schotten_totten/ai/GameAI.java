@@ -60,7 +60,7 @@ public abstract class GameAI {
 
     private void reclaim(final Game g) {
         for (final Milestone m : g.getGameBoard().getMilestones()) {
-            m.reclaim(PlayerType.TWO, g.getGameBoard().getPlayedCards());
+            m.reclaim(PlayerType.TWO, g.getGameBoard().getCardsNotYetPlayed());
         }
     }
 

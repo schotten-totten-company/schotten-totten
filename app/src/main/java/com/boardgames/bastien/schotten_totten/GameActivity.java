@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -18,7 +17,6 @@ import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Card;
-import com.boardgames.bastien.schotten_totten.model.Deck;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.GameBoard;
 import com.boardgames.bastien.schotten_totten.model.Hand;
@@ -26,9 +24,6 @@ import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 import com.boardgames.bastien.schotten_totten.view.MilestoneView;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.Predicate;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -39,7 +34,6 @@ public abstract class GameActivity extends AppCompatActivity {
 
     protected Game game;
     protected int selectedCard;
-    protected final List<Card> allTheCards = new ArrayList(new Deck().getDeck());
     private boolean isClickEnabled = true;
 
     protected ImageButton passButton;
@@ -177,26 +171,14 @@ public abstract class GameActivity extends AppCompatActivity {
                         if (selectedCard == -1) {
                             // reclaim
 
-                            // get played cards
-                            final List<Card> playedCards = game.getGameBoard().getPlayedCards();
-
                             //get not yet played cards
-                            final List<Card> cardsNotYetPlayed = new ArrayList(allTheCards);
-                            CollectionUtils.filter(cardsNotYetPlayed, new Predicate<Card>() {
-                                @Override
-                                public boolean evaluate(final Card cardToFilter) {
-                                    for (final Card playedCard : playedCards) {
-                                        if (cardToFilter.getNumber().equals(playedCard.getNumber())
-                                                && cardToFilter.getColor().equals(playedCard.getColor())) {
-                                            return false;
-                                        }
-                                    }
-                                    return true;
-                                }
-                            });
+                            final List<Card> cardsNotYetPlayed =
+                                    game.getGameBoard().getCardsNotYetPlayed();
 
                             // test reclaim
-                            final boolean reclaim = m.reclaim(game.getPlayingPlayerType(), cardsNotYetPlayed);
+                            final boolean reclaim =
+                                    m.reclaim(game.getPlayingPlayerType(), cardsNotYetPlayed);
+
                             if (reclaim) {
                                 // capture the milestone
                                 updateMilestoneView(index);
