@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.boardgames.bastien.schotten_totten.model.Game;
@@ -21,6 +23,9 @@ import com.boardgames.bastien.schotten_totten.server.GameDoNotExistException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class LauncherActivity extends AppCompatActivity {
@@ -185,26 +190,39 @@ public class LauncherActivity extends AppCompatActivity {
 
     private void joinGame() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.enter_game_name));
+        builder.setTitle(getString(R.string.choose_game_name));
 
         final LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
         // Set up the input
-        final EditText gameNameInput = new EditText(this);
-        gameNameInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        gameNameInput.setText(getString(R.string.game_name));
-        layout.addView(gameNameInput);
+        final Spinner spinner = new Spinner(this);
+        try {
+            final Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
+            // Get private mPopup member variable and try cast to ListPopupWindow
+            android.widget.ListPopupWindow popupWindow =
+                    (android.widget.ListPopupWindow) popup.get(spinner);
+            popupWindow.setHeight(1000);
 
+            final ArrayList<String> list =  new GameClient().listGame();
+            final ArrayAdapter<String> spinnerArrayAdapter =
+                    new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
+            spinner.setAdapter(spinnerArrayAdapter);
+            layout.addView(spinner);
+        } catch (Exception e) {
+            showError(e);
+        }
+
+        //set player type
         final RadioGroup radioGroup = new RadioGroup(this);
         final RadioButton p1Button = new RadioButton(this);
         p1Button.setText("ONE");
-        p1Button.setChecked(true);
         radioGroup.addView(p1Button);
         final RadioButton p2Button = new RadioButton(this);
         p2Button.setText("TWO");
         radioGroup.addView(p2Button);
-        radioGroup.check(p1Button.getId());
+        radioGroup.check(p2Button.getId());
         layout.addView(radioGroup);
 
         builder.setView(layout);
@@ -213,7 +231,7 @@ public class LauncherActivity extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final String gameName = gameNameInput.getText().toString();
+                final String gameName = spinner.getSelectedItem().toString();
                 final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                 joinIntent.putExtra("gameName", gameName);
                 final RadioButton selectedButton =
