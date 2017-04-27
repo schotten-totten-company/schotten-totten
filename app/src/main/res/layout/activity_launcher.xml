@@ -7,9 +7,10 @@
     android:layout_gravity="center"
     android:layout_weight="1"
     android:background="@android:color/holo_green_dark"
+    android:foregroundGravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
+    android:padding="10dp"
     android:weightSum="1">
 
     <LinearLayout
@@ -27,12 +28,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.56"
+            android:fontFamily="casual"
             android:freezesText="false"
             android:gravity="left"
             android:text="SCHOTTEN TOTTEN"
             android:textAlignment="center"
+            android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"
-            android:textSize="36sp" />
+            android:textSize="36sp"
+            android:textStyle="bold|italic" />
 
     </LinearLayout>
 
@@ -43,96 +47,187 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/hotSeatLauncherText"
+            android:id="@+id/localTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="0.17"
-            android:padding="10dp"
-            android:text="Hot Seat Game"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:text="Local Game"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="30sp"
+            android:textStyle="italic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.17"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/hotSeatLauncherText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Hot Seat"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/soloLauncherText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Solo"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lantextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_weight="0.17"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:text="LAN Game"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="24sp" />
+            android:textSize="30sp"
+            android:textStyle="italic" />
 
-        <TextView
-            android:id="@+id/createOnLineLauncherText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_gravity="center"
             android:layout_weight="0.17"
-            android:padding="10dp"
-            android:text="Create LAN Game"
-            android:textAlignment="viewStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="24sp" />
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/createOnLineLauncherText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Create"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/joinOnlineLauncherText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Join"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/joinOnlineLauncherText"
+            android:id="@+id/serverTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:layout_weight="0.17"
-            android:padding="10dp"
-            android:text="Join LAN Game"
-            android:textAlignment="textEnd"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:text="Server Game"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="24sp" />
+            android:textSize="30sp"
+            android:textStyle="italic" />
 
-        <TextView
-            android:id="@+id/createServerLauncherTest"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_gravity="center"
             android:layout_weight="0.17"
-            android:padding="10dp"
-            android:text="Create Game on Server"
-            android:textAlignment="textStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="24sp" />
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/joinServerLauncherText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:layout_weight="0.17"
-            android:padding="10dp"
-            android:text="JoinGame on Server"
-            android:textAlignment="textEnd"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="24sp" />
+            <TextView
+                android:id="@+id/createServerLauncherTest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Create"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/soloLauncherText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.17"
-            android:padding="10dp"
-            android:text="Solo Game"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="24sp" />
+            <TextView
+                android:id="@+id/joinServerLauncherText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Join"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/aboutLauncherText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="30dp"
             android:layout_weight="0.17"
-            android:padding="10dp"
-            android:text="About ?"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="24sp" />
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/quitLauncherText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.17"
-            android:padding="10dp"
-            android:text="Quit"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="24sp" />
+            <TextView
+                android:id="@+id/aboutLauncherText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="About ?"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/quitLauncherText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Quit"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="24sp"
+                android:textStyle="bold|italic" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
