@@ -1,6 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -36,10 +37,18 @@ public abstract class LanGameActivity extends GameActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         waitingDialog = new ProgressDialog(LanGameActivity.this);
-        waitingDialog.setCancelable(false);// set to true for dev
+        waitingDialog.setCancelable(true);
+        waitingDialog.setCanceledOnTouchOutside(false);
+        waitingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
         findViewById(R.id.gameLayout).setVisibility(View.INVISIBLE);
     }
 
+    // un comment for debug
 //    @Override
 //    public void onBackPressed() {
 //        startActivity(new Intent(OnlineGameActivity.this, LauncherActivity.class));
