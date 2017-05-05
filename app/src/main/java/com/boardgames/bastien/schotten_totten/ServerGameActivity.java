@@ -1,6 +1,8 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Player;
@@ -31,6 +33,7 @@ public class ServerGameActivity extends GameActivity {
             updateTextField();
             if (!this.game.getPlayingPlayerType().equals(type)) {
                 disableClick();
+                Executors.newSingleThreadExecutor().submit(new GameClientThread());
             }
         } catch (final ExecutionException e) {
             if (e.getCause() instanceof GameDoNotExistException) {
@@ -66,7 +69,22 @@ public class ServerGameActivity extends GameActivity {
             }
             game = client.getGame(gameName);
             enableClick();
-            updateUI();
+            // update ui
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    try {
+                        updateUI();
+                        Toast.makeText(ServerGameActivity.this,
+                                "your turn to play", Toast.LENGTH_LONG).show();
+                    } catch (final NoPlayerException ex) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                showErrorMessage(ex);
+                            }
+                        });
+                    }
+                }
+            });
             return true;
         }
     }
@@ -80,5 +98,14 @@ public class ServerGameActivity extends GameActivity {
         } catch (final ExecutionException | InterruptedException e) {
             showErrorMessage(e);
         }
+    }
+
+    @Override
+    protected void updateTextField() throws NoPlayerException {
+        final PlayerType playingPlayerType = game.getPlayingPlayer().getPlayerType();
+        final String message = playingPlayerType.equals(type) ?
+                game.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message) :
+                getString(R.string.not_your_turn_message) ;
+        ((TextView) findViewById(R.id.textView)).setText(message);
     }
 }

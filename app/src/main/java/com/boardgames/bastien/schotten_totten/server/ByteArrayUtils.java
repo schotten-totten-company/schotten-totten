@@ -35,21 +35,17 @@ public class ByteArrayUtils {
 		return new ByteArrayEntity(gameToByteArray(g));
 	}
 	
-	public static Game inputStreamToGame(final InputStream is) throws IOException {
+	public static Game inputStreamToGame(final InputStream is) throws IOException, ClassNotFoundException {
 		try (final ByteArrayInputStream bis = new ByteArrayInputStream(IOUtils.toByteArray(is))) {
 			final ObjectInput in = new ObjectInputStream(bis);
 			return (Game)in.readObject(); 
-		} catch (ClassNotFoundException | IOException e) {
-			throw new IOException(e.getCause());
-		} 
+		}
 	}
 	
-	public static ArrayList<String> inputStreamToSet(final InputStream is) throws IOException {
+	public static ArrayList<String> inputStreamToSet(final InputStream is) throws IOException, ClassNotFoundException {
 		try (final ByteArrayInputStream bis = new ByteArrayInputStream(IOUtils.toByteArray(is))) {
 			final ObjectInput in = new ObjectInputStream(bis);
-			return (ArrayList<String>)in.readObject(); 
-		} catch (ClassNotFoundException | IOException e) {
-			throw new IOException(e.getCause());
+			return (ArrayList<String>)in.readObject();
 		} 
 	}
 
