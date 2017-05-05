@@ -159,7 +159,7 @@ public class LauncherActivity extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final String gameName = input.getText().toString();
+                final String gameName = input.getText().toString().trim();
                 try {
                     new GameClient().createGame(gameName, new Game("P1", "P2"));
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
@@ -274,8 +274,8 @@ public class LauncherActivity extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final String player1Name = player1NameInput.getText().toString();
-                final String player2Name = player2NameInput.getText().toString();
+                final String player1Name = player1NameInput.getText().toString().trim();
+                final String player2Name = player2NameInput.getText().toString().trim();
                 final Intent hotSeatIntent = new Intent(LauncherActivity.this, HotSeatGameActivity.class);
                 hotSeatIntent.putExtra("player1Name", player1Name);
                 hotSeatIntent.putExtra("player2Name", player2Name);
