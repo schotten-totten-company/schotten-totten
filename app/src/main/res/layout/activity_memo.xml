@@ -157,57 +157,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/straightLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="77dp"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginLeft="15dp"
-                android:foregroundGravity="left|center_vertical"
-                android:gravity="left|center_vertical"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <ImageView
-                    android:id="@+id/straightCard1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    app:srcCompat="@drawable/number3three" />
-
-                <ImageView
-                    android:id="@+id/straightCard2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    app:srcCompat="@drawable/number4four" />
-
-                <ImageView
-                    android:id="@+id/straightCard3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    app:srcCompat="@drawable/number5five" />
-
-                <TextView
-                    android:id="@+id/straightText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:padding="5dp"
-                    android:text="Straight"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/flushLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="77dp"
@@ -255,6 +204,57 @@
                     android:layout_margin="5dp"
                     android:padding="5dp"
                     android:text="Flush"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/straightLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="77dp"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="15dp"
+                android:foregroundGravity="left|center_vertical"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/straightCard1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number3three" />
+
+                <ImageView
+                    android:id="@+id/straightCard2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number4four" />
+
+                <ImageView
+                    android:id="@+id/straightCard3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    app:srcCompat="@drawable/number5five" />
+
+                <TextView
+                    android:id="@+id/straightText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:text="Straight"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
             </LinearLayout>
 
