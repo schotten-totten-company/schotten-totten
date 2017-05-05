@@ -90,6 +90,8 @@ public class CreateLanGameActivity extends LanGameActivity {
                 }
             } catch (final Exception e) {
                 superCatch(e);
+            } finally {
+                alreadyLaunched = false;
             }
         }
     }

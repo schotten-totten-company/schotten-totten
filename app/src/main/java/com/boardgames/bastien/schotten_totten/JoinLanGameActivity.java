@@ -84,6 +84,8 @@ public class JoinLanGameActivity extends LanGameActivity {
 
             } catch (final Exception e) {
                 superCatch(e);
+            } finally {
+                joinAlreadyLaunched = false;
             }
         }
     }
