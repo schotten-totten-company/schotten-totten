@@ -3,6 +3,7 @@ package com.boardgames.bastien.schotten_totten;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -172,14 +173,7 @@ public abstract class LanGameActivity extends GameActivity {
             }
             // check victory
             try {
-                final Player winner = game.getWinner();
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        showAlertMessage(getString(R.string.end_of_the_game_title),
-                                winner.getName() +
-                                        getString(R.string.end_of_the_game_message), true, false);
-                    }
-                });
+                endOfTheGame(game.getWinner());
                 isGameFinished = true;
             } catch (final NoPlayerException e) {
                 isGameFinished = false;
