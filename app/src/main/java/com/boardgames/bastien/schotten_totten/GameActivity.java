@@ -208,8 +208,12 @@ public abstract class GameActivity extends AppCompatActivity {
                                 // draw card;
                                 try {
                                     final Card newCard = game.getGameBoard().getDeck().drawCard();
-                                    game.getPlayingPlayer().getHand().getCards().add(selectedCard, newCard);
-                                    updateHandCard(handView.get(selectedCard), newCard);
+                                    game.getPlayingPlayer().getHand().getCards().add(0, newCard);
+                                    handView.get(0).startAnimation(
+                                            AnimationUtils.loadAnimation(
+                                                    getApplicationContext(), R.anim.zoomout));
+                                    selectCard(handView.get(0));
+                                    updateHand();
                                     selectedCard = -1;
                                 } catch (final EmptyDeckException e) {
                                     //showAlertMessage(e.getMessage());
@@ -436,13 +440,7 @@ public abstract class GameActivity extends AppCompatActivity {
         textView.setText(game.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message));
     }
 
-    protected void updateUI() throws NoPlayerException {
-        // update board
-        for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
-            updateMilestoneView(i);
-        }
-
-        handLayout.setVisibility(View.VISIBLE);
+    private void updateHand() throws NoPlayerException {
         // update hand
         final Hand hand = game.getPlayingPlayer().getHand();
         for (int i = 0; i < hand.getHandSize(); i++) {
@@ -457,6 +455,16 @@ public abstract class GameActivity extends AppCompatActivity {
             unSelectCard(handCardView);
             handCardView.setVisibility(View.INVISIBLE);
         }
+    }
+
+    protected void updateUI() throws NoPlayerException {
+        // update board
+        for (int i = 0; i < game.getGameBoard().getMilestones().size(); i++) {
+            updateMilestoneView(i);
+        }
+
+        handLayout.setVisibility(View.VISIBLE);
+        updateHand();
 
         // update playing player text
         updateTextField();
