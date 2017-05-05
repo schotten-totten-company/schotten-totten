@@ -176,7 +176,8 @@ public abstract class LanGameActivity extends GameActivity {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         showAlertMessage(getString(R.string.end_of_the_game_title),
-                                getString(R.string.end_of_the_game_message) + winner.getName(), true, false);
+                                winner.getName() +
+                                        getString(R.string.end_of_the_game_message), true, false);
                     }
                 });
                 isGameFinished = true;
