@@ -29,6 +29,7 @@ public class HotSeatGameActivity extends GameActivity {
 
     @Override
     protected void endOfTurn() throws NoPlayerException {
+        game.swapPlayingPlayerType();
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
         alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + game.getPlayingPlayer().getName());
@@ -37,7 +38,6 @@ public class HotSeatGameActivity extends GameActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             // swap player
-                            game.swapPlayingPlayerType();
                             updateUI();
                             enableClick();
                             dialog.dismiss();
