@@ -39,7 +39,6 @@ public class LauncherActivity extends AppCompatActivity {
         hotSeatLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(LauncherActivity.this, HotSeatGameActivity.class));
                 enterPlayersNames();
             }
         });
@@ -79,7 +78,15 @@ public class LauncherActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.aboutLauncherText).setAlpha((float)0.5);
+        findViewById(R.id.aboutLauncherText).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAboutDialog();
+            }
+
+
+        });
+
         findViewById(R.id.quitLauncherText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -309,6 +316,20 @@ public class LauncherActivity extends AppCompatActivity {
                     }
                 });
         alertDialog.setCancelable(false);
+        alertDialog.show();
+    }
+
+    private final void showAboutDialog() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.about_title));
+        alertDialog.setMessage(getString(R.string.about_content));
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setCancelable(true);
         alertDialog.show();
     }
 }
