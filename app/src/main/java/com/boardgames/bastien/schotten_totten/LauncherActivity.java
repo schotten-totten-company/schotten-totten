@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class LauncherActivity extends AppCompatActivity {
+public class LauncherActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

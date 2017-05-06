@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -64,6 +67,32 @@ public abstract class GameActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        final MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.rules, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+//            case R.id.action_settings:
+//                // User chose the "Settings" item, show the app settings UI...
+//                return true;
+
+            case R.id.action_favorite:
+                startActivity(new Intent(getApplicationContext(), MemoActivity.class));
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.quit_title));
@@ -116,12 +145,6 @@ public abstract class GameActivity extends AppCompatActivity {
             selectedCard = -1;
 
             updateTextField();
-            findViewById(R.id.memoButton).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), MemoActivity.class));
-                }
-            });
 
             initPassButton();
 

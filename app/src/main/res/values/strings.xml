@@ -39,6 +39,7 @@
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="memo">Memo</string>
 
     <string name="it_is_your_turn_message">, it is your turn to play.</string>
     <string name="not_your_turn_message">Your opponent is playing ...</string>

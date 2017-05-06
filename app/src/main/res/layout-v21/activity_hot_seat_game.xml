@@ -52,13 +52,6 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/ic_media_ff" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_dialog_info"
-                android:id="@+id/memoButton"
-                tools:ignore="ContentDescription" />
-
         </LinearLayout>
 
         <LinearLayout
