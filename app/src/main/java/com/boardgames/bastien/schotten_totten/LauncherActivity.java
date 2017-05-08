@@ -193,6 +193,8 @@ public class LauncherActivity extends Activity {
                     }
                 } catch (Exception e) {
                     showError(e);
+                } finally {
+                    waitingDialog.dismiss();
                 }
             }
         });

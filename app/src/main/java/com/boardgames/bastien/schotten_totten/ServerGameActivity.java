@@ -8,7 +8,9 @@ import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
+import com.boardgames.bastien.schotten_totten.server.GameClientInterface;
 import com.boardgames.bastien.schotten_totten.server.GameDoNotExistException;
+import com.boardgames.bastien.schotten_totten.server.MongoDbGameClient;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -16,7 +18,7 @@ import java.util.concurrent.Executors;
 
 public class ServerGameActivity extends GameActivity {
 
-    private final GameClient client = new GameClient();
+    private final GameClientInterface client = new GameClient();
     private PlayerType type;
     private String gameName;
 

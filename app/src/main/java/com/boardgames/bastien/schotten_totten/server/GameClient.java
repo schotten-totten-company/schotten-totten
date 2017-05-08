@@ -18,7 +18,7 @@ import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
 
-public class GameClient {
+public class GameClient implements GameClientInterface {
 
 	private final String serverUrl;
 
@@ -150,6 +150,5 @@ public class GameClient {
 		};
 		Executors.newSingleThreadExecutor().submit(updateCallable).get();
 	}
-		
 
 }

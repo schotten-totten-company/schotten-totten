@@ -86,7 +86,7 @@ public class Game implements Serializable {
         } else if (playerWinTheGame(player2)) {
             return player2;
         } else {
-            throw new NoPlayerException(PlayerType.NONE.name());
+            throw new NoPlayerException(PlayerType.NONE.toString());
         }
     }
 
