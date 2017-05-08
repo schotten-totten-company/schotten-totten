@@ -41,6 +41,13 @@ public class ByteArrayUtils {
 			return (Game)in.readObject(); 
 		}
 	}
+
+	public static Game byteArrayToGame(final byte[] bArray) throws IOException, ClassNotFoundException {
+		try (final ByteArrayInputStream bis = new ByteArrayInputStream(bArray)) {
+			final ObjectInput in = new ObjectInputStream(bis);
+			return (Game)in.readObject();
+		}
+	}
 	
 	public static ArrayList<String> inputStreamToSet(final InputStream is) throws IOException, ClassNotFoundException {
 		try (final ByteArrayInputStream bis = new ByteArrayInputStream(IOUtils.toByteArray(is))) {
