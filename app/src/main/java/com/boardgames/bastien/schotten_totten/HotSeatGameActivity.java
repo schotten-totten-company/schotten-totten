@@ -33,7 +33,7 @@ public class HotSeatGameActivity extends GameActivity {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
         alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + game.getPlayingPlayer().getName());
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         try {

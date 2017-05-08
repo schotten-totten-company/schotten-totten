@@ -24,7 +24,7 @@ public class CreateLanGameActivity extends LanGameActivity {
         super.onCreate(savedInstanceState);
 
         if (!alreadyLaunched) {
-            playerName = "P1";
+            playerName = getString(R.string.player1name);
             playerType = PlayerType.ONE;
             localPort = 8011;
             distantPort = 8022;
@@ -62,7 +62,7 @@ public class CreateLanGameActivity extends LanGameActivity {
                             waitingDialog.dismiss();
                             gameLayout.setVisibility(View.VISIBLE);
                             Toast.makeText(CreateLanGameActivity.this,
-                                    "other player online", Toast.LENGTH_LONG).show();
+                                    getString(R.string.connection_ok), Toast.LENGTH_LONG).show();
                         }
                     });
                     // Create input and output streams to client

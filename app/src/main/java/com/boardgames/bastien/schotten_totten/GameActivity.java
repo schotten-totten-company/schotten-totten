@@ -512,7 +512,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected void showErrorMessage(final Exception e) {
         final StringWriter message = new StringWriter();
         e.printStackTrace(new PrintWriter(message));
-        showAlertMessage("Error : " + e.getMessage(), message.toString(), true, true);
+        showAlertMessage(getString(R.string.error_title) + e.getMessage(), message.toString(), true, true);
     }
 
     protected void showAlertMessage(final String message) {
@@ -525,7 +525,7 @@ public abstract class GameActivity extends AppCompatActivity {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         gameLayout.setVisibility(View.VISIBLE);

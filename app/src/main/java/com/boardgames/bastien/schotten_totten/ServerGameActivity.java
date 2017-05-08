@@ -80,7 +80,7 @@ public class ServerGameActivity extends GameActivity {
                         } catch (final NoPlayerException e) {
                             // nothing to do, just continue to play
                             Toast.makeText(ServerGameActivity.this,
-                                "your turn to play", Toast.LENGTH_LONG).show();
+                                getString(R.string.it_is_your_turn), Toast.LENGTH_LONG).show();
                         }
                     } catch (final NoPlayerException ex) {
                         runOnUiThread(new Runnable() {

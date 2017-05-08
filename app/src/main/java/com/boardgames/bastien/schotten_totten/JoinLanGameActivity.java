@@ -24,7 +24,7 @@ public class JoinLanGameActivity extends LanGameActivity {
         super.onCreate(savedInstanceState);
 
         if (!joinAlreadyLaunched) {
-            playerName = "P2";
+            playerName = getString(R.string.player2name);
             playerType = PlayerType.TWO;
             localPort = 8022;
             distantPort = 8011;
@@ -37,7 +37,7 @@ public class JoinLanGameActivity extends LanGameActivity {
                 waitingDialog.setMessage(getString(R.string.please_wait));
                 waitingDialog.show();
                 Executors.newSingleThreadExecutor().submit(new GameInitClient());
-                textView.setText("try to connect...");
+                textView.setText(getString(R.string.please_wait));
 
             } catch (final UnknownHostException e) {
                 showAlertMessage(getString(R.string.unknown_host_title),
@@ -73,7 +73,7 @@ public class JoinLanGameActivity extends LanGameActivity {
                         gameLayout.setVisibility(View.VISIBLE);
                         initUI(handToUpdate);
                         Toast.makeText(JoinLanGameActivity.this,
-                                "connected to server", Toast.LENGTH_LONG).show();
+                                getString(R.string.connection_ok), Toast.LENGTH_LONG).show();
                     }
                 });
 

@@ -3,7 +3,6 @@ package com.boardgames.bastien.schotten_totten;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -148,7 +147,7 @@ public abstract class LanGameActivity extends GameActivity {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(LanGameActivity.this,
-                                "your turn to play", Toast.LENGTH_LONG).show();
+                                getString(R.string.it_is_your_turn), Toast.LENGTH_LONG).show();
                     }
                 });
 

@@ -15,12 +15,17 @@
     <string name="milestone_already_captured_message">Milestone already captured by the opponent.</string>
 
     <string name="warning_title">Warning !!!</string>
+    <string name="error_title">Error:\u0020</string>
 
     <string name="unknown_host_title">No local network connection</string>
     <string name="unknown_host_message">Not connected on WLAN or VLAN,
         please first connect to a WiFi or PPTP VPN local network.</string>
+
+    <string name="connection_ok">Connection established</string>
     <string name="game_do_not_exist">\u0020do not exist.</string>
     <string name="game_already_exist">\u0020already exist.</string>
+
+    <string name="it_is_your_turn">It is your turn</string>
 
     <string name="game_name">Game_</string>
 

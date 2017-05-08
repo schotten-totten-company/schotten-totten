@@ -264,7 +264,7 @@ public class LauncherActivity extends Activity {
 
                 }
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -280,7 +280,7 @@ public class LauncherActivity extends Activity {
 
     private void enterPlayersNames() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Players Names");
+        builder.setTitle(getString(R.string.enter_game_name));
 
         final LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -309,7 +309,7 @@ public class LauncherActivity extends Activity {
                 startActivity(hotSeatIntent);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -322,14 +322,14 @@ public class LauncherActivity extends Activity {
     private final void showError(final Exception e) {
         final StringWriter message = new StringWriter();
         e.printStackTrace(new PrintWriter(message));
-        showError("Error : " + e.getMessage(), message.toString());
+        showError(getString(R.string.error_title) + e.getMessage(), message.toString());
     }
 
     private final void showError(final String title, final String message) {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -343,7 +343,7 @@ public class LauncherActivity extends Activity {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.about_title));
         alertDialog.setMessage(getString(R.string.about_content));
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
