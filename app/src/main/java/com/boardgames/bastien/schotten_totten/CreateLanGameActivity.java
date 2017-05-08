@@ -31,7 +31,8 @@ public class CreateLanGameActivity extends LanGameActivity {
 
             try {
                 localIp = getIPAddress();
-                waitingDialog.setTitle(localIp + " is waiting ...");
+                waitingDialog.setTitle(localIp);
+                waitingDialog.setMessage(getString(R.string.please_wait));
                 waitingDialog.show();
                 // init game (wait for client)
                 Executors.newSingleThreadExecutor().submit(new GameInitServer());

@@ -30,24 +30,11 @@ import java.util.concurrent.Future;
 
 public class LauncherActivity extends Activity {
 
-    protected ProgressDialog waitingDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // prepare waiting popup
         setContentView(R.layout.activity_launcher);
-        waitingDialog = new ProgressDialog(LauncherActivity.this);
-        waitingDialog.setTitle(getString(R.string.contacting_server));
-        waitingDialog.setCancelable(true);
-        waitingDialog.setCanceledOnTouchOutside(false);
-        waitingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });
 
         final TextView hotSeatLauncherText = (TextView) findViewById(R.id.hotSeatLauncherText);
         hotSeatLauncherText.setOnClickListener(new View.OnClickListener() {
@@ -182,10 +169,14 @@ public class LauncherActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 final String gameName = input.getText().toString().trim();
                 dialog.dismiss();
+                final ProgressDialog waitingDialog =
+                        ProgressDialog.show(LauncherActivity.this,
+                                getString(R.string.contacting_server),
+                                getString(R.string.please_wait), true, false);
                 try {
-                    final Future<Boolean> future = new GameClient().createGame(gameName, new Game("P1", "P2"));
+                    final Future<Boolean> future =
+                            new GameClient().createGame(gameName, new Game("P1", "P2"));
                     // show waiting pop up
-                    waitingDialog.show();
                     future.get();
                     // close waiting pop up
                     waitingDialog.dismiss();
@@ -219,7 +210,10 @@ public class LauncherActivity extends Activity {
         try {
             final Future<ArrayList<String>> future =  new GameClient().listGame();
             // show waiting pop up
-            waitingDialog.show();
+            final ProgressDialog waitingDialog =
+                    ProgressDialog.show(LauncherActivity.this,
+                            getString(R.string.contacting_server),
+                            getString(R.string.please_wait), true, false);
             final ArrayList<String> list = future.get();
             // dismiss waiting pop up
             waitingDialog.dismiss();

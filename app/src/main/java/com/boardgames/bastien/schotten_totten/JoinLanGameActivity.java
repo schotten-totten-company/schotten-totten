@@ -33,7 +33,8 @@ public class JoinLanGameActivity extends LanGameActivity {
 
                 localIp = getIPAddress();
                 distantIp = getIntent().getStringExtra("distantIp");
-                waitingDialog.setTitle(localIp + " is connecting ...");
+                waitingDialog.setTitle(localIp);
+                waitingDialog.setMessage(getString(R.string.please_wait));
                 waitingDialog.show();
                 Executors.newSingleThreadExecutor().submit(new GameInitClient());
                 textView.setText("try to connect...");

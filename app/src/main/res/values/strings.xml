@@ -34,7 +34,8 @@
     <string name="enter_ip_message">Enter Player 1 IP address:</string>
     <string name="choose_game_name">Choose Game name:</string>
     <string name="enter_game_name">Enter Game name:</string>
-    <string name="contacting_server">Contacting Server ...</string>
+    <string name="contacting_server">Contacting Server</string>
+    <string name="please_wait">Please Wait ...</string>
 
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
