@@ -65,7 +65,7 @@ public class ServerGameActivity extends GameActivity {
         @Override
         public Boolean call() throws Exception {
             while(!client.getGame(gameName).getPlayingPlayerType().equals(type)) {
-                Thread.sleep(5000);
+                Thread.sleep(2500);
             }
             game = client.getGame(gameName);
             enableClick();
@@ -92,11 +92,13 @@ public class ServerGameActivity extends GameActivity {
     @Override
     protected void endOfTheGame(final Player winner) throws NoPlayerException {
         super.endOfTheGame(winner);
-        try {
-            client.deleteGame(gameName);
-            Executors.newSingleThreadExecutor().submit(new GameClientThread());
-        } catch (final ExecutionException | InterruptedException e) {
-            showErrorMessage(e);
+        if (!winner.getPlayerType().equals(type)) {
+            try {
+                client.deleteGame(gameName);
+                Executors.newSingleThreadExecutor().submit(new GameClientThread());
+            } catch (final ExecutionException | InterruptedException e) {
+                showErrorMessage(e);
+            }
         }
     }
 
