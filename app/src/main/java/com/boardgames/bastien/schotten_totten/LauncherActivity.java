@@ -2,10 +2,10 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,21 +20,34 @@ import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameAlreadyExistsException;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
-import com.boardgames.bastien.schotten_totten.server.GameDoNotExistException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class LauncherActivity extends Activity {
+
+    protected ProgressDialog waitingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // prepare waiting popup
         setContentView(R.layout.activity_launcher);
+        waitingDialog = new ProgressDialog(LauncherActivity.this);
+        waitingDialog.setTitle(getString(R.string.contacting_server));
+        waitingDialog.setCancelable(true);
+        waitingDialog.setCanceledOnTouchOutside(false);
+        waitingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
 
         final TextView hotSeatLauncherText = (TextView) findViewById(R.id.hotSeatLauncherText);
         hotSeatLauncherText.setOnClickListener(new View.OnClickListener() {
@@ -168,8 +181,14 @@ public class LauncherActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String gameName = input.getText().toString().trim();
+                dialog.dismiss();
                 try {
-                    new GameClient().createGame(gameName, new Game("P1", "P2"));
+                    final Future<Boolean> future = new GameClient().createGame(gameName, new Game("P1", "P2"));
+                    // show waiting pop up
+                    waitingDialog.show();
+                    future.get();
+                    // close waiting pop up
+                    waitingDialog.dismiss();
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     joinIntent.putExtra("gameName", gameName);
                     joinIntent.putExtra("type", PlayerType.ONE.toString());
@@ -197,15 +216,21 @@ public class LauncherActivity extends Activity {
     }
 
     private void joinGame() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.choose_game_name));
-
-        final LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        // Set up the input
-        final Spinner spinner = new Spinner(this);
         try {
+            final Future<ArrayList<String>> future =  new GameClient().listGame();
+            // show waiting pop up
+            waitingDialog.show();
+            final ArrayList<String> list = future.get();
+            // dismiss waiting pop up
+            waitingDialog.dismiss();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.choose_game_name));
+
+            final LinearLayout layout = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+
+            // Set up the input
+            final Spinner spinner = new Spinner(this);
             final Field popup = Spinner.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
             // Get private mPopup member variable and try cast to ListPopupWindow
@@ -213,50 +238,50 @@ public class LauncherActivity extends Activity {
                     (android.widget.ListPopupWindow) popup.get(spinner);
             popupWindow.setHeight(1000);
 
-            final ArrayList<String> list =  new GameClient().listGame();
             final ArrayAdapter<String> spinnerArrayAdapter =
                     new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
             spinner.setAdapter(spinnerArrayAdapter);
             layout.addView(spinner);
+
+            //set player type
+            final RadioGroup radioGroup = new RadioGroup(this);
+            final RadioButton p1Button = new RadioButton(this);
+            p1Button.setText("ONE");
+            radioGroup.addView(p1Button);
+            final RadioButton p2Button = new RadioButton(this);
+            p2Button.setText("TWO");
+            radioGroup.addView(p2Button);
+            radioGroup.check(p2Button.getId());
+            layout.addView(radioGroup);
+
+            builder.setView(layout);
+
+            // Set up the buttons
+            builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    final String gameName = spinner.getSelectedItem().toString();
+                    final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                    joinIntent.putExtra("gameName", gameName);
+                    final RadioButton selectedButton =
+                            (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+                    joinIntent.putExtra("type", selectedButton.getText().toString());
+                    startActivity(joinIntent);
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
         } catch (Exception e) {
             showError(e);
         }
-
-        //set player type
-        final RadioGroup radioGroup = new RadioGroup(this);
-        final RadioButton p1Button = new RadioButton(this);
-        p1Button.setText("ONE");
-        radioGroup.addView(p1Button);
-        final RadioButton p2Button = new RadioButton(this);
-        p2Button.setText("TWO");
-        radioGroup.addView(p2Button);
-        radioGroup.check(p2Button.getId());
-        layout.addView(radioGroup);
-
-        builder.setView(layout);
-
-        // Set up the buttons
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String gameName = spinner.getSelectedItem().toString();
-                final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                joinIntent.putExtra("gameName", gameName);
-                final RadioButton selectedButton =
-                        (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
-                joinIntent.putExtra("type", selectedButton.getText().toString());
-                startActivity(joinIntent);
-
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
     }
 
     private void enterPlayersNames() {

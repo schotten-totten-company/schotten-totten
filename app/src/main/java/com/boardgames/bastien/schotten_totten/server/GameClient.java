@@ -26,7 +26,7 @@ public class GameClient {
 		serverUrl = "https://schotten-totten.herokuapp.com";
 	}
 
-	public String ping() throws ExecutionException, InterruptedException {
+	public Future<String> ping() {
 
 		final Callable pingCallable = new Callable<String>() {
 			@Override
@@ -42,11 +42,10 @@ public class GameClient {
 				}
 			}
 		};
-		final Future<String> future = Executors.newSingleThreadExecutor().submit(pingCallable);
-		return future.get();
+		return Executors.newSingleThreadExecutor().submit(pingCallable);
 	}
 
-	public void createGame(final String gameName, final Game game) throws ExecutionException, InterruptedException {
+	public Future<Boolean> createGame(final String gameName, final Game game) {
 
 		final Callable createCallable = new Callable<Boolean>() {
 			@Override
@@ -67,10 +66,10 @@ public class GameClient {
 				return true;
 			}
 		};
-		Executors.newSingleThreadExecutor().submit(createCallable).get();
+		return Executors.newSingleThreadExecutor().submit(createCallable);
 	}
 
-	public Game getGame(final String gameName) throws ExecutionException, InterruptedException {
+	public Future<Game> getGame(final String gameName) {
 
 		final Callable getCallable = new Callable<Game>() {
 			@Override
@@ -90,11 +89,10 @@ public class GameClient {
 				}
 			}
 		};
-		final Future<Game> future = Executors.newSingleThreadExecutor().submit(getCallable);
-		return future.get();
+		return Executors.newSingleThreadExecutor().submit(getCallable);
 	}
 	
-	public ArrayList<String> listGame() throws ExecutionException, InterruptedException {
+	public Future<ArrayList<String>> listGame() {
 
 		final Callable listCallable = new Callable<ArrayList<String>>() {
 			@Override
@@ -110,8 +108,7 @@ public class GameClient {
 				}
 			}
 		};
-		final Future<ArrayList<String>> future = Executors.newSingleThreadExecutor().submit(listCallable);
-		return future.get();
+		return Executors.newSingleThreadExecutor().submit(listCallable);
 	}
 	
 	public void updateGame(final String gameName, final Game game) throws ExecutionException, InterruptedException {

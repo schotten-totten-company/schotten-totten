@@ -28,7 +28,7 @@ public class ServerGameActivity extends GameActivity {
         gameName = getIntent().getStringExtra("gameName");
 
         try {
-            this.game = client.getGame(gameName);
+            this.game = client.getGame(gameName).get();
             initUI(this.game.getPlayer(type).getHand());
             updateTextField();
             if (!this.game.getPlayingPlayerType().equals(type)) {
@@ -64,18 +64,24 @@ public class ServerGameActivity extends GameActivity {
     private class GameClientThread implements Callable<Boolean> {
         @Override
         public Boolean call() throws Exception {
-            while(!client.getGame(gameName).getPlayingPlayerType().equals(type)) {
+            while(!client.getGame(gameName).get().getPlayingPlayerType().equals(type)) {
                 Thread.sleep(2500);
             }
-            game = client.getGame(gameName);
+            game = client.getGame(gameName).get();
             enableClick();
             // update ui
             runOnUiThread(new Runnable() {
                 public void run() {
                     try {
                         updateUI();
-                        Toast.makeText(ServerGameActivity.this,
+                        // check victory
+                        try {
+                            endOfTheGame(game.getWinner());
+                        } catch (final NoPlayerException e) {
+                            // nothing to do, just continue to play
+                            Toast.makeText(ServerGameActivity.this,
                                 "your turn to play", Toast.LENGTH_LONG).show();
+                        }
                     } catch (final NoPlayerException ex) {
                         runOnUiThread(new Runnable() {
                             public void run() {
@@ -92,7 +98,15 @@ public class ServerGameActivity extends GameActivity {
     @Override
     protected void endOfTheGame(final Player winner) throws NoPlayerException {
         super.endOfTheGame(winner);
-        if (!winner.getPlayerType().equals(type)) {
+        if (winner.getPlayerType().equals(type)) {
+            game.swapPlayingPlayerType();
+            try {
+                client.updateGame(gameName, game);
+                Executors.newSingleThreadExecutor().submit(new GameClientThread());
+            } catch (final ExecutionException | InterruptedException e) {
+                showErrorMessage(e);
+            }
+        } else {
             try {
                 client.deleteGame(gameName);
                 Executors.newSingleThreadExecutor().submit(new GameClientThread());
