@@ -30,11 +30,21 @@ import java.util.concurrent.Future;
 
 public class LauncherActivity extends Activity {
 
+    private ProgressDialog waitingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_launcher);
+
+        waitingDialog = new ProgressDialog(LauncherActivity.this);
+        waitingDialog.setTitle(getString(R.string.contacting_server));
+        waitingDialog.setMessage(getString(R.string.please_wait));
+        waitingDialog.setCanceledOnTouchOutside(false);
+        waitingDialog.setCancelable(false);
+        waitingDialog.dismiss();
+
 
         final TextView hotSeatLauncherText = (TextView) findViewById(R.id.hotSeatLauncherText);
         hotSeatLauncherText.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +110,7 @@ public class LauncherActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        waitingDialog.dismiss();
         mangeJoinButton();
     }
 
@@ -168,18 +179,12 @@ public class LauncherActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String gameName = input.getText().toString().trim();
-                dialog.dismiss();
-                final ProgressDialog waitingDialog =
-                        ProgressDialog.show(LauncherActivity.this,
-                                getString(R.string.contacting_server),
-                                getString(R.string.please_wait), true, false);
+                waitingDialog.show();
                 try {
                     final Future<Boolean> future =
                             new GameClient().createGame(gameName, new Game("P1", "P2"));
                     // show waiting pop up
                     future.get();
-                    // close waiting pop up
-                    waitingDialog.dismiss();
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     joinIntent.putExtra("gameName", gameName);
                     joinIntent.putExtra("type", PlayerType.ONE.toString());
@@ -193,8 +198,6 @@ public class LauncherActivity extends Activity {
                     }
                 } catch (Exception e) {
                     showError(e);
-                } finally {
-                    waitingDialog.dismiss();
                 }
             }
         });
@@ -204,7 +207,12 @@ public class LauncherActivity extends Activity {
                 dialog.cancel();
             }
         });
-
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                //waitingDialog.dismiss();
+            }
+        });
         builder.show();
     }
 
@@ -212,13 +220,8 @@ public class LauncherActivity extends Activity {
         try {
             final Future<ArrayList<String>> future =  new GameClient().listGame();
             // show waiting pop up
-            final ProgressDialog waitingDialog =
-                    ProgressDialog.show(LauncherActivity.this,
-                            getString(R.string.contacting_server),
-                            getString(R.string.please_wait), true, false);
+            waitingDialog.show();
             final ArrayList<String> list = future.get();
-            // dismiss waiting pop up
-            waitingDialog.dismiss();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.choose_game_name));
 
@@ -263,6 +266,8 @@ public class LauncherActivity extends Activity {
                             (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
                     joinIntent.putExtra("type", selectedButton.getText().toString());
                     startActivity(joinIntent);
+                    // dismiss waiting pop up
+                    waitingDialog.dismiss();
 
                 }
             });
@@ -270,6 +275,8 @@ public class LauncherActivity extends Activity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
+                    // dismiss waiting pop up
+                    waitingDialog.dismiss();
                 }
             });
 
