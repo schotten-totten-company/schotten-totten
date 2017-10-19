@@ -22,6 +22,7 @@ public class GameBoard implements Serializable {
     private final List<Milestone> milestones;
 
     private Card lastPlayedCard;
+
     public GameBoard() {
 
         // create deck

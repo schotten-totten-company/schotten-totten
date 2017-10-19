@@ -38,7 +38,7 @@ public class Hand implements Serializable {
         return drawnCardIndex;
     }
 
-    public Card playCard(final int i) throws CardInitialisationException {
+    public Card playCard(final int i) {
         return cards.remove(i);
     }
 

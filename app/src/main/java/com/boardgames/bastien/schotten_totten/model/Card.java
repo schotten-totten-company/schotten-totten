@@ -15,6 +15,11 @@ public class Card implements Serializable {
         YELLOW,
         GREEN,
         GREY;
+
+        @Override
+        public String toString() {
+            return String.valueOf(ordinal() + 1);
+        }
     }
 
     public enum NUMBER {

@@ -225,7 +225,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                     m.addCard(c, game.getPlayingPlayerType());
                                     game.getGameBoard().updateLastPlayedCard(c);
                                     updateMilestoneView(m.getId());
-                                } catch (final NoPlayerException | CardInitialisationException e) {
+                                } catch (final NoPlayerException e) {
                                     showErrorMessage(e);
                                 }
                                 // draw card;
