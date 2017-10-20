@@ -11,6 +11,9 @@ import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Bastien on 19/10/2017.
  */
@@ -97,6 +100,30 @@ public abstract class SimpleGameManager {
     public abstract int chooseCardToPlay();
 
     public abstract int chooseMilestoneWhereToPlay();
+
+    public List<Card> getPlayer1SideOfMilestone(final int milestoneIndex) {
+        return game.getGameBoard().getMilestones().get(milestoneIndex).getPlayer1Side();
+    }
+
+    public List<Card> getPlayer2SideOfMilestone(final int milestoneIndex) {
+        return game.getGameBoard().getMilestones().get(milestoneIndex).getPlayer2Side();
+    }
+
+    public List<Card> getPlayingPlayerSideOfMilestone(final int milestoneIndex) {
+        try {
+            if (game.getPlayingPlayer().getPlayerType() == PlayerType.ONE) {
+                return game.getGameBoard().getMilestones().get(milestoneIndex).getPlayer1Side();
+            } else {
+                return game.getGameBoard().getMilestones().get(milestoneIndex).getPlayer2Side();
+            }
+        } catch (NoPlayerException e) {
+           return new ArrayList<>();
+        }
+    }
+
+    public int getDeckSize() {
+        return game.getGameBoard().getDeck().getDeck().size();
+    }
 
     public PlayerType playWholeGame() {
         while(!isGameFinished()) {
