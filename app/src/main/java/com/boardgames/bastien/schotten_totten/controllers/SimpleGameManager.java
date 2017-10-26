@@ -23,6 +23,7 @@ public abstract class SimpleGameManager {
     private final Game game;
     private final long gameUid;
 
+
     public SimpleGameManager(final String player1Name, final String player2Name, final long uid) throws GameCreationException {
         game = new Game(player1Name, player2Name);
         this.gameUid = uid;
