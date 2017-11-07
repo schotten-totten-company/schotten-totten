@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
@@ -62,11 +62,11 @@ public class JoinLanGameActivity extends LanGameActivity {
                 final ObjectOutputStream outToServer = new ObjectOutputStream(clientSocketToConnect.getOutputStream());
                 final ObjectInputStream inFromServer = new ObjectInputStream(clientSocketToConnect.getInputStream());
                 outToServer.writeObject(playerName + "@" + localIp);
-                game = (Game)inFromServer.readObject();
+                gameManager = (AbstractGameManager)inFromServer.readObject();
                 clientSocketToConnect.close();
 
 
-                final Hand handToUpdate = game.getPlayer(PlayerType.TWO).getHand();
+                final Hand handToUpdate = gameManager.getGame().getPlayer(PlayerType.TWO).getHand();
                 runOnUiThread(new Runnable() {
                     public void run() {
                         waitingDialog.dismiss();

@@ -1,6 +1,6 @@
 package com.boardgames.bastien.schotten_totten.server;
 
-import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
@@ -27,7 +27,7 @@ public class MongoDbGameClient implements GameClientInterface {
         uri = new MongoClientURI("mongodb://player:player1234567890@ds133991.mlab.com:33991/schotten-totten");
     }
 
-    public Future<Boolean> createGame(final String gameName, final Game game) {
+    public Future<Boolean> createGame(final String gameName, final AbstractGameManager game) {
 
         final Callable createCallable = new Callable<Boolean>() {
             @Override
@@ -55,11 +55,11 @@ public class MongoDbGameClient implements GameClientInterface {
         return Executors.newSingleThreadExecutor().submit(createCallable);
     }
 
-    public Future<Game> getGame(final String gameName) {
+    public Future<AbstractGameManager> getGame(final String gameName) {
 
-        final Callable getCallable = new Callable<Game>() {
+        final Callable getCallable = new Callable<AbstractGameManager>() {
             @Override
-            public Game call() throws Exception {
+            public AbstractGameManager call() throws Exception {
                 try (final MongoClient mongoClient = new MongoClient(uri)) {
                     final MongoCollection<Document> collection =
                             mongoClient.getDatabase(uri.getDatabase()).getCollection("games");
@@ -96,7 +96,7 @@ public class MongoDbGameClient implements GameClientInterface {
         return Executors.newSingleThreadExecutor().submit(listCallable);
     }
 
-    public void updateGame(final String gameName, final Game game) throws ExecutionException, InterruptedException {
+    public void updateGame(final String gameName, final AbstractGameManager game) throws ExecutionException, InterruptedException {
 
         final Callable updateCallable = new Callable<Boolean>() {
             @Override

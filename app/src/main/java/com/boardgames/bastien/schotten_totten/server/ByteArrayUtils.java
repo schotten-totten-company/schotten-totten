@@ -1,5 +1,9 @@
 package com.boardgames.bastien.schotten_totten.server;
 
+import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
+
+import org.apache.commons.io.IOUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -10,10 +14,6 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import org.apache.commons.io.IOUtils;
-
-import com.boardgames.bastien.schotten_totten.model.Game;
-
 import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 
 public class ByteArrayUtils {
@@ -22,7 +22,7 @@ public class ByteArrayUtils {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static byte[] gameToByteArray(final Game g) throws IOException {
+	public static byte[] gameToByteArray(final AbstractGameManager g) throws IOException {
 		try (final ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
 			final ObjectOutput out = new ObjectOutputStream(bos);   
 			out.writeObject(g);
@@ -31,21 +31,21 @@ public class ByteArrayUtils {
 		}
 	}
 
-	public static ByteArrayEntity gameToByteArrayEntity(final Game g) throws IOException {
+	public static ByteArrayEntity gameToByteArrayEntity(final AbstractGameManager g) throws IOException {
 		return new ByteArrayEntity(gameToByteArray(g));
 	}
 	
-	public static Game inputStreamToGame(final InputStream is) throws IOException, ClassNotFoundException {
+	public static AbstractGameManager inputStreamToGame(final InputStream is) throws IOException, ClassNotFoundException {
 		try (final ByteArrayInputStream bis = new ByteArrayInputStream(IOUtils.toByteArray(is))) {
 			final ObjectInput in = new ObjectInputStream(bis);
-			return (Game)in.readObject(); 
+			return (AbstractGameManager)in.readObject();
 		}
 	}
 
-	public static Game byteArrayToGame(final byte[] bArray) throws IOException, ClassNotFoundException {
+	public static AbstractGameManager byteArrayToGame(final byte[] bArray) throws IOException, ClassNotFoundException {
 		try (final ByteArrayInputStream bis = new ByteArrayInputStream(bArray)) {
 			final ObjectInput in = new ObjectInputStream(bis);
-			return (Game)in.readObject();
+			return (AbstractGameManager)in.readObject();
 		}
 	}
 	

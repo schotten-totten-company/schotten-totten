@@ -16,7 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameAlreadyExistsException;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
@@ -182,7 +182,7 @@ public class LauncherActivity extends Activity {
                 waitingDialog.show();
                 try {
                     final Future<Boolean> future =
-                            new GameClient().createGame(gameName, new Game("P1", "P2"));
+                            new GameClient().createGame(gameName, new SimpleGameManager("P1", "P2"));
                     // show waiting pop up
                     future.get();
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);

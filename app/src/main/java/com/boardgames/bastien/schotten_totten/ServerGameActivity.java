@@ -10,7 +10,6 @@ import com.boardgames.bastien.schotten_totten.model.PlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
 import com.boardgames.bastien.schotten_totten.server.GameClientInterface;
 import com.boardgames.bastien.schotten_totten.server.GameDoNotExistException;
-import com.boardgames.bastien.schotten_totten.server.MongoDbGameClient;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -30,10 +29,10 @@ public class ServerGameActivity extends GameActivity {
         gameName = getIntent().getStringExtra("gameName");
 
         try {
-            this.game = client.getGame(gameName).get();
-            initUI(this.game.getPlayer(type).getHand());
+            this.gameManager = client.getGame(gameName).get();
+            initUI(this.gameManager.getGame().getPlayer(type).getHand());
             updateTextField();
-            if (!this.game.getPlayingPlayerType().equals(type)) {
+            if (!this.gameManager.getGame().getPlayingPlayerType().equals(type)) {
                 disableClick();
                 Executors.newSingleThreadExecutor().submit(new GameClientThread());
             }
@@ -53,9 +52,9 @@ public class ServerGameActivity extends GameActivity {
     protected void endOfTurn() throws NoPlayerException {
         updateUI();
         disableClick();
-        game.swapPlayingPlayerType();
+        gameManager.swapPlayingPlayer();
         try {
-            client.updateGame(gameName, game);
+            client.updateGame(gameName, gameManager);
             Executors.newSingleThreadExecutor().submit(new GameClientThread());
         } catch (final ExecutionException | InterruptedException e) {
             showErrorMessage(e);
@@ -66,10 +65,10 @@ public class ServerGameActivity extends GameActivity {
     private class GameClientThread implements Callable<Boolean> {
         @Override
         public Boolean call() throws Exception {
-            while(!client.getGame(gameName).get().getPlayingPlayerType().equals(type)) {
+            while(!client.getGame(gameName).get().getGame().getPlayingPlayerType().equals(type)) {
                 Thread.sleep(2500);
             }
-            game = client.getGame(gameName).get();
+            gameManager = client.getGame(gameName).get();
             enableClick();
             // update ui
             runOnUiThread(new Runnable() {
@@ -78,7 +77,7 @@ public class ServerGameActivity extends GameActivity {
                         updateUI();
                         // check victory
                         try {
-                            endOfTheGame(game.getWinner());
+                            endOfTheGame(gameManager.getGame().getWinner());
                         } catch (final NoPlayerException e) {
                             // nothing to do, just continue to play
                             Toast.makeText(ServerGameActivity.this,
@@ -101,9 +100,9 @@ public class ServerGameActivity extends GameActivity {
     protected void endOfTheGame(final Player winner) throws NoPlayerException {
         super.endOfTheGame(winner);
         if (winner.getPlayerType().equals(type)) {
-            game.swapPlayingPlayerType();
+            gameManager.swapPlayingPlayer();
             try {
-                client.updateGame(gameName, game);
+                client.updateGame(gameName, gameManager);
                 Executors.newSingleThreadExecutor().submit(new GameClientThread());
             } catch (final ExecutionException | InterruptedException e) {
                 showErrorMessage(e);
@@ -120,9 +119,9 @@ public class ServerGameActivity extends GameActivity {
 
     @Override
     protected void updateTextField() throws NoPlayerException {
-        final PlayerType playingPlayerType = game.getPlayingPlayer().getPlayerType();
+        final PlayerType playingPlayerType = gameManager.getGame().getPlayingPlayerType();
         final String message = playingPlayerType.equals(type) ?
-                game.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message) :
+                gameManager.getGame().getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message) :
                 getString(R.string.not_your_turn_message) ;
         ((TextView) findViewById(R.id.textView)).setText(message);
     }

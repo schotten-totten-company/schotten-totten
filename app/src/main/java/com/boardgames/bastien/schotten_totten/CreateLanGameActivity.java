@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
 
@@ -74,10 +74,10 @@ public class CreateLanGameActivity extends LanGameActivity {
                     distantIp = ipAndName.split("@")[1];
 
                     // create game
-                    game = new Game(playerName, ipAndName.split("@")[0]);
-                    outToClient.writeObject(game);
+                    gameManager = new SimpleGameManager(playerName, ipAndName.split("@")[0]);
+                    outToClient.writeObject(gameManager.getGame());
 
-                    final Hand handToUpdate = game.getPlayer(PlayerType.ONE).getHand();
+                    final Hand handToUpdate = gameManager.getGame().getPlayer(PlayerType.ONE).getHand();
                     runOnUiThread(new Runnable() {
                         public void run() {
                             initUI(handToUpdate);

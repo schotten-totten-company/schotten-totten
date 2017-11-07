@@ -1,6 +1,6 @@
 package com.boardgames.bastien.schotten_totten.server;
 
-import com.boardgames.bastien.schotten_totten.model.Game;
+import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
 
 import org.apache.commons.io.IOUtils;
 
@@ -45,7 +45,7 @@ public class GameClient implements GameClientInterface {
 		return Executors.newSingleThreadExecutor().submit(pingCallable);
 	}
 
-	public Future<Boolean> createGame(final String gameName, final Game game) {
+	public Future<Boolean> createGame(final String gameName, final AbstractGameManager game) {
 
 		final Callable createCallable = new Callable<Boolean>() {
 			@Override
@@ -69,11 +69,11 @@ public class GameClient implements GameClientInterface {
 		return Executors.newSingleThreadExecutor().submit(createCallable);
 	}
 
-	public Future<Game> getGame(final String gameName) {
+	public Future<AbstractGameManager> getGame(final String gameName) {
 
-		final Callable getCallable = new Callable<Game>() {
+		final Callable getCallable = new Callable<AbstractGameManager>() {
 			@Override
-			public Game call() throws Exception {
+			public AbstractGameManager call() throws Exception {
 				final HttpClient client = HttpClients.createDefault();
 				final HttpGet requestGet = new HttpGet(serverUrl + "/getGame");
 				requestGet.addHeader("gameName", gameName);
@@ -111,7 +111,7 @@ public class GameClient implements GameClientInterface {
 		return Executors.newSingleThreadExecutor().submit(listCallable);
 	}
 	
-	public void updateGame(final String gameName, final Game game) throws ExecutionException, InterruptedException {
+	public void updateGame(final String gameName, final AbstractGameManager game) throws ExecutionException, InterruptedException {
 
 		final Callable updateCallable = new Callable<Boolean>() {
 			@Override

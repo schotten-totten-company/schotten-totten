@@ -2,14 +2,13 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.boardgames.bastien.schotten_totten.model.Game;
 
 public class HotSeatGameActivity extends GameActivity {
 
@@ -18,9 +17,9 @@ public class HotSeatGameActivity extends GameActivity {
         super.onCreate(savedInstanceState);
 
         try {
-            this.game = new Game(getIntent().getStringExtra("player1Name"),
+            this.gameManager = new SimpleGameManager(getIntent().getStringExtra("player1Name"),
                     getIntent().getStringExtra("player2Name"));
-            initUI(this.game.getPlayingPlayer().getHand());
+            initUI(this.gameManager.getGame().getPlayingPlayer().getHand());
 
         } catch (final NoPlayerException | GameCreationException e) {
             showErrorMessage(e);
@@ -29,10 +28,10 @@ public class HotSeatGameActivity extends GameActivity {
 
     @Override
     protected void endOfTurn() throws NoPlayerException {
-        game.swapPlayingPlayerType();
+        gameManager.swapPlayingPlayer();
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
-        alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + game.getPlayingPlayer().getName());
+        alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + gameManager.getGame().getPlayingPlayer().getName());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
