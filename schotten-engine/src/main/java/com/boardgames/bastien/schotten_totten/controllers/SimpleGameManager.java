@@ -10,7 +10,6 @@ import com.boardgames.bastien.schotten_totten.model.Card;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  * Created by Bastien on 19/10/2017.
