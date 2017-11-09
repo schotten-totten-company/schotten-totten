@@ -10,6 +10,7 @@ import com.boardgames.bastien.schotten_totten.model.Card;
 import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  * Created by Bastien on 19/10/2017.
@@ -23,6 +24,10 @@ public class SimpleGameManager extends AbstractGameManager {
 
     public SimpleGameManager(final String player1Name, final String player2Name) throws GameCreationException {
         super(player1Name, player2Name, System.currentTimeMillis());
+    }
+
+    public SimpleGameManager(Game game) {
+        super(game);
     }
 
     public boolean reclaimMilestone(final PlayerType p, final int milestoneIndex) throws NotYourTurnException {

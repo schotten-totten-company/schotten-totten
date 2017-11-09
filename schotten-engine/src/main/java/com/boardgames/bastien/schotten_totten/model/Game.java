@@ -44,6 +44,10 @@ public class Game implements Serializable {
 
     }
 
+    public Game() throws GameCreationException {
+        this("Player One",  "Player Two");
+    }
+
     public PlayerType getPlayingPlayerType() {
         return this.playingPlayer;
     }
@@ -117,4 +121,11 @@ public class Game implements Serializable {
         return (playCapturedMilestones.size() == 5);
     }
 
+    public BoardFromPlayerView  getBoardFromPlayingPlayerView() throws NoPlayerException {
+        if (playingPlayer == PlayerType.NONE) {
+            throw new NoPlayerException("");
+        }
+        return new BoardFromPlayerView(this.getPlayer(playingPlayer).getHand(),
+                this.getGameBoard().getMilestones());
+    }
 }

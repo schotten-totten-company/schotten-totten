@@ -17,6 +17,11 @@ public abstract class AbstractGameManager implements GameManagerInterface {
         this.gameUid = uid;
     }
 
+    public AbstractGameManager(Game game) {
+        this.game = game;
+        this.gameUid = -1;
+    }
+
     public abstract Game getGame();
 
 }
