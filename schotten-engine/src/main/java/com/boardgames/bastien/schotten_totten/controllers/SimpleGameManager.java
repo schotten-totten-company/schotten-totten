@@ -25,6 +25,10 @@ public class SimpleGameManager extends AbstractGameManager {
         super(player1Name, player2Name, System.currentTimeMillis());
     }
 
+    public SimpleGameManager(Game game) {
+        super(game);
+    }
+
     public boolean reclaimMilestone(final PlayerType p, final int milestoneIndex) throws NotYourTurnException {
         if (game.getPlayingPlayerType() == p) {
             final Milestone milestone = game.getGameBoard().getMilestones().get(milestoneIndex);

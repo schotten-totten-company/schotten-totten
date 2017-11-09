@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/schotten-engine/schotten-engine.iml" filepath="$PROJECT_DIR$/schotten-engine/schotten-engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/schotten-totten.iml" filepath="$PROJECT_DIR$/schotten-totten.iml" />
     </modules>
   </component>
