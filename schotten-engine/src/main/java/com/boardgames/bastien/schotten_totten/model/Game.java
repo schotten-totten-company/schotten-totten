@@ -121,11 +121,11 @@ public class Game implements Serializable {
         return (playCapturedMilestones.size() == 5);
     }
 
-    public BoardFromPlayerView  getBoardFromPlayingPlayerView() throws NoPlayerException {
-        if (playingPlayer == PlayerType.NONE) {
+    public BoardFromPlayerView  getBoardFromPlayerView(PlayerType player) throws NoPlayerException {
+        if (player == PlayerType.NONE) {
             throw new NoPlayerException("");
         }
-        return new BoardFromPlayerView(this.getPlayer(playingPlayer).getHand(),
-                this.getGameBoard().getMilestones());
+        return new BoardFromPlayerView(this.getPlayer(player).getHand(),
+                this.getGameBoard().getMilestones(),  player);
     }
 }
