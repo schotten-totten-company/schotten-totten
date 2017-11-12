@@ -14,13 +14,13 @@ public class Player implements Serializable {
 
     private boolean isPlaying;
 
-    private final PlayerType playerType;
+    private final PlayingPlayerType playingPlayerType;
 
-    public Player(final String name, final PlayerType playerType) {
+    public Player(final String name, final PlayingPlayerType playingPlayerType) {
         this.name = name;
         this.hand = new Hand();
         this.isPlaying = false;
-        this.playerType = playerType;
+        this.playingPlayerType = playingPlayerType;
     }
 
     public String getName() {
@@ -31,20 +31,8 @@ public class Player implements Serializable {
         return hand;
     }
 
-    public boolean isPlaying() {
-        return isPlaying;
-    }
-
-    public PlayerType getPlayerType() {
-        return playerType;
-    }
-
-    public void setPlaying() {
-        this.isPlaying = true;
-    }
-
-    public void setNotPlaying() {
-        this.isPlaying = false;
+    public PlayingPlayerType getPlayerType() {
+        return playingPlayerType;
     }
 
 }

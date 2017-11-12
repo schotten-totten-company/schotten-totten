@@ -6,7 +6,8 @@ import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
 import com.boardgames.bastien.schotten_totten.model.Hand;
-import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
+import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -25,7 +26,7 @@ public class JoinLanGameActivity extends LanGameActivity {
 
         if (!joinAlreadyLaunched) {
             playerName = getString(R.string.player2name);
-            playerType = PlayerType.TWO;
+            playingPlayerType = PlayingPlayerType.TWO;
             localPort = 8022;
             distantPort = 8011;
 
@@ -66,7 +67,7 @@ public class JoinLanGameActivity extends LanGameActivity {
                 clientSocketToConnect.close();
 
 
-                final Hand handToUpdate = gameManager.getGame().getPlayer(PlayerType.TWO).getHand();
+                final Hand handToUpdate = gameManager.getPlayer(PlayingPlayerType.TWO).getHand();
                 runOnUiThread(new Runnable() {
                     public void run() {
                         waitingDialog.dismiss();

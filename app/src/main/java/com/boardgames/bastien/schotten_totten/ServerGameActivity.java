@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Player;
-import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
 import com.boardgames.bastien.schotten_totten.server.GameClientInterface;
 import com.boardgames.bastien.schotten_totten.server.GameDoNotExistException;
@@ -18,21 +18,21 @@ import java.util.concurrent.Executors;
 public class ServerGameActivity extends GameActivity {
 
     private final GameClientInterface client = new GameClient();
-    private PlayerType type;
+    private PlayingPlayerType type;
     private String gameName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        type = getIntent().getStringExtra("type").equals(PlayerType.ONE.toString())
-                ? PlayerType.ONE : PlayerType.TWO;
+        type = getIntent().getStringExtra("type").equals(PlayingPlayerType.ONE.toString())
+                ? PlayingPlayerType.ONE : PlayingPlayerType.TWO;
         gameName = getIntent().getStringExtra("gameName");
 
         try {
             this.gameManager = client.getGame(gameName).get();
-            initUI(this.gameManager.getGame().getPlayer(type).getHand());
+            initUI(this.gameManager.getPlayer(type).getHand());
             updateTextField();
-            if (!this.gameManager.getGame().getPlayingPlayerType().equals(type)) {
+            if (!this.gameManager.getPlayingPlayer().getPlayerType().equals(type)) {
                 disableClick();
                 Executors.newSingleThreadExecutor().submit(new GameClientThread());
             }
@@ -52,7 +52,7 @@ public class ServerGameActivity extends GameActivity {
     protected void endOfTurn() throws NoPlayerException {
         updateUI();
         disableClick();
-        gameManager.swapPlayingPlayer();
+        //gameManager.swapPlayingPlayer();
         try {
             client.updateGame(gameName, gameManager);
             Executors.newSingleThreadExecutor().submit(new GameClientThread());
@@ -65,7 +65,7 @@ public class ServerGameActivity extends GameActivity {
     private class GameClientThread implements Callable<Boolean> {
         @Override
         public Boolean call() throws Exception {
-            while(!client.getGame(gameName).get().getGame().getPlayingPlayerType().equals(type)) {
+            while(!client.getGame(gameName).get().getPlayingPlayer().getPlayerType().equals(type)) {
                 Thread.sleep(2500);
             }
             gameManager = client.getGame(gameName).get();
@@ -77,7 +77,7 @@ public class ServerGameActivity extends GameActivity {
                         updateUI();
                         // check victory
                         try {
-                            endOfTheGame(gameManager.getGame().getWinner());
+                            endOfTheGame(gameManager.getWinner());
                         } catch (final NoPlayerException e) {
                             // nothing to do, just continue to play
                             Toast.makeText(ServerGameActivity.this,
@@ -100,7 +100,7 @@ public class ServerGameActivity extends GameActivity {
     protected void endOfTheGame(final Player winner) throws NoPlayerException {
         super.endOfTheGame(winner);
         if (winner.getPlayerType().equals(type)) {
-            gameManager.swapPlayingPlayer();
+            //gameManager.swapPlayingPlayer();
             try {
                 client.updateGame(gameName, gameManager);
                 Executors.newSingleThreadExecutor().submit(new GameClientThread());
@@ -119,9 +119,9 @@ public class ServerGameActivity extends GameActivity {
 
     @Override
     protected void updateTextField() throws NoPlayerException {
-        final PlayerType playingPlayerType = gameManager.getGame().getPlayingPlayerType();
-        final String message = playingPlayerType.equals(type) ?
-                gameManager.getGame().getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message) :
+        final PlayingPlayerType playingMilestonePlayerType = gameManager.getPlayingPlayer().getPlayerType();
+        final String message = playingMilestonePlayerType.equals(type) ?
+                gameManager.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message) :
                 getString(R.string.not_your_turn_message) ;
         ((TextView) findViewById(R.id.textView)).setText(message);
     }

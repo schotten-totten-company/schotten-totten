@@ -19,19 +19,19 @@ public class HotSeatGameActivity extends GameActivity {
         try {
             this.gameManager = new SimpleGameManager(getIntent().getStringExtra("player1Name"),
                     getIntent().getStringExtra("player2Name"));
-            initUI(this.gameManager.getGame().getPlayingPlayer().getHand());
+            initUI(this.gameManager.getPlayingPlayer().getHand());
 
-        } catch (final NoPlayerException | GameCreationException e) {
+        } catch (final GameCreationException e) {
             showErrorMessage(e);
         }
     }
 
     @Override
     protected void endOfTurn() throws NoPlayerException {
-        gameManager.swapPlayingPlayer();
+        //gameManager.swapPlayingPlayer();
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
-        alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + gameManager.getGame().getPlayingPlayer().getName());
+        alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + gameManager.getPlayingPlayer().getName());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

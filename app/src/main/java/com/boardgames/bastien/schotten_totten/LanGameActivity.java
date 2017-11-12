@@ -9,8 +9,9 @@ import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
+import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
 import com.boardgames.bastien.schotten_totten.model.Player;
-import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -31,7 +32,7 @@ public abstract class LanGameActivity extends GameActivity {
     protected int localPort;
     protected int distantPort;
     protected ProgressDialog waitingDialog;
-    protected PlayerType playerType;
+    protected PlayingPlayerType playingPlayerType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +57,16 @@ public abstract class LanGameActivity extends GameActivity {
 
     @Override
     protected void updateTextField() throws NoPlayerException {
-        final PlayerType playingPlayerType = gameManager.getGame().getPlayingPlayer().getPlayerType();
-        final String message = playingPlayerType.equals(playerType) ?
+        final PlayingPlayerType playingPlayerType = gameManager.getPlayingPlayer().getPlayerType();
+        final String message = playingPlayerType.equals(playingPlayerType) ?
                 playerName + getString(R.string.it_is_your_turn_message) :
                 getString(R.string.not_your_turn_message) ;
         ((TextView) findViewById(R.id.textView)).setText(message);
     }
 
     protected void updateBoardUI() throws NoPlayerException {
-        final PlayerType playingPlayerType = gameManager.getGame().getPlayingPlayer().getPlayerType();
-        final String playingPlayerOpponentName = playingPlayerType.equals(playerType) ?
+        final PlayingPlayerType playingPlayerType = gameManager.getPlayingPlayer().getPlayerType();
+        final String playingPlayerOpponentName = playingPlayerType.equals(playingPlayerType) ?
                 getString(R.string.not_your_turn_message) :
                 playerName + getString(R.string.it_is_your_turn_message) ;
         runOnUiThread(new Runnable() {
@@ -73,7 +74,7 @@ public abstract class LanGameActivity extends GameActivity {
                 // update playing player text
                 ((TextView) findViewById(R.id.textView)).setText(playingPlayerOpponentName);
                 // update board
-                for (int i = 0; i < gameManager.getGame().getGameBoard().getMilestones().size(); i++) {
+                for (int i = 0; i < gameManager.getMilestones().size(); i++) {
                     updateMilestoneView(i);
                 }
             }
@@ -172,7 +173,7 @@ public abstract class LanGameActivity extends GameActivity {
             }
             // check victory
             try {
-                endOfTheGame(gameManager.getGame().getWinner());
+                endOfTheGame(gameManager.getWinner());
                 isGameFinished = true;
             } catch (final NoPlayerException e) {
                 isGameFinished = false;
@@ -193,7 +194,7 @@ public abstract class LanGameActivity extends GameActivity {
         disableClick();
         passButton.setVisibility(View.INVISIBLE);
         // swap
-        gameManager.swapPlayingPlayer();
+        //gameManager.swapPlayingPlayer();
         // send game
         Executors.newSingleThreadExecutor().submit(new GameSender());
     }

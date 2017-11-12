@@ -17,7 +17,7 @@ public class Game implements Serializable {
 
     private final GameBoard board;
 
-    private PlayerType playingPlayer;
+    private PlayingPlayerType playingPlayerType;
 
     private final Player player1;
 
@@ -28,8 +28,8 @@ public class Game implements Serializable {
         board = new GameBoard();
 
         // create players
-        this.player1 = new Player(player1Name, PlayerType.ONE);
-        this.player2 = new Player(player2Name, PlayerType.TWO);
+        this.player1 = new Player(player1Name, PlayingPlayerType.ONE);
+        this.player2 = new Player(player2Name, PlayingPlayerType.TWO);
 
         try {
             for (int i = 0; i < player1.getHand().MAX_HAND_SIZE; i++) {
@@ -40,43 +40,34 @@ public class Game implements Serializable {
             throw new GameCreationException(e);
         }
 
-        playingPlayer = PlayerType.ONE;
+        this.playingPlayerType = PlayingPlayerType.ONE;
 
     }
 
-    public PlayerType getPlayingPlayerType() {
-        return this.playingPlayer;
-    }
-
-    public void setPlayingPlayerType(final PlayerType pType) {
-        this.playingPlayer = pType;
+    public PlayingPlayerType getPlayingPlayerType() {
+        return this.playingPlayerType;
     }
 
     public void swapPlayingPlayerType() {
-        switch (playingPlayer) {
+        switch (playingPlayerType) {
             case ONE:
-                playingPlayer = PlayerType.TWO;
+                playingPlayerType = PlayingPlayerType.TWO;
                 break;
             case TWO:
-                playingPlayer = PlayerType.ONE;
-                break;
-            default:
+                playingPlayerType = PlayingPlayerType.ONE;
                 break;
         }
     }
 
-    public Player getPlayingPlayer() throws NoPlayerException {
+    public Player getPlayingPlayer() {
         return getPlayer(getPlayingPlayerType());
     }
 
-    public Player getPlayer(final PlayerType t) throws NoPlayerException {
-        switch (t) {
-            case ONE:
-                return player1;
-            case TWO:
-                return player2;
-            default:
-                throw new NoPlayerException(t.toString());
+    public Player getPlayer(final PlayingPlayerType t) {
+        if (t == PlayingPlayerType.ONE) {
+            return player1;
+        } else {
+            return player2;
         }
     }
 
@@ -86,7 +77,7 @@ public class Game implements Serializable {
         } else if (playerWinTheGame(player2)) {
             return player2;
         } else {
-            throw new NoPlayerException(PlayerType.NONE.toString());
+            throw new NoPlayerException(MilestonePlayerType.NONE.toString());
         }
     }
 
@@ -96,7 +87,7 @@ public class Game implements Serializable {
 
         final List<Milestone> playCapturedMilestones = new ArrayList<>();
         for (final Milestone m : board.getMilestones()) {
-            if (m.getCaptured().equals(p.getPlayerType())) {
+            if (m.getCaptured().toString() == p.getPlayerType().toString()) {
                 playCapturedMilestones.add(m);
             }
         }

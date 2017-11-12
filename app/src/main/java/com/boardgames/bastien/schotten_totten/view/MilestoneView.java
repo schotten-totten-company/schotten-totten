@@ -1,15 +1,9 @@
 package com.boardgames.bastien.schotten_totten.view;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.boardgames.bastien.schotten_totten.model.Milestone;
-import com.boardgames.bastien.schotten_totten.model.PlayerType;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -17,7 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
-import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameAlreadyExistsException;
 import com.boardgames.bastien.schotten_totten.server.GameClient;
 
@@ -187,7 +187,7 @@ public class LauncherActivity extends Activity {
                     future.get();
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     joinIntent.putExtra("gameName", gameName);
-                    joinIntent.putExtra("type", PlayerType.ONE.toString());
+                    joinIntent.putExtra("type", MilestonePlayerType.ONE.toString());
                     startActivity(joinIntent);
                 } catch (final ExecutionException e) {
                     if (e.getCause() instanceof GameAlreadyExistsException) {

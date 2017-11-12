@@ -6,7 +6,11 @@ import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
 import com.boardgames.bastien.schotten_totten.model.Hand;
-import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
+import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
+
+import org.zeromq.ZContext;
+import org.zeromq.ZMQ;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -25,7 +29,7 @@ public class CreateLanGameActivity extends LanGameActivity {
 
         if (!alreadyLaunched) {
             playerName = getString(R.string.player1name);
-            playerType = PlayerType.ONE;
+            playingPlayerType = PlayingPlayerType.ONE;
             localPort = 8011;
             distantPort = 8022;
 
@@ -75,9 +79,9 @@ public class CreateLanGameActivity extends LanGameActivity {
 
                     // create game
                     gameManager = new SimpleGameManager(playerName, ipAndName.split("@")[0]);
-                    outToClient.writeObject(gameManager.getGame());
+                    outToClient.writeObject(gameManager);
 
-                    final Hand handToUpdate = gameManager.getGame().getPlayer(PlayerType.ONE).getHand();
+                    final Hand handToUpdate = gameManager.getPlayer(PlayingPlayerType.ONE).getHand();
                     runOnUiThread(new Runnable() {
                         public void run() {
                             initUI(handToUpdate);
@@ -96,6 +100,5 @@ public class CreateLanGameActivity extends LanGameActivity {
             }
         }
     }
-
 
 }

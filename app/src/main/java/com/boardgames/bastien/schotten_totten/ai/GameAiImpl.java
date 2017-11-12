@@ -1,9 +1,10 @@
 package com.boardgames.bastien.schotten_totten.ai;
 
-import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
+import com.boardgames.bastien.schotten_totten.controllers.GameManagerInterface;
+import com.boardgames.bastien.schotten_totten.exceptions.NotYourTurnException;
 import com.boardgames.bastien.schotten_totten.model.Hand;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
-import com.boardgames.bastien.schotten_totten.model.PlayerType;
+import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
 
 import java.util.List;
 
@@ -13,13 +14,18 @@ import java.util.List;
 
 public class GameAiImpl extends GameAI {
 
+
     @Override
-    public GameResult play(final List<Milestone> milestoneList, final Hand hand) {
-        for (final Milestone m : milestoneList) {
-            if(m.getPlayer2Side().size() < m.MAX_CARDS_PER_SIDE) {
-                return new GameResult(m.getId(), 0);
-            }
+    protected void reclaim(GameManagerInterface gameManager) {
+        try {
+            gameManager.reclaimMilestone(PlayingPlayerType.TWO, 0);
+        } catch (final NotYourTurnException e) {
+            //
         }
-        return new GameResult(0, 0);
+    }
+
+    @Override
+    protected void play(GameManagerInterface gameManager) {
+        //
     }
 }

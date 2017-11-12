@@ -17,13 +17,9 @@ import java.util.List;
  * Created by Bastien on 19/10/2017.
  */
 
-public class SimpleGameManager extends AbstractGameManager {
+public class LanGameManager extends SimpleGameManager {
 
-    public SimpleGameManager(final String player1Name, final String player2Name, final long uid) throws GameCreationException {
-        super(player1Name, player2Name, uid);
-    }
-
-    public SimpleGameManager(final String player1Name, final String player2Name) throws GameCreationException {
+    public LanGameManager(final String player1Name, final String player2Name) throws GameCreationException {
         super(player1Name, player2Name, System.currentTimeMillis());
     }
 

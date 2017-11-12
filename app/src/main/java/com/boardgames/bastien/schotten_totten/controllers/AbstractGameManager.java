@@ -1,6 +1,7 @@
 package com.boardgames.bastien.schotten_totten.controllers;
 
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
+import com.boardgames.bastien.schotten_totten.model.Card;
 import com.boardgames.bastien.schotten_totten.model.Game;
 
 /**
@@ -17,6 +18,6 @@ public abstract class AbstractGameManager implements GameManagerInterface {
         this.gameUid = uid;
     }
 
-    public abstract Game getGame();
+    public abstract Card getLastPlayedCard();
 
 }
