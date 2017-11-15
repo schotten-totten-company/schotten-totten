@@ -9,7 +9,6 @@ import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationExcep
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
 
 public class SoloGameActivity extends GameActivity {
 
@@ -21,7 +20,7 @@ public class SoloGameActivity extends GameActivity {
 
         try {
             this.gameManager = new SimpleGameManager(getString(R.string.player1name), getString(R.string.player2name));
-            initUI(this.gameManager.getPlayingPlayer().getHand());
+            initUI(this.gameManager.getPlayingPlayer().getPlayerType());
 
         } catch (final Exception e) {
             showErrorMessage(e);
@@ -29,17 +28,17 @@ public class SoloGameActivity extends GameActivity {
     }
 
     @Override
-    protected void endOfTurn() throws NoPlayerException {
-        updateUI();
+    protected void endOfTurn() {
+        updateUI(this.gameManager.getPlayingPlayer().getPlayerType());
         disableClick();
         //gameManager.swapPlayingPlayer();
         try {
             ai.reclaimAndPlay(gameManager);
-        } catch (final MilestoneSideMaxReachedException |
+        } catch (final MilestoneSideMaxReachedException | NoPlayerException |
                 CardInitialisationException |HandFullException e) {
             showErrorMessage(e);
         }
         enableClick();
-        updateUI();
+        updateUI(this.gameManager.getPlayingPlayer().getPlayerType());
     }
 }

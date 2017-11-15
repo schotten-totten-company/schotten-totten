@@ -19,7 +19,7 @@ public class HotSeatGameActivity extends GameActivity {
         try {
             this.gameManager = new SimpleGameManager(getIntent().getStringExtra("player1Name"),
                     getIntent().getStringExtra("player2Name"));
-            initUI(this.gameManager.getPlayingPlayer().getHand());
+            initUI(this.gameManager.getPlayingPlayer().getPlayerType());
 
         } catch (final GameCreationException e) {
             showErrorMessage(e);
@@ -27,7 +27,7 @@ public class HotSeatGameActivity extends GameActivity {
     }
 
     @Override
-    protected void endOfTurn() throws NoPlayerException {
+    protected void endOfTurn() {
         //gameManager.swapPlayingPlayer();
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
@@ -35,14 +35,10 @@ public class HotSeatGameActivity extends GameActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            // swap player
-                            updateUI();
-                            enableClick();
-                            dialog.dismiss();
-                        } catch (final NoPlayerException e) {
-                            showErrorMessage(e);
-                        }
+                        // swap player
+                        updateUI(gameManager.getPlayingPlayer().getPlayerType());
+                        enableClick();
+                        dialog.dismiss();
                     }
                 });
         alertDialog.setCancelable(false);
@@ -55,7 +51,7 @@ public class HotSeatGameActivity extends GameActivity {
             }
         });
 
-        updateUI();
+        updateUI(gameManager.getPlayingPlayer().getPlayerType());
         disableClick();
 
         // hide hand

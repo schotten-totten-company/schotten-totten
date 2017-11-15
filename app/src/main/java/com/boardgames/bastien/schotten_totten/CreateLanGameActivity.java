@@ -81,10 +81,9 @@ public class CreateLanGameActivity extends LanGameActivity {
                     gameManager = new SimpleGameManager(playerName, ipAndName.split("@")[0]);
                     outToClient.writeObject(gameManager);
 
-                    final Hand handToUpdate = gameManager.getPlayer(PlayingPlayerType.ONE).getHand();
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            initUI(handToUpdate);
+                            initUI(PlayingPlayerType.ONE);
                         }
                     });
 

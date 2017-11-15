@@ -66,13 +66,11 @@ public class JoinLanGameActivity extends LanGameActivity {
                 gameManager = (AbstractGameManager)inFromServer.readObject();
                 clientSocketToConnect.close();
 
-
-                final Hand handToUpdate = gameManager.getPlayer(PlayingPlayerType.TWO).getHand();
                 runOnUiThread(new Runnable() {
                     public void run() {
                         waitingDialog.dismiss();
                         gameLayout.setVisibility(View.VISIBLE);
-                        initUI(handToUpdate);
+                        initUI(PlayingPlayerType.TWO);
                         Toast.makeText(JoinLanGameActivity.this,
                                 getString(R.string.connection_ok), Toast.LENGTH_LONG).show();
                     }

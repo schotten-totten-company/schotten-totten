@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
 import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
 
@@ -56,15 +55,15 @@ public abstract class LanGameActivity extends GameActivity {
 //    }
 
     @Override
-    protected void updateTextField() throws NoPlayerException {
+    protected void updateTextField(final PlayingPlayerType updatePointOfView) {
         final PlayingPlayerType playingPlayerType = gameManager.getPlayingPlayer().getPlayerType();
-        final String message = playingPlayerType.equals(playingPlayerType) ?
+        final String message = playingPlayerType.equals(updatePointOfView) ?
                 playerName + getString(R.string.it_is_your_turn_message) :
                 getString(R.string.not_your_turn_message) ;
         ((TextView) findViewById(R.id.textView)).setText(message);
     }
 
-    protected void updateBoardUI() throws NoPlayerException {
+    protected void updateBoardUI() {
         final PlayingPlayerType playingPlayerType = gameManager.getPlayingPlayer().getPlayerType();
         final String playingPlayerOpponentName = playingPlayerType.equals(playingPlayerType) ?
                 getString(R.string.not_your_turn_message) :
@@ -72,31 +71,31 @@ public abstract class LanGameActivity extends GameActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 // update playing player text
-                ((TextView) findViewById(R.id.textView)).setText(playingPlayerOpponentName);
+                updateTextField(playingPlayerType);
                 // update board
                 for (int i = 0; i < gameManager.getMilestones().size(); i++) {
-                    updateMilestoneView(i);
+                    updateMilestoneView(i, playingPlayerType);
                 }
             }
         });
     }
 
-    private class GameSender implements Runnable {
-
-        @Override
-        public void run() {
-            // Create the socket
-            try (final Socket clientSocketToPass = new Socket(distantIp, distantPort)){
-                // Create the input & output streams to the server
-                final ObjectOutputStream outToServer =
-                        new ObjectOutputStream(clientSocketToPass.getOutputStream());
-                outToServer.writeObject(gameManager);
-                clientSocketToPass.close();
-            } catch (final Exception e) {
-                superCatch(e);
-            }
-        }
-    }
+//    private class GameSender implements Runnable {
+//
+//        @Override
+//        public void run() {
+//            // Create the socket
+//            try (final Socket clientSocketToPass = new Socket(distantIp, distantPort)){
+//                // Create the input & output streams to the server
+//                final ObjectOutputStream outToServer =
+//                        new ObjectOutputStream(clientSocketToPass.getOutputStream());
+//                outToServer.writeObject(gameManager);
+//                clientSocketToPass.close();
+//            } catch (final Exception e) {
+//                superCatch(e);
+//            }
+//        }
+//    }
 
     protected String getIPAddress() throws UnknownHostException {
         try {
@@ -159,11 +158,7 @@ public abstract class LanGameActivity extends GameActivity {
                 // update ui
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        try {
-                            updateUI();
-                        } catch (NoPlayerException e) {
-                            superCatch(e);
-                        }
+                        updateUI(gameManager.getPlayingPlayer().getPlayerType());
                     }
                 });
                 enableClick();
@@ -182,13 +177,13 @@ public abstract class LanGameActivity extends GameActivity {
     }
 
     @Override
-    protected void endOfTheGame(final Player winner) throws NoPlayerException {
+    protected void endOfTheGame(final Player winner) {
         endOfTurn();
         super.endOfTheGame(winner);
     }
 
     @Override
-    protected void endOfTurn() throws NoPlayerException {
+    protected void endOfTurn() {
         updateBoardUI();
         // disable click
         disableClick();
@@ -196,6 +191,6 @@ public abstract class LanGameActivity extends GameActivity {
         // swap
         //gameManager.swapPlayingPlayer();
         // send game
-        Executors.newSingleThreadExecutor().submit(new GameSender());
+        //Executors.newSingleThreadExecutor().submit(new GameSender());
     }
 }

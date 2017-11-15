@@ -30,8 +30,8 @@ public class ServerGameActivity extends GameActivity {
 
         try {
             this.gameManager = client.getGame(gameName).get();
-            initUI(this.gameManager.getPlayer(type).getHand());
-            updateTextField();
+            initUI(type);
+            updateTextField(type);
             if (!this.gameManager.getPlayingPlayer().getPlayerType().equals(type)) {
                 disableClick();
                 Executors.newSingleThreadExecutor().submit(new GameClientThread());
@@ -49,17 +49,16 @@ public class ServerGameActivity extends GameActivity {
     }
 
     @Override
-    protected void endOfTurn() throws NoPlayerException {
-        updateUI();
+    protected void endOfTurn() {
+        updateUI(type);
         disableClick();
-        //gameManager.swapPlayingPlayer();
         try {
             client.updateGame(gameName, gameManager);
             Executors.newSingleThreadExecutor().submit(new GameClientThread());
         } catch (final ExecutionException | InterruptedException e) {
             showErrorMessage(e);
         }
-        updateTextField();
+        updateTextField(type);
     }
 
     private class GameClientThread implements Callable<Boolean> {
@@ -73,22 +72,14 @@ public class ServerGameActivity extends GameActivity {
             // update ui
             runOnUiThread(new Runnable() {
                 public void run() {
+                    updateUI(gameManager.getPlayingPlayer().getPlayerType());
+                    // check victory
                     try {
-                        updateUI();
-                        // check victory
-                        try {
-                            endOfTheGame(gameManager.getWinner());
-                        } catch (final NoPlayerException e) {
-                            // nothing to do, just continue to play
-                            Toast.makeText(ServerGameActivity.this,
+                        endOfTheGame(gameManager.getWinner());
+                    } catch (final NoPlayerException e) {
+                        // nothing to do, just continue to play
+                        Toast.makeText(ServerGameActivity.this,
                                 getString(R.string.it_is_your_turn), Toast.LENGTH_LONG).show();
-                        }
-                    } catch (final NoPlayerException ex) {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                showErrorMessage(ex);
-                            }
-                        });
                     }
                 }
             });
@@ -97,7 +88,7 @@ public class ServerGameActivity extends GameActivity {
     }
 
     @Override
-    protected void endOfTheGame(final Player winner) throws NoPlayerException {
+    protected void endOfTheGame(final Player winner) {
         super.endOfTheGame(winner);
         if (winner.getPlayerType().equals(type)) {
             //gameManager.swapPlayingPlayer();
@@ -118,9 +109,9 @@ public class ServerGameActivity extends GameActivity {
     }
 
     @Override
-    protected void updateTextField() throws NoPlayerException {
+    protected void updateTextField(final PlayingPlayerType updatePointOfView) {
         final PlayingPlayerType playingMilestonePlayerType = gameManager.getPlayingPlayer().getPlayerType();
-        final String message = playingMilestonePlayerType.equals(type) ?
+        final String message = playingMilestonePlayerType.equals(updatePointOfView) ?
                 gameManager.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message) :
                 getString(R.string.not_your_turn_message) ;
         ((TextView) findViewById(R.id.textView)).setText(message);

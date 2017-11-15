@@ -64,14 +64,20 @@ public class SimpleGameManager extends AbstractGameManager {
 
     @Override
     public void playerPlays(final PlayingPlayerType p, final int indexInPlayingPlayerHand, final int milestoneIndex)
-            throws MilestoneSideMaxReachedException, NotYourTurnException, EmptyDeckException, HandFullException {
+            throws NotYourTurnException, EmptyDeckException, HandFullException, MilestoneSideMaxReachedException {
 
         if (game.getPlayingPlayerType() == p) {
             final Card cardToPlay = game.getPlayingPlayer().getHand().playCard(indexInPlayingPlayerHand);
-            game.getGameBoard().getMilestones().get(milestoneIndex).addCard(cardToPlay, p);
-            game.getGameBoard().updateLastPlayedCard(cardToPlay);
-            game.getPlayingPlayer().getHand().addCard(game.getGameBoard().getDeck().drawCard());
-            game.swapPlayingPlayerType();
+            try {
+                game.getGameBoard().getMilestones().get(milestoneIndex).addCard(cardToPlay, p);
+                game.getGameBoard().updateLastPlayedCard(cardToPlay);
+                game.getPlayingPlayer().getHand().addCard(game.getGameBoard().getDeck().drawCard());
+                game.swapPlayingPlayerType();
+            } catch (final MilestoneSideMaxReachedException e) {
+                game.getPlayingPlayer().getHand().addCard(cardToPlay);
+                throw e;
+            }
+
         } else {
             throw new NotYourTurnException(p);
         }
