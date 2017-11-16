@@ -12,14 +12,11 @@ public class Player implements Serializable {
 
     private final Hand hand;
 
-    private boolean isPlaying;
-
     private final PlayingPlayerType playingPlayerType;
 
     public Player(final String name, final PlayingPlayerType playingPlayerType) {
         this.name = name;
         this.hand = new Hand();
-        this.isPlaying = false;
         this.playingPlayerType = playingPlayerType;
     }
 

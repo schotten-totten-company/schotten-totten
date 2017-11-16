@@ -10,7 +10,7 @@ android {
         }
     }
     compileSdkVersion 24
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.boardgames.bastien.schotten_totten"
         minSdkVersion 21

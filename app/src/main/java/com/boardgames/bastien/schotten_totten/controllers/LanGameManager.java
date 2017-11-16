@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 public class LanGameManager extends SimpleGameManager {
 
     public LanGameManager(final String player1Name, final String player2Name) throws GameCreationException {
-        super(player1Name, player2Name, System.currentTimeMillis());
+        super(player1Name, player2Name, System.currentTimeMillis() + "");
     }
 
 }
