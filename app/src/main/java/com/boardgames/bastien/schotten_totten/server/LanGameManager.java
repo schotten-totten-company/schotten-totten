@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten.server;
 
+import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
 import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
@@ -36,11 +37,16 @@ import java.util.List;
 @SpringBootApplication
 public class LanGameManager {
 
-    private SimpleGameManager gameManager;
+    private AbstractGameManager gameManager;
     private ConfigurableApplicationContext context;
 
     public void start() {
         context = SpringApplication.run(LanGameManager.class);
+        context.isActive();
+    }
+
+    public boolean isActive() {
+        return context.isActive();
     }
 
     public void stop() {

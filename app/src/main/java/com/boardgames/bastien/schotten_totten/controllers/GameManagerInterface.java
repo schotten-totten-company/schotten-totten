@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface GameManagerInterface {
 
-    public void playerPlays(final PlayingPlayerType p, final int indexInPlayingPlayerHand, final int milestoneIndex)
+    public boolean playerPlays(final PlayingPlayerType p, final int indexInPlayingPlayerHand, final int milestoneIndex)
             throws MilestoneSideMaxReachedException, NotYourTurnException, EmptyDeckException, HandFullException;
 
     public boolean reclaimMilestone(final PlayingPlayerType p, final int milestoneIndex) throws NotYourTurnException;

@@ -7,31 +7,20 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Executors;
 
 public abstract class LanGameActivity extends GameActivity {
 
     protected String playerName;
-    protected String distantIp;
-    protected String localIp;
-    protected int localPort;
-    protected int distantPort;
     protected ProgressDialog waitingDialog;
-    protected PlayingPlayerType playingPlayerType;
+    protected PlayingPlayerType playerType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,43 +128,6 @@ public abstract class LanGameActivity extends GameActivity {
         });
     }
 
-    protected void runTheGame(final ServerSocket serverSocket) {
-        boolean isGameFinished = false;
-        while (!isGameFinished) {
-            try (final Socket clientSocket = serverSocket.accept()) {
-                // Create the Client Socket
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(LanGameActivity.this,
-                                getString(R.string.it_is_your_turn), Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                // recieve the game
-                gameManager = (AbstractGameManager) new ObjectInputStream(clientSocket.getInputStream()).readObject();
-                clientSocket.close();
-
-                // update ui
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        updateUI(gameManager.getPlayingPlayer().getPlayerType());
-                    }
-                });
-                enableClick();
-
-            } catch (final Exception e) {
-                superCatch(e);
-            }
-            // check victory
-            try {
-                endOfTheGame(gameManager.getWinner());
-                isGameFinished = true;
-            } catch (final NoPlayerException e) {
-                isGameFinished = false;
-            }
-        }
-    }
-
     @Override
     protected void endOfTheGame(final Player winner) {
         endOfTurn();
@@ -188,9 +140,32 @@ public abstract class LanGameActivity extends GameActivity {
         // disable click
         disableClick();
         passButton.setVisibility(View.INVISIBLE);
-        // swap
-        //gameManager.swapPlayingPlayer();
-        // send game
-        //Executors.newSingleThreadExecutor().submit(new GameSender());
+
+        // wait for your turn
+        while (gameManager.getPlayingPlayer().getPlayerType() != playerType) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                superCatch(e);
+            }
+        }
+
+        // show that it is your turn
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(LanGameActivity.this,
+                        getString(R.string.it_is_your_turn), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // update ui
+        runOnUiThread(new Runnable() {
+            public void run() {
+                updateUI(gameManager.getPlayingPlayer().getPlayerType());
+            }
+        });
+
+        // enable click
+        enableClick();
     }
 }

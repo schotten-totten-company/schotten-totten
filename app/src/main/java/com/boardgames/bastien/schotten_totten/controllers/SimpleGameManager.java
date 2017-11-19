@@ -7,6 +7,7 @@ import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReached
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.exceptions.NotYourTurnException;
 import com.boardgames.bastien.schotten_totten.model.Card;
+import com.boardgames.bastien.schotten_totten.model.Game;
 import com.boardgames.bastien.schotten_totten.model.Milestone;
 import com.boardgames.bastien.schotten_totten.model.Player;
 import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
@@ -19,12 +20,17 @@ import java.util.List;
 
 public class SimpleGameManager extends AbstractGameManager {
 
+    protected final Game game;
+    protected final String gameUid;
+
     public SimpleGameManager(final String player1Name, final String player2Name, final String uid) throws GameCreationException {
-        super(player1Name, player2Name, uid);
+        this.game = new Game(player1Name, player2Name);
+        this.gameUid = uid;
     }
 
     public SimpleGameManager(final String player1Name, final String player2Name) throws GameCreationException {
-        super(player1Name, player2Name, System.currentTimeMillis() + "");
+        this.game = new Game(player1Name, player2Name);
+        this.gameUid = System.currentTimeMillis() + "";
     }
 
     @Override
@@ -63,7 +69,7 @@ public class SimpleGameManager extends AbstractGameManager {
     }
 
     @Override
-    public void playerPlays(final PlayingPlayerType p, final int indexInPlayingPlayerHand, final int milestoneIndex)
+    public boolean playerPlays(final PlayingPlayerType p, final int indexInPlayingPlayerHand, final int milestoneIndex)
             throws NotYourTurnException, EmptyDeckException, HandFullException, MilestoneSideMaxReachedException {
 
         if (game.getPlayingPlayerType() == p) {
@@ -73,6 +79,7 @@ public class SimpleGameManager extends AbstractGameManager {
                 game.getGameBoard().updateLastPlayedCard(cardToPlay);
                 game.getPlayingPlayer().getHand().addCard(game.getGameBoard().getDeck().drawCard());
                 game.swapPlayingPlayerType();
+                return true;
             } catch (final MilestoneSideMaxReachedException e) {
                 game.getPlayingPlayer().getHand().addCard(cardToPlay);
                 throw e;

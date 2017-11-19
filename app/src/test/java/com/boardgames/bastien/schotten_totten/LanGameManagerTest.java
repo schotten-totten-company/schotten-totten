@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
+import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.exceptions.NotYourTurnException;
@@ -26,6 +27,7 @@ public class LanGameManagerTest {
     public static void Before() {
         manager = new LanGameManager();
         manager.start();
+        Assert.assertTrue(manager.isActive());
     }
 
     @AfterClass
@@ -39,20 +41,20 @@ public class LanGameManagerTest {
     }
 
     @Test
-    public void TestCreateGame() {
+    public void TestCreateGame() throws GameCreationException {
         Assert.assertTrue(restGameClient.createGame());
         System.out.println(restGameClient.getPlayingPlayer().getName());
     }
 
     @Test
-    public void TestGetPlayers() {
+    public void TestGetPlayers() throws GameCreationException {
         Assert.assertTrue(restGameClient.createGame());
         System.out.println(restGameClient.getPlayingPlayer().getName());
         System.out.println(restGameClient.getPlayer(PlayingPlayerType.TWO).getName());
     }
 
     @Test
-    public void TestGetWinner() {
+    public void TestGetWinner() throws GameCreationException {
         Assert.assertTrue(restGameClient.createGame());
         try {
             System.out.println(restGameClient.getWinner().getName());
@@ -63,7 +65,7 @@ public class LanGameManagerTest {
     }
 
     @Test
-    public void TestReclaim() {
+    public void TestReclaim() throws GameCreationException {
         Assert.assertTrue(restGameClient.createGame());
         System.out.println(restGameClient.getPlayingPlayer().getName());
         try {
@@ -74,7 +76,7 @@ public class LanGameManagerTest {
     }
 
     @Test
-    public void TestPlay() {
+    public void TestPlay() throws GameCreationException {
         Assert.assertTrue(restGameClient.createGame());
         System.out.println(restGameClient.getPlayingPlayer().getName());
         try {
@@ -87,7 +89,7 @@ public class LanGameManagerTest {
     }
 
     @Test
-    public void TestMilestones() {
+    public void TestMilestones() throws GameCreationException {
         Assert.assertTrue(restGameClient.createGame());
         System.out.println(restGameClient.getPlayingPlayer().getName());
         try {

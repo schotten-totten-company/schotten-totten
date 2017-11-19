@@ -8,7 +8,6 @@ import android.widget.Button;
 
 import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 
 public class HotSeatGameActivity extends GameActivity {
 

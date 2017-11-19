@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten.server;
 
+import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
 import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
 import com.boardgames.bastien.schotten_totten.exceptions.NotYourTurnException;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by Bastien on 19/11/2017.
  */
 
-public class RestGameClient {
+public class RestGameClient extends AbstractGameManager {
 
     private final String url;
 

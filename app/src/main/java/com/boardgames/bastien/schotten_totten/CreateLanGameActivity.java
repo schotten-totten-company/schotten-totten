@@ -4,42 +4,57 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
-import com.boardgames.bastien.schotten_totten.model.Hand;
-import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
 import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
+import com.boardgames.bastien.schotten_totten.server.LanGameManager;
+import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 
-import org.zeromq.ZContext;
-import org.zeromq.ZMQ;
-
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.Executors;
 
 public class CreateLanGameActivity extends LanGameActivity {
 
     protected static boolean alreadyLaunched = false;
+    private final LanGameManager lanGameManager = new LanGameManager();
+    protected String localIp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (!alreadyLaunched) {
-            playerName = getString(R.string.player1name);
-            playingPlayerType = PlayingPlayerType.ONE;
-            localPort = 8011;
-            distantPort = 8022;
+            playerType = PlayingPlayerType.ONE;
+            lanGameManager.start();
+            gameManager = new RestGameClient("http://localhost:8080");
 
             try {
                 localIp = getIPAddress();
+                playerName = getString(R.string.player1name) + "-" + localIp;
+                playerType = PlayingPlayerType.ONE;
+
+                // start server
+                lanGameManager.start();
+
                 waitingDialog.setTitle(localIp);
                 waitingDialog.setMessage(getString(R.string.please_wait));
                 waitingDialog.show();
-                // init game (wait for client)
-                Executors.newSingleThreadExecutor().submit(new GameInitServer());
+
+                // wait for server started
+                // TODO
+                while (!lanGameManager.isActive()) {
+                    Thread.sleep(3333);
+                }
+                waitingDialog.dismiss();
+                gameLayout.setVisibility(View.VISIBLE);
+                Toast.makeText(CreateLanGameActivity.this,
+                        getString(R.string.connection_ok), Toast.LENGTH_LONG).show();
+
+                // create game
+                ((RestGameClient)gameManager).createGame();
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        initUI(PlayingPlayerType.ONE);
+                    }
+                });
 
             } catch (final UnknownHostException e) {
                 showAlertMessage(getString(R.string.unknown_host_title),
@@ -51,53 +66,6 @@ public class CreateLanGameActivity extends LanGameActivity {
             alreadyLaunched = true;
         }
 
-    }
-
-    public class GameInitServer implements Runnable {
-
-        @Override
-        public void run() {
-
-            try (final ServerSocket serverSocket = new ServerSocket(localPort)) {
-                // Create the Client Socket
-                try (final Socket initClientSocket = serverSocket.accept()) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            waitingDialog.dismiss();
-                            gameLayout.setVisibility(View.VISIBLE);
-                            Toast.makeText(CreateLanGameActivity.this,
-                                    getString(R.string.connection_ok), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    // Create input and output streams to client
-                    final ObjectInputStream inFromClient =
-                            new ObjectInputStream(initClientSocket.getInputStream());
-                    final ObjectOutputStream outToClient =
-                            new ObjectOutputStream(initClientSocket.getOutputStream());
-                    final String ipAndName = (String) inFromClient.readObject();
-                    distantIp = ipAndName.split("@")[1];
-
-                    // create game
-                    gameManager = new SimpleGameManager(playerName, ipAndName.split("@")[0]);
-                    outToClient.writeObject(gameManager);
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            initUI(PlayingPlayerType.ONE);
-                        }
-                    });
-
-                    runTheGame(serverSocket);
-
-                } catch (final Exception e) {
-                    superCatch(e);
-                }
-            } catch (final Exception e) {
-                superCatch(e);
-            } finally {
-                alreadyLaunched = false;
-            }
-        }
     }
 
 }
