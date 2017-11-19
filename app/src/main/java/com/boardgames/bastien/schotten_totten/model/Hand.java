@@ -2,6 +2,8 @@ package com.boardgames.bastien.schotten_totten.model;
 
 import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -14,34 +16,33 @@ import java.util.List;
 
 public class Hand implements Serializable {
 
-    private final List<Card> cards;
+   private final List<Card> cards;
 
+    @JsonIgnore
     public final int MAX_HAND_SIZE = 6;
-
-    private int drawnCardIndex = -1;
 
     public Hand() {
         cards = new ArrayList<>();
     }
 
+    public Hand(final List<Card> cards) {
+        this.cards = cards;
+    }
+
     public void addCard(final Card c) throws HandFullException {
         if (cards.size() < MAX_HAND_SIZE) {
-            drawnCardIndex = 0;
-            cards.add(drawnCardIndex, c);
+            cards.add(0, c);
         } else {
             throw new HandFullException(MAX_HAND_SIZE);
         }
-
     }
 
-    public int getDrawnCardIndex() {
-        return drawnCardIndex;
-    }
-
+    @JsonIgnore
     public Card playCard(final int i) {
         return cards.remove(i);
     }
 
+    @JsonIgnore
     public int getHandSize() {
         return cards.size();
     }

@@ -33,4 +33,6 @@ public class LanGameManagerTest {
         final RestTemplate rest = new RestTemplate();
         System.out.println(rest.getForObject("http://localhost:8080/ping", String.class).toString());
     }
+
+
 }

@@ -1,11 +1,14 @@
 package com.boardgames.bastien.schotten_totten.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.io.Serializable;
 
 /**
  * Created by Bastien on 28/11/2016.
  */
 
+@JsonDeserialize(using = CardDeserializer.class)
 public class Card implements Serializable {
 
     public enum COLOR {
@@ -39,9 +42,9 @@ public class Card implements Serializable {
         }
     }
 
-    private final NUMBER number;
+    private NUMBER number;
 
-    private final COLOR color;
+    private COLOR color;
 
     public Card(final NUMBER n, final COLOR c) {
         this.number = n;
