@@ -1,6 +1,9 @@
 package com.boardgames.bastien.schotten_totten.model;
 
 import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
@@ -14,6 +17,7 @@ import java.util.List;
  * Created by Bastien on 29/11/2016.
  */
 
+@JsonDeserialize(using = MilestoneDeserializer.class)
 public class Milestone implements Serializable {
 
     private final int id;
@@ -22,12 +26,15 @@ public class Milestone implements Serializable {
 
     private final List<Card> player2Side;
 
+    @JsonProperty("firstPlayerToReachMaxCardPerSide")
     private MilestonePlayerType firstPlayerToReachMaxCardPerSide;
 
     private MilestonePlayerType captured;
 
+    @JsonIgnore
     public final int MAX_CARDS_PER_SIDE = 3;
 
+    @JsonIgnore
     public Milestone(final int id) {
         this.id = id;
         this.player1Side = new ArrayList<>(MAX_CARDS_PER_SIDE);
@@ -36,6 +43,20 @@ public class Milestone implements Serializable {
         this.captured = MilestonePlayerType.NONE;
     }
 
+
+    public Milestone(final int id,
+                     final List<Card> player1Side, final List<Card> player2Side,
+                     final MilestonePlayerType firstPlayerToReachMaxCardPerSide,
+                     final MilestonePlayerType captured) {
+
+        this.id = id;
+        this.player1Side = player1Side;
+        this.player2Side = player2Side;
+        this.firstPlayerToReachMaxCardPerSide = firstPlayerToReachMaxCardPerSide;
+        this.captured = captured;
+    }
+
+    @JsonIgnore
     public void addCard(final Card c, final PlayingPlayerType playingPlayerType) throws MilestoneSideMaxReachedException {
         switch (playingPlayerType) {
             case ONE:
@@ -47,6 +68,7 @@ public class Milestone implements Serializable {
         }
     }
 
+    @JsonIgnore
     public void checkSideSize(final PlayingPlayerType playingPlayerType) throws MilestoneSideMaxReachedException {
         if (playingPlayerType == PlayingPlayerType.ONE) {
             if (player1Side.size() == MAX_CARDS_PER_SIDE) {
@@ -59,6 +81,7 @@ public class Milestone implements Serializable {
         }
     }
 
+    @JsonIgnore
     private void addCardOnPlayerSide(final Card c, final List<Card> playerSide, final MilestonePlayerType milestonePlayerType) throws MilestoneSideMaxReachedException {
         if (playerSide.size() == MAX_CARDS_PER_SIDE) {
             throw new MilestoneSideMaxReachedException(id);
@@ -71,6 +94,7 @@ public class Milestone implements Serializable {
         }
     }
 
+    @JsonIgnore
     public boolean reclaim(final PlayingPlayerType playerType, final List<Card> cardsNotYetPlayed) {
         switch (playerType) {
             case ONE:
@@ -89,6 +113,7 @@ public class Milestone implements Serializable {
         return false; // normally not used
     }
 
+    @JsonIgnore
     private boolean compareSideStrenght(final List<Card> sideToCompare,
                                         final List<Card> otherSide,
                                         final PlayingPlayerType playerType,
@@ -121,6 +146,7 @@ public class Milestone implements Serializable {
         }
     }
 
+    @JsonIgnore
     private int sideStrength(final List<Card> side) {
         if (side.size() != MAX_CARDS_PER_SIDE) {
             return 0;
