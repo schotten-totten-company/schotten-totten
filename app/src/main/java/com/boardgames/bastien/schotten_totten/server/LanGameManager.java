@@ -1,5 +1,6 @@
-package com.boardgames.bastien.schotten_totten.controllers;
+package com.boardgames.bastien.schotten_totten.server;
 
+import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
 import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
 import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
 import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
@@ -14,9 +15,16 @@ import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
 import java.util.List;
@@ -63,10 +71,10 @@ public class LanGameManager {
         }
 
         @RequestMapping("/reclaimMilestone")
-        public boolean reclaimMilestone(
+        public Boolean reclaimMilestone(
                 @RequestParam(value="p") PlayingPlayerType p,
                 @RequestParam(value="milestoneIndex") int milestoneIndex) throws NotYourTurnException {
-            return gameManager.reclaimMilestone(p, milestoneIndex);
+            return new Boolean(gameManager.reclaimMilestone(p, milestoneIndex));
         }
 
         @RequestMapping("/getPlayer")
@@ -91,15 +99,52 @@ public class LanGameManager {
         }
 
         @RequestMapping("/playerPlays")
-        public void playerPlays(
+        public Boolean playerPlays(
                 @RequestParam(value="p") PlayingPlayerType p,
                 @RequestParam(value="indexInPlayingPlayerHand") int indexInPlayingPlayerHand,
                 @RequestParam(value="milestoneIndex") int milestoneIndex)
-                throws NotYourTurnException, EmptyDeckException, HandFullException, MilestoneSideMaxReachedException {
+                throws NotYourTurnException, MilestoneSideMaxReachedException {
 
-            gameManager.playerPlays(p, indexInPlayingPlayerHand, milestoneIndex);
+            try {
+                gameManager.playerPlays(p, indexInPlayingPlayerHand, milestoneIndex);
+                return true;
+            } catch (final EmptyDeckException e) {
+                // nothing to send to the client
+                e.printStackTrace();
+                return false;
+            } catch (final HandFullException e) {
+                // nothing to send to the client
+                e.printStackTrace();
+                return false;
+            }
         }
 
+
+    }
+
+    @ControllerAdvice
+    public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+
+        @ExceptionHandler(value = { NoPlayerException.class })
+        protected ResponseEntity<Object> handleNoPlayerException(NoPlayerException ex, WebRequest request) {
+            final String bodyOfResponse = ex.getMessage();
+            return handleExceptionInternal(ex, bodyOfResponse,
+                    new HttpHeaders(), HttpStatus.NO_CONTENT, request);
+        }
+
+        @ExceptionHandler(value = { NotYourTurnException.class })
+        protected ResponseEntity<Object> handleNotYourTurnException(NotYourTurnException ex, WebRequest request) {
+            final String bodyOfResponse = ex.getMessage();
+            return handleExceptionInternal(ex, bodyOfResponse,
+                    new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+        }
+
+        @ExceptionHandler(value = { MilestoneSideMaxReachedException.class })
+        protected ResponseEntity<Object> handleMilestoneSideMaxReachedException(MilestoneSideMaxReachedException ex, WebRequest request) {
+            final String bodyOfResponse = ex.getMessage();
+            return handleExceptionInternal(ex, bodyOfResponse,
+                    new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE, request);
+        }
     }
 
 }
