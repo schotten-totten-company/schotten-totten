@@ -18,8 +18,8 @@ import android.widget.TextView;
 
 import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
 import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
+import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
 import com.boardgames.bastien.schotten_totten.server.GameAlreadyExistsException;
-import com.boardgames.bastien.schotten_totten.server.GameClient;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -181,21 +181,21 @@ public class LauncherActivity extends Activity {
                 final String gameName = input.getText().toString().trim();
                 waitingDialog.show();
                 try {
-                    final Future<Boolean> future =
-                            new GameClient().createGame(gameName, new SimpleGameManager("P1", "P2"));
-                    // show waiting pop up
-                    future.get();
+//                    final Future<Boolean> future =
+//                            new GameClient().createGame(gameName, new SimpleGameManager("P1", "P2"));
+//                    // show waiting pop up
+//                    future.get();
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     joinIntent.putExtra("gameName", gameName);
-                    joinIntent.putExtra("type", MilestonePlayerType.ONE.toString());
+                    joinIntent.putExtra("type", PlayingPlayerType.ONE.toString());
                     startActivity(joinIntent);
-                } catch (final ExecutionException e) {
-                    if (e.getCause() instanceof GameAlreadyExistsException) {
-                        showError(getString(R.string.warning_title),
-                                gameName + getString(R.string.game_already_exist));
-                    } else {
-                        showError(e);
-                    }
+//                } catch (final ExecutionException e) {
+//                    if (e.getCause() instanceof GameAlreadyExistsException) {
+//                        showError(getString(R.string.warning_title),
+//                                gameName + getString(R.string.game_already_exist));
+//                    } else {
+//                        showError(e);
+//                    }
                 } catch (Exception e) {
                     showError(e);
                 }
@@ -218,7 +218,7 @@ public class LauncherActivity extends Activity {
 
     private void joinGame() {
         try {
-            final Future<ArrayList<String>> future =  new GameClient().listGame();
+            final Future<ArrayList<String>> future =  null;//new GameClient().listGame();
             // show waiting pop up
             waitingDialog.show();
             final ArrayList<String> list = future.get();
