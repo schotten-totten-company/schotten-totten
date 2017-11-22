@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Schotten Totten</string>
 
+    <string name="pass_button_description">pass button</string>
+    <string name="milestone_description">milestone</string>
+    <string name="card_description">card</string>
+
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_main">MainActivity</string>

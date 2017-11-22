@@ -7,6 +7,7 @@
 
     <application
         android:allowBackup="true"
+        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher_milestone"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -14,35 +15,42 @@
 
         <activity android:name=".HotSeatGameActivity"
             android:screenOrientation="portrait"
+            android:largeHeap="true"
             android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".CreateLanGameActivity"
             android:screenOrientation="portrait"
+            android:largeHeap="true"
             android:launchMode="singleTask">
         </activity>
         <activity android:name=".JoinLanGameActivity"
             android:screenOrientation="portrait"
+            android:largeHeap="true"
             android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".SoloGameActivity"
             android:screenOrientation="portrait"
+            android:largeHeap="true"
             android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".ServerGameActivity"
             android:screenOrientation="portrait"
+            android:largeHeap="true"
             android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".MemoActivity"
             android:screenOrientation="portrait"
+            android:largeHeap="true"
             android:launchMode="standard">
         </activity>
 
         <activity android:name=".LauncherActivity"
             android:screenOrientation="portrait"
+            android:largeHeap="true"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

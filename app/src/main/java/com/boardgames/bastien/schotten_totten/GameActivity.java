@@ -386,36 +386,37 @@ public abstract class GameActivity extends AppCompatActivity {
     }
 
     private void updateCard(final ImageView view, final Card card) {
+
+        view.setAlpha((float) 1.0);
+
         switch (card.getNumber()) {
             case ONE:
-                view.setImageResource(R.drawable.number1one);
+                view.setImageResource(R.drawable.card01);
                 break;
             case TWO:
-                view.setImageResource(R.drawable.number2two);
+                view.setImageResource(R.drawable.card02);
                 break;
             case THREE:
-                view.setImageResource(R.drawable.number3three);
+                view.setImageResource(R.drawable.card03);
                 break;
             case FOUR:
-                view.setImageResource(R.drawable.number4four);
+                view.setImageResource(R.drawable.card04);
                 break;
             case FIVE:
-                view.setImageResource(R.drawable.number5five);
+                view.setImageResource(R.drawable.card05);
                 break;
             case SIX:
-                view.setImageResource(R.drawable.number6six);
+                view.setImageResource(R.drawable.card06);
                 break;
             case SEVEN:
-                view.setImageResource(R.drawable.number7seven);
+                view.setImageResource(R.drawable.card07);
                 break;
             case EIGHT:
-                view.setImageResource(R.drawable.number8eight);
+                view.setImageResource(R.drawable.card08);
                 break;
             case NINE:
-                view.setImageResource(R.drawable.number9nine);
+                view.setImageResource(R.drawable.card09);
                 break;
-
-
         }
         switch (card.getColor()) {
             case BLUE:
@@ -442,6 +443,7 @@ public abstract class GameActivity extends AppCompatActivity {
     private void resetPlayedCard(final ImageView view) {
         view.setImageResource(R.drawable.empty);
         view.setBackgroundColor(Color.LTGRAY);
+        view.setAlpha((float) 0.5);
     }
 
     protected abstract void endOfTurn();
