@@ -50,6 +50,16 @@ public class LanGameManagerTest {
     public void TestGetPlayers() throws GameCreationException {
         Assert.assertTrue(restGameClient.createGame());
         System.out.println(restGameClient.getPlayingPlayer().getName());
+        Assert.assertEquals(restGameClient.getPlayingPlayer().getPlayerType(), PlayingPlayerType.ONE);
+        Assert.assertTrue(restGameClient.swapPlayers());
+        System.out.println(restGameClient.getPlayer(PlayingPlayerType.TWO).getName());
+        Assert.assertEquals(restGameClient.getPlayingPlayer().getPlayerType(), PlayingPlayerType.TWO);
+    }
+
+    @Test
+    public void TestSwapPlayers() throws GameCreationException {
+        Assert.assertTrue(restGameClient.createGame());
+        System.out.println(restGameClient.getPlayingPlayer().getName());
         System.out.println(restGameClient.getPlayer(PlayingPlayerType.TWO).getName());
     }
 

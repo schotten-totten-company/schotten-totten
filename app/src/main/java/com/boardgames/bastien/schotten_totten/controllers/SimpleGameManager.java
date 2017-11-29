@@ -77,11 +77,10 @@ public class SimpleGameManager extends AbstractGameManager {
             try {
                 game.getGameBoard().getMilestones().get(milestoneIndex).addCard(cardToPlay, p);
                 game.getGameBoard().updateLastPlayedCard(cardToPlay);
-                game.getPlayingPlayer().getHand().addCard(game.getGameBoard().getDeck().drawCard());
-                game.swapPlayingPlayerType();
+                game.getPlayingPlayer().getHand().addCard(game.getGameBoard().getDeck().drawCard(), indexInPlayingPlayerHand);
                 return true;
             } catch (final MilestoneSideMaxReachedException e) {
-                game.getPlayingPlayer().getHand().addCard(cardToPlay);
+                game.getPlayingPlayer().getHand().addCard(cardToPlay, indexInPlayingPlayerHand);
                 throw e;
             }
 
@@ -90,4 +89,9 @@ public class SimpleGameManager extends AbstractGameManager {
         }
     }
 
+    @Override
+    public boolean swapPlayers() {
+        game.swapPlayingPlayerType();
+        return true;
+    }
 }

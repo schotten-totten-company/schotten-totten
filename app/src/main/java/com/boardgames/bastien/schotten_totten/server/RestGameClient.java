@@ -62,6 +62,11 @@ public class RestGameClient extends AbstractGameManager {
                 this.url + "/getPlayer?" + "p=" + p.toString(), Player.class);
     }
 
+    public boolean swapPlayers() {
+        final RestTemplate rest = new RestTemplate();
+        return rest.getForObject(this.url + "/swapPlayers", Boolean.class);
+    }
+
     public Player getPlayingPlayer() {
         final RestTemplate rest = new RestTemplate();
         return rest.getForObject(this.url + "/getPlayingPlayer", Player.class);

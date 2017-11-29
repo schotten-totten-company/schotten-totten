@@ -56,6 +56,11 @@ public class RestGameControllers {
         return gameManager.getLastPlayedCard();
     }
 
+    @RequestMapping("/swapPlayers")
+    public Boolean swapPlayers() {
+        return gameManager.swapPlayers();
+    }
+
     @RequestMapping("/reclaimMilestone")
     public Boolean reclaimMilestone(
             @RequestParam(value="p") PlayingPlayerType p,

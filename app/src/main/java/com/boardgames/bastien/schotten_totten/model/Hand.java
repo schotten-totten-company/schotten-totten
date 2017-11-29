@@ -29,9 +29,9 @@ public class Hand implements Serializable {
         this.cards = cards;
     }
 
-    public void addCard(final Card c) throws HandFullException {
+    public void addCard(final Card c, final int index) throws HandFullException {
         if (cards.size() < MAX_HAND_SIZE) {
-            cards.add(0, c);
+            cards.add(index, c);
         } else {
             throw new HandFullException(MAX_HAND_SIZE);
         }

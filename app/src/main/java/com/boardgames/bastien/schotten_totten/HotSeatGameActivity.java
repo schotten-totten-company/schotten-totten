@@ -27,14 +27,13 @@ public class HotSeatGameActivity extends GameActivity {
 
     @Override
     protected void endOfTurn() {
-        //gameManager.swapPlayingPlayer();
+        gameManager.swapPlayers();
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
         alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + gameManager.getPlayingPlayer().getName());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // swap player
                         updateUI(gameManager.getPlayingPlayer().getPlayerType());
                         enableClick();
                         dialog.dismiss();

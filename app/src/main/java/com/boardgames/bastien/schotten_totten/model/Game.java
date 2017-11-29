@@ -33,8 +33,8 @@ public class Game implements Serializable {
 
         try {
             for (int i = 0; i < player1.getHand().MAX_HAND_SIZE; i++) {
-                player1.getHand().addCard(board.getDeck().drawCard());
-                player2.getHand().addCard(board.getDeck().drawCard());
+                player1.getHand().addCard(board.getDeck().drawCard(), 0);
+                player2.getHand().addCard(board.getDeck().drawCard(), 0);
             }
         } catch (final EmptyDeckException | HandFullException e) {
             throw new GameCreationException(e);

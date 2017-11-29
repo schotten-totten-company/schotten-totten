@@ -215,26 +215,27 @@ public abstract class GameActivity extends AppCompatActivity {
                                 m.checkSideSize(gameManager.getPlayingPlayer().getPlayerType());
                                 // put card
                                 try {
+                                    try {
+                                        // play
+                                        gameManager.playerPlays(gameManager.getPlayingPlayer().getPlayerType(), selectedCard, index);
 
-                                    final PlayingPlayerType playingPlayerBeforeSwap = gameManager.getPlayingPlayer().getPlayerType();
-
-                                    gameManager.playerPlays(gameManager.getPlayingPlayer().getPlayerType(), selectedCard, index);
-
-                                    updateMilestoneView(m.getId(), playingPlayerBeforeSwap);
-
-                                    // update hand card;
-                                    handView.get(0).startAnimation(
+                                        // update hand card;
+                                        handView.get(selectedCard).startAnimation(
                                             AnimationUtils.loadAnimation(
                                                     getApplicationContext(), R.anim.zoomout));
-                                    selectCard(handView.get(0));
-                                    updateHand(playingPlayerBeforeSwap);
-                                    selectedCard = -1;
+                                        selectCard(handView.get(selectedCard));
+                                        updateHand(gameManager.getPlayingPlayer().getPlayerType());
+                                        selectedCard = -1;
+
+                                    } catch (final EmptyDeckException e) {
+                                        // nothing special to do
+                                        selectedCard = -1;
+                                    } finally {
+                                        updateMilestoneView(m.getId(), gameManager.getPlayingPlayer().getPlayerType());
+                                    }
 
                                 } catch (final NotYourTurnException e) {
                                     showErrorMessage(e);
-                                } catch (final EmptyDeckException e) {
-                                    //showAlertMessage(e.getMessage());
-                                    selectedCard = -1;
                                 } catch (final HandFullException e) {
                                     showErrorMessage(e);
                                 }

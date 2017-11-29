@@ -31,7 +31,7 @@ public class JacksonTests {
         System.out.println("Card: " + c.getColor().name() + "-" + c.getNumber().name());
 
         final Hand handForTest = new Hand();
-        handForTest.addCard(c);
+        handForTest.addCard(c, 0);
         final String hand = mapper.writeValueAsString(handForTest);
         System.out.println(hand);
         final Hand h = mapper.readValue(hand, Hand.class);
@@ -39,7 +39,7 @@ public class JacksonTests {
         System.out.println("first card: " + h.getCards().get(0).getColor().name() + "-" + h.getCards().get(0).getNumber().name());
 
         final Player p1 = new Player("player1", PlayingPlayerType.ONE);
-        p1.getHand().addCard(c);
+        p1.getHand().addCard(c, 0);
         final String player = mapper.writeValueAsString(p1);
         System.out.println(player);
         final Player p = mapper.readValue(player, Player.class);

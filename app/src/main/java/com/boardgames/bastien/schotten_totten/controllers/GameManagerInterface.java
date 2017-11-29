@@ -26,6 +26,8 @@ public interface GameManagerInterface {
 
     public Player getPlayer(final PlayingPlayerType p);
 
+    public boolean swapPlayers();
+
     public Player getWinner() throws NoPlayerException;
 
     public List<Milestone> getMilestones();
