@@ -1,6 +1,6 @@
 apply plugin: 'java-library'
-apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.bastienbarthet'
+//apply plugin: 'com.github.dcendents.android-maven'
+//group='com.github.bastienbarthet'
 
 
 dependencies {
