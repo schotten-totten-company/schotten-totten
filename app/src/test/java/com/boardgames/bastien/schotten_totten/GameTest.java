@@ -1,15 +1,15 @@
 package com.boardgames.bastien.schotten_totten;
 
-import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
-import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
-import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
-import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.boardgames.bastien.schotten_totten.model.Card;
-import com.boardgames.bastien.schotten_totten.model.Game;
-import com.boardgames.bastien.schotten_totten.model.Milestone;
-import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
-import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
+import com.utils.bastien.schotten_totten.exceptions.EmptyDeckException;
+import com.utils.bastien.schotten_totten.exceptions.GameCreationException;
+import com.utils.bastien.schotten_totten.exceptions.HandFullException;
+import com.utils.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
+import com.utils.bastien.schotten_totten.exceptions.NoPlayerException;
+import com.utils.bastien.schotten_totten.model.Card;
+import com.utils.bastien.schotten_totten.model.Game;
+import com.utils.bastien.schotten_totten.model.Milestone;
+import com.utils.bastien.schotten_totten.model.MilestonePlayerType;
+import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
 
 import org.junit.Assert;
 import org.junit.Before;

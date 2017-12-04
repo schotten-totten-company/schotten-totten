@@ -1,9 +1,9 @@
-package com.boardgames.bastien.schotten_totten.model;
+package com.utils.bastien.schotten_totten.model;
 
-import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
-import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
-import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
+import com.utils.bastien.schotten_totten.exceptions.EmptyDeckException;
+import com.utils.bastien.schotten_totten.exceptions.GameCreationException;
+import com.utils.bastien.schotten_totten.exceptions.HandFullException;
+import com.utils.bastien.schotten_totten.exceptions.NoPlayerException;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package com.boardgames.bastien.schotten_totten.server;
 
-import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
+import com.utils.bastien.schotten_totten.controllers.AbstractGameManager;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;

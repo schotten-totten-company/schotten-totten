@@ -1,28 +1,21 @@
 package com.boardgames.bastien.schotten_totten.server;
 
-import com.boardgames.bastien.schotten_totten.controllers.AbstractGameManager;
-import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
-import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
-import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
-import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
-import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.boardgames.bastien.schotten_totten.exceptions.NotYourTurnException;
-import com.boardgames.bastien.schotten_totten.model.Card;
-import com.boardgames.bastien.schotten_totten.model.Milestone;
-import com.boardgames.bastien.schotten_totten.model.Player;
-import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
+import com.utils.bastien.schotten_totten.controllers.AbstractGameManager;
+import com.utils.bastien.schotten_totten.controllers.SimpleGameManager;
+import com.utils.bastien.schotten_totten.exceptions.EmptyDeckException;
+import com.utils.bastien.schotten_totten.exceptions.GameCreationException;
+import com.utils.bastien.schotten_totten.exceptions.HandFullException;
+import com.utils.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
+import com.utils.bastien.schotten_totten.exceptions.NoPlayerException;
+import com.utils.bastien.schotten_totten.exceptions.NotYourTurnException;
+import com.utils.bastien.schotten_totten.model.Card;
+import com.utils.bastien.schotten_totten.model.Milestone;
+import com.utils.bastien.schotten_totten.model.Player;
+import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
 import java.util.List;

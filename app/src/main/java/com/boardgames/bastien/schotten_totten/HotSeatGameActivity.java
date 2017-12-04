@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
-import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
+import com.utils.bastien.schotten_totten.controllers.SimpleGameManager;
+import com.utils.bastien.schotten_totten.exceptions.GameCreationException;
 
 public class HotSeatGameActivity extends GameActivity {
 

@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.boardgames.bastien.schotten_totten.model.Player;
-import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
+import com.utils.bastien.schotten_totten.model.Player;
+import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;

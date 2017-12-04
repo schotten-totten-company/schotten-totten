@@ -1,4 +1,4 @@
-package com.boardgames.bastien.schotten_totten.model;
+package com.utils.bastien.schotten_totten.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 

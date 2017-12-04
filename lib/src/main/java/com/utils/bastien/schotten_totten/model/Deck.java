@@ -1,6 +1,6 @@
-package com.boardgames.bastien.schotten_totten.model;
+package com.utils.bastien.schotten_totten.model;
 
-import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
+import com.utils.bastien.schotten_totten.exceptions.EmptyDeckException;
 
 import java.io.Serializable;
 import java.util.Collections;

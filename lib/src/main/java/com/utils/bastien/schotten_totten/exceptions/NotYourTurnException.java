@@ -1,6 +1,6 @@
-package com.boardgames.bastien.schotten_totten.exceptions;
+package com.utils.bastien.schotten_totten.exceptions;
 
-import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
+import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
 
 /**
  * Created by Bastien on 19/10/2017.

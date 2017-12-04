@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.LauncherActivity;
 import com.boardgames.bastien.schotten_totten.R;
-import com.boardgames.bastien.schotten_totten.model.TicTacToe;
+import com.utils.bastien.schotten_totten.model.TicTacToe;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

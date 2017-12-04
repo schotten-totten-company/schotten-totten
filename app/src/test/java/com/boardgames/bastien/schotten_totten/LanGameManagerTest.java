@@ -1,10 +1,10 @@
 package com.boardgames.bastien.schotten_totten;
 
-import com.boardgames.bastien.schotten_totten.exceptions.GameCreationException;
-import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.boardgames.bastien.schotten_totten.exceptions.NotYourTurnException;
-import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
+import com.utils.bastien.schotten_totten.exceptions.GameCreationException;
+import com.utils.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
+import com.utils.bastien.schotten_totten.exceptions.NoPlayerException;
+import com.utils.bastien.schotten_totten.exceptions.NotYourTurnException;
+import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
 import com.boardgames.bastien.schotten_totten.server.LanGameManager;
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 

@@ -4,11 +4,11 @@ import android.os.Bundle;
 
 import com.boardgames.bastien.schotten_totten.ai.GameAI;
 import com.boardgames.bastien.schotten_totten.ai.GameAiImpl;
-import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
-import com.boardgames.bastien.schotten_totten.exceptions.CardInitialisationException;
-import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
-import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
+import com.utils.bastien.schotten_totten.controllers.SimpleGameManager;
+import com.utils.bastien.schotten_totten.exceptions.CardInitialisationException;
+import com.utils.bastien.schotten_totten.exceptions.HandFullException;
+import com.utils.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
+import com.utils.bastien.schotten_totten.exceptions.NoPlayerException;
 
 public class SoloGameActivity extends GameActivity {
 

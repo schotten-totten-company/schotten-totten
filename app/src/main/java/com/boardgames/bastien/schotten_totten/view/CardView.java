@@ -2,16 +2,16 @@ package com.boardgames.bastien.schotten_totten.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.AppCompatTextView;
 import android.widget.TextView;
 
-import com.boardgames.bastien.schotten_totten.R;
-import com.boardgames.bastien.schotten_totten.model.Card;
+import com.utils.bastien.schotten_totten.model.Card;
 
 /**
  * Created by Bastien on 10/12/2016.
  */
 
-public abstract class CardView extends TextView {
+public abstract class CardView extends AppCompatTextView {
 
     public CardView(final Context context, final Card c) {
         this(context);

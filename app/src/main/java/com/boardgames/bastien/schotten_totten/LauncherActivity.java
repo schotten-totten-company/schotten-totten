@@ -16,16 +16,14 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.boardgames.bastien.schotten_totten.controllers.SimpleGameManager;
-import com.boardgames.bastien.schotten_totten.model.MilestonePlayerType;
-import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
-import com.boardgames.bastien.schotten_totten.server.GameAlreadyExistsException;
+import com.utils.bastien.schotten_totten.controllers.SimpleGameManager;
+import com.utils.bastien.schotten_totten.model.MilestonePlayerType;
+import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class LauncherActivity extends Activity {

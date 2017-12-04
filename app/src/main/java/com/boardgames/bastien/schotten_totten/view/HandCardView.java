@@ -3,8 +3,7 @@ package com.boardgames.bastien.schotten_totten.view;
 import android.content.Context;
 import android.graphics.Typeface;
 
-import com.boardgames.bastien.schotten_totten.R;
-import com.boardgames.bastien.schotten_totten.model.Card;
+import com.utils.bastien.schotten_totten.model.Card;
 
 /**
  * Created by Bastien on 11/12/2016.

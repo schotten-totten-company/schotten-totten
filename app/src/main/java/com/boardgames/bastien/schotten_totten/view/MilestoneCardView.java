@@ -3,16 +3,17 @@ package com.boardgames.bastien.schotten_totten.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v7.widget.AppCompatTextView;
 import android.widget.TextView;
 
-import com.boardgames.bastien.schotten_totten.model.Card;
-import com.boardgames.bastien.schotten_totten.model.Milestone;
+import com.utils.bastien.schotten_totten.model.Card;
+import com.utils.bastien.schotten_totten.model.Milestone;
 
 /**
  * Created by Bastien on 10/12/2016.
  */
 
-public class MilestoneCardView extends TextView {
+public class MilestoneCardView extends AppCompatTextView {
 
     private final int index;
 

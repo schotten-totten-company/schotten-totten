@@ -1,13 +1,13 @@
-package com.boardgames.bastien.schotten_totten.controllers;
+package com.utils.bastien.schotten_totten.controllers;
 
-import com.boardgames.bastien.schotten_totten.exceptions.EmptyDeckException;
-import com.boardgames.bastien.schotten_totten.exceptions.HandFullException;
-import com.boardgames.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.boardgames.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.boardgames.bastien.schotten_totten.exceptions.NotYourTurnException;
-import com.boardgames.bastien.schotten_totten.model.Milestone;
-import com.boardgames.bastien.schotten_totten.model.Player;
-import com.boardgames.bastien.schotten_totten.model.PlayingPlayerType;
+import com.utils.bastien.schotten_totten.exceptions.EmptyDeckException;
+import com.utils.bastien.schotten_totten.exceptions.HandFullException;
+import com.utils.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
+import com.utils.bastien.schotten_totten.exceptions.NoPlayerException;
+import com.utils.bastien.schotten_totten.exceptions.NotYourTurnException;
+import com.utils.bastien.schotten_totten.model.Milestone;
+import com.utils.bastien.schotten_totten.model.Player;
+import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
 
 import java.util.List;
 

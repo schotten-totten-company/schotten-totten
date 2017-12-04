@@ -1,6 +1,4 @@
-package com.boardgames.bastien.schotten_totten.exceptions;
-
-import com.boardgames.bastien.schotten_totten.model.Milestone;
+package com.utils.bastien.schotten_totten.exceptions;
 
 /**
  * Created by Bastien on 29/11/2016.

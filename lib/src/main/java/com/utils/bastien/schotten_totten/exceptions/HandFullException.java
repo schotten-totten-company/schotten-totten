@@ -1,4 +1,4 @@
-package com.boardgames.bastien.schotten_totten.exceptions;
+package com.utils.bastien.schotten_totten.exceptions;
 
 /**
  * Created by Bastien on 28/11/2016.

@@ -1,7 +1,7 @@
-package com.boardgames.bastien.schotten_totten.model;
+package com.utils.bastien.schotten_totten.model;
 
-import com.boardgames.bastien.schotten_totten.model.Card.COLOR;
-import com.boardgames.bastien.schotten_totten.model.Card.NUMBER;
+import com.utils.bastien.schotten_totten.model.Card.COLOR;
+import com.utils.bastien.schotten_totten.model.Card.NUMBER;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
