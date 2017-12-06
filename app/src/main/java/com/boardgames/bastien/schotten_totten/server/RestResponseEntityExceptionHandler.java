@@ -1,8 +1,8 @@
 package com.boardgames.bastien.schotten_totten.server;
 
-import com.utils.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.utils.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.utils.bastien.schotten_totten.exceptions.NotYourTurnException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.NoPlayerException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.NotYourTurnException;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

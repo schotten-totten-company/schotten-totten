@@ -5,7 +5,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.boardgames.bastien.schotten_totten.R;
-import com.utils.bastien.schotten_totten.model.TicTacToe;
+import com.boradgames.bastien.schotten_totten.core.model.TicTacToe;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

@@ -1,20 +1,13 @@
 package com.boardgames.bastien.schotten_totten.ai;
 
-import com.utils.bastien.schotten_totten.controllers.AbstractGameManager;
-import com.utils.bastien.schotten_totten.controllers.GameManagerInterface;
-import com.utils.bastien.schotten_totten.controllers.SimpleGameManager;
-import com.utils.bastien.schotten_totten.exceptions.CardInitialisationException;
-import com.utils.bastien.schotten_totten.exceptions.EmptyDeckException;
-import com.utils.bastien.schotten_totten.exceptions.HandFullException;
-import com.utils.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.utils.bastien.schotten_totten.exceptions.NoPlayerException;
-import com.utils.bastien.schotten_totten.model.Card;
-import com.utils.bastien.schotten_totten.model.Game;
-import com.utils.bastien.schotten_totten.model.Hand;
-import com.utils.bastien.schotten_totten.model.Milestone;
-import com.utils.bastien.schotten_totten.model.Player;
-import com.utils.bastien.schotten_totten.model.MilestonePlayerType;
-import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
+
+import com.boradgames.bastien.schotten_totten.core.controllers.AbstractGameManager;
+import com.boradgames.bastien.schotten_totten.core.controllers.GameManagerInterface;
+import com.boradgames.bastien.schotten_totten.core.exceptions.CardInitialisationException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.HandFullException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.NoPlayerException;
+import com.boradgames.bastien.schotten_totten.core.model.Player;
 
 /**
  * Created by Bastien on 27/03/2017.

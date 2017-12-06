@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
+import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 public class JoinLanGameActivity extends LanGameActivity {
 

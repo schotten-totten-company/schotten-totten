@@ -1,6 +1,6 @@
 package com.boardgames.bastien.schotten_totten.server;
 
-import com.utils.bastien.schotten_totten.controllers.AbstractGameManager;
+import com.boradgames.bastien.schotten_totten.core.controllers.AbstractGameManager;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;

@@ -3,9 +3,8 @@ package com.boardgames.bastien.schotten_totten.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.AppCompatTextView;
-import android.widget.TextView;
 
-import com.utils.bastien.schotten_totten.model.Card;
+import com.boradgames.bastien.schotten_totten.core.model.Card;
 
 /**
  * Created by Bastien on 10/12/2016.

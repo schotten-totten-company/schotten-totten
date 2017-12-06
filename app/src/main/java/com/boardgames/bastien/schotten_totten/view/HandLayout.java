@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 
-import com.utils.bastien.schotten_totten.model.Game;
+import com.boradgames.bastien.schotten_totten.core.model.Game;
 
 import java.util.List;
 

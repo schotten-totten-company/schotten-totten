@@ -16,9 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.utils.bastien.schotten_totten.controllers.SimpleGameManager;
-import com.utils.bastien.schotten_totten.model.MilestonePlayerType;
-import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
+import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

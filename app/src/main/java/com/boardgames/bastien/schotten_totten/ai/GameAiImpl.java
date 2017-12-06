@@ -1,10 +1,9 @@
 package com.boardgames.bastien.schotten_totten.ai;
 
-import com.utils.bastien.schotten_totten.controllers.GameManagerInterface;
-import com.utils.bastien.schotten_totten.exceptions.NotYourTurnException;
-import com.utils.bastien.schotten_totten.model.Hand;
-import com.utils.bastien.schotten_totten.model.Milestone;
-import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
+
+import com.boradgames.bastien.schotten_totten.core.controllers.GameManagerInterface;
+import com.boradgames.bastien.schotten_totten.core.exceptions.NotYourTurnException;
+import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 /**
  * Created by Bastien on 27/03/2017.
