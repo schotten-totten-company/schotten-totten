@@ -1,14 +1,14 @@
 package com.boardgames.bastien.schotten_totten;
 
-import com.utils.bastien.schotten_totten.exceptions.GameCreationException;
-import com.utils.bastien.schotten_totten.exceptions.HandFullException;
-import com.utils.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.utils.bastien.schotten_totten.model.Card;
-import com.utils.bastien.schotten_totten.model.Game;
-import com.utils.bastien.schotten_totten.model.Hand;
-import com.utils.bastien.schotten_totten.model.Milestone;
-import com.utils.bastien.schotten_totten.model.Player;
-import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
+import com.boradgames.bastien.schotten_totten.core.exceptions.GameCreationException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.HandFullException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
+import com.boradgames.bastien.schotten_totten.core.model.Card;
+import com.boradgames.bastien.schotten_totten.core.model.Game;
+import com.boradgames.bastien.schotten_totten.core.model.Hand;
+import com.boradgames.bastien.schotten_totten.core.model.Milestone;
+import com.boradgames.bastien.schotten_totten.core.model.Player;
+import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;

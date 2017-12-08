@@ -1,10 +1,9 @@
 package com.boardgames.bastien.schotten_totten;
 
-import com.utils.bastien.schotten_totten.exceptions.MilestoneSideMaxReachedException;
-import com.utils.bastien.schotten_totten.model.Card;
-import com.utils.bastien.schotten_totten.model.Milestone;
-import com.utils.bastien.schotten_totten.model.MilestonePlayerType;
-import com.utils.bastien.schotten_totten.model.PlayingPlayerType;
+import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
+import com.boradgames.bastien.schotten_totten.core.model.Card;
+import com.boradgames.bastien.schotten_totten.core.model.Milestone;
+import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import org.junit.Assert;
 import org.junit.Before;
