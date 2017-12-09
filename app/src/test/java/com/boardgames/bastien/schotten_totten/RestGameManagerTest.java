@@ -1,6 +1,5 @@
 package com.boardgames.bastien.schotten_totten;
 
-import com.boardgames.bastien.schotten_totten.server.LanGameManager;
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.exceptions.GameCreationException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
@@ -10,30 +9,17 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import junit.framework.Assert;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * Created by Bastien on 19/11/2017.
  */
 
-public class LanGameManagerTest {
+public class RestGameManagerTest {
 
-    private static LanGameManager manager;
-    private final RestGameClient restGameClient = new RestGameClient("http://localhost:8080");
-
-    @BeforeClass
-    public static void Before() {
-        manager = new LanGameManager();
-        manager.start();
-        Assert.assertTrue(manager.isActive());
-    }
-
-    @AfterClass
-    public static void After() {
-        manager.stop();
-    }
+    private final RestGameClient restGameClient =
+            new RestGameClient("http://localhost:8080",
+                    "testGame-" + System.currentTimeMillis());
 
     @Test
     public void TestPing() {

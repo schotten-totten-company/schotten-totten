@@ -12,10 +12,14 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Bastien on 19/11/2017.
@@ -24,88 +28,263 @@ import java.util.List;
 public class RestGameClient extends AbstractGameManager {
 
     private final String url;
+    private final String guid;
+    private final RestTemplate restTemplate;
 
-    public RestGameClient(final String url) {
+    public RestGameClient(final String url, final String guid) {
         this.url = url;
+        this.guid = guid;
+        restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     }
 
-    public String ping() {
-        final RestTemplate rest = new RestTemplate();
-        return rest.getForObject(this.url + "/ping", String.class).toString();
+    public String ping() throws InterruptedException, ExecutionException {
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                  return restTemplate.getForObject(url + "/ping", String.class);
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public boolean createGame() {
-        final RestTemplate rest = new RestTemplate();
-        return rest.getForObject(this.url + "/createGame", Boolean.class).booleanValue();
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return restTemplate.getForObject(url + "/createGame?"
+                            + "gamename=" + guid, Boolean.class).booleanValue();
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean deleteGame() {
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return restTemplate.getForObject(url + "/deleteGame?"
+                            + "gamename=" + guid, Boolean.class).booleanValue();
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public Card getLastPlayedCard() {
-        final RestTemplate rest = new RestTemplate();
-        return rest.getForObject(this.url + "/getLastPlayedCard", Card.class);
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<Card>() {
+                @Override
+                public Card call() throws Exception {
+                    return restTemplate.getForObject(url + "/getLastPlayedCard?"
+                            + "gamename=" + guid, Card.class);
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean reclaimMilestone(
             final PlayingPlayerType p, final int milestoneIndex) throws NotYourTurnException {
-        final RestTemplate rest = new RestTemplate();
-        final ResponseEntity<Boolean> b = rest.getForEntity(this.url + "/reclaimMilestone?"
-                        + "p=" + p.toString() + "&milestoneIndex=" + milestoneIndex, Boolean.class);
 
-        if (b.getStatusCode() == HttpStatus.OK) {
-            return b.getBody();
-        } else {
-            throw new NotYourTurnException(p);
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    final ResponseEntity<Boolean> b = restTemplate.getForEntity(url + "/reclaimMilestone?"
+                            + "gamename=" + guid
+                            + "&p=" + p.toString()
+                            + "&milestoneIndex=" + milestoneIndex, Boolean.class);
+
+                    if (b.getStatusCode() == HttpStatus.OK) {
+                        return b.getBody();
+                    } else {
+                        throw new NotYourTurnException(p);
+                    }
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ExecutionException e) {
+            if (e.getCause() instanceof NotYourTurnException) {
+                throw (NotYourTurnException) e.getCause();
+            } else {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
     }
 
     public Player getPlayer(final PlayingPlayerType p) {
-        final RestTemplate rest = new RestTemplate();
-        return rest.getForObject(
-                this.url + "/getPlayer?" + "p=" + p.toString(), Player.class);
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<Player>() {
+                @Override
+                public Player call() throws Exception {
+                    return restTemplate.getForObject(
+                            url + "/getPlayer?"
+                                    + "gamename=" + guid
+                                    + "&p=" + p.toString(), Player.class);
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean swapPlayers() {
-        final RestTemplate rest = new RestTemplate();
-        return rest.getForObject(this.url + "/swapPlayers", Boolean.class);
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return restTemplate.getForObject(url + "/swapPlayers?"
+                            + "gamename=" + guid
+                            + "&p=", Boolean.class);
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
     }
 
     public Player getPlayingPlayer() {
-        final RestTemplate rest = new RestTemplate();
-        return rest.getForObject(this.url + "/getPlayingPlayer", Player.class);
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<Player>() {
+                @Override
+                public Player call() throws Exception {
+                    return restTemplate.getForObject(url + "/getPlayingPlayer?"
+                            + "gamename=" + guid, Player.class);
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public Player getWinner() throws NoPlayerException {
-        final RestTemplate rest = new RestTemplate();
-        final ResponseEntity<Player> winner = rest.getForEntity(this.url + "/getWinner", Player.class);
-        if (winner.getStatusCode() == HttpStatus.OK) {
-            return winner.getBody();
-        } else {
-            throw new NoPlayerException(winner.getStatusCode().getReasonPhrase());
+
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<Player>() {
+                @Override
+                public Player call() throws Exception {
+                    final ResponseEntity<Player> winner =
+                            restTemplate.getForEntity(url + "/getWinner?"
+                            + "gamename=" + guid, Player.class);
+                    if (winner.getStatusCode() == HttpStatus.OK) {
+                        return winner.getBody();
+                    } else {
+                        throw new NoPlayerException(winner.getStatusCode().getReasonPhrase());
+                    }
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            if (e.getCause() instanceof NoPlayerException) {
+                throw (NoPlayerException) e.getCause();
+            } else {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
     }
 
     public List<Milestone> getMilestones() {
-        final RestTemplate rest = new RestTemplate();
-        final ResponseEntity<Milestone[]> list =
-                rest.getForEntity(this.url + "/getMilestones", Milestone[].class);
-        return Arrays.asList(list.getBody());
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<List<Milestone>>() {
+                @Override
+                public List<Milestone> call() throws Exception {
+                    final ResponseEntity<Milestone[]> list =
+                            restTemplate.getForEntity(url + "/getMilestones?"
+                                    + "gamename=" + guid, Milestone[].class);
+                    return Arrays.asList(list.getBody());
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean playerPlays(
             final PlayingPlayerType p, final int indexInPlayingPlayerHand, final int milestoneIndex)
             throws NotYourTurnException, MilestoneSideMaxReachedException {
 
-        final RestTemplate rest = new RestTemplate();
-        final ResponseEntity<Boolean> result = rest.getForEntity(this.url + "/playerPlays?"
-                + "p=" + p.toString()
-                + "&indexInPlayingPlayerHand=" + indexInPlayingPlayerHand
-                + "&milestoneIndex=" + milestoneIndex, Boolean.class);
 
-        if (result.getStatusCode() == HttpStatus.OK) {
-            return result.getBody().booleanValue();
-        } else if (result.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                throw new NotYourTurnException(p);
-        } else {
-            throw new MilestoneSideMaxReachedException(milestoneIndex);
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    final ResponseEntity<Boolean> result =
+                            restTemplate.getForEntity(url + "/playerPlays?"
+                            + "gamename=" + guid
+                            + "&p=" + p.toString()
+                            + "&indexInPlayingPlayerHand=" + indexInPlayingPlayerHand
+                            + "&milestoneIndex=" + milestoneIndex, Boolean.class);
+
+                    if (result.getStatusCode() == HttpStatus.OK) {
+                        return result.getBody().booleanValue();
+                    } else if (result.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                        throw new NotYourTurnException(p);
+                    } else {
+                        throw new MilestoneSideMaxReachedException(milestoneIndex);
+                    }
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            if (e.getCause() instanceof NotYourTurnException) {
+                throw (NotYourTurnException) e.getCause();
+            }  else if (e.getCause() instanceof MilestoneSideMaxReachedException) {
+                throw (MilestoneSideMaxReachedException) e.getCause();
+            } else {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
     }
 

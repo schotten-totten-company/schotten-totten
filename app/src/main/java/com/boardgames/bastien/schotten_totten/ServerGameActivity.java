@@ -4,69 +4,48 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.boardgames.bastien.schotten_totten.server.GameClientInterface;
-import com.boardgames.bastien.schotten_totten.server.GameDoNotExistException;
+import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.exceptions.NoPlayerException;
 import com.boradgames.bastien.schotten_totten.core.model.Player;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
 public class ServerGameActivity extends GameActivity {
 
-    private final GameClientInterface client = null;// new GameClient();
     private PlayingPlayerType type;
     private String gameName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        type = getIntent().getStringExtra("type").equals(PlayingPlayerType.ONE.toString())
+        this.type = getIntent().getStringExtra("type").equals(PlayingPlayerType.ONE.toString())
                 ? PlayingPlayerType.ONE : PlayingPlayerType.TWO;
-        gameName = getIntent().getStringExtra("gameName");
+        this.gameName = getIntent().getStringExtra("gameName");
 
         try {
-            this.gameManager = client.getGame(gameName).get();
+            this.gameManager = new RestGameClient("https://schotten-totten.herokuapp.com", this.gameName);
             initUI(type);
             updateTextField(type);
             if (!this.gameManager.getPlayingPlayer().getPlayerType().equals(type)) {
                 disableClick();
                 Executors.newSingleThreadExecutor().submit(new GameClientThread());
             }
-        } catch (final ExecutionException e) {
-            if (e.getCause() instanceof GameDoNotExistException) {
-                showAlertMessage(getString(R.string.warning_title),
-                        gameName + getString(R.string.game_do_not_exist),true, true);
-            } else {
-                showErrorMessage(e);
-            }
         } catch (final Exception e) {
             showErrorMessage(e);
         }
     }
 
-    @Override
-    protected void endOfTurn() {
-        updateUI(type);
-        disableClick();
-        try {
-            client.updateGame(gameName, gameManager);
-            Executors.newSingleThreadExecutor().submit(new GameClientThread());
-        } catch (final ExecutionException | InterruptedException e) {
-            showErrorMessage(e);
-        }
-        updateTextField(type);
-    }
-
-    private class GameClientThread implements Callable<Boolean> {
+    private class GameClientThread implements Runnable {
         @Override
-        public Boolean call() throws Exception {
-            while(!client.getGame(gameName).get().getPlayingPlayer().getPlayerType().equals(type)) {
-                Thread.sleep(2500);
+        public void run() {
+            while(!gameManager.getPlayingPlayer().getPlayerType().equals(type)) {
+                try {
+                    Thread.sleep(5000);
+                } catch (final InterruptedException e) {
+                    showErrorMessage(e);
+                }
             }
-            gameManager = client.getGame(gameName).get();
             enableClick();
             // update ui
             runOnUiThread(new Runnable() {
@@ -82,35 +61,32 @@ public class ServerGameActivity extends GameActivity {
                     }
                 }
             });
-            return true;
         }
+    }
+
+    @Override
+    protected void endOfTurn() {
+        gameManager.swapPlayers();
+        updateUI(type);
+        disableClick();
+        Executors.newSingleThreadExecutor().submit(new GameClientThread());
+        updateTextField(type);
     }
 
     @Override
     protected void endOfTheGame(final Player winner) {
         super.endOfTheGame(winner);
         if (winner.getPlayerType().equals(type)) {
-            //gameManager.swapPlayingPlayer();
-            try {
-                client.updateGame(gameName, gameManager);
-                Executors.newSingleThreadExecutor().submit(new GameClientThread());
-            } catch (final ExecutionException | InterruptedException e) {
-                showErrorMessage(e);
-            }
+            gameManager.swapPlayers();
         } else {
-            try {
-                client.deleteGame(gameName);
-                Executors.newSingleThreadExecutor().submit(new GameClientThread());
-            } catch (final ExecutionException | InterruptedException e) {
-                showErrorMessage(e);
-            }
+            ((RestGameClient)gameManager).deleteGame();
         }
     }
 
     @Override
     protected void updateTextField(final PlayingPlayerType updatePointOfView) {
-        final PlayingPlayerType playingMilestonePlayerType = gameManager.getPlayingPlayer().getPlayerType();
-        final String message = playingMilestonePlayerType.equals(updatePointOfView) ?
+        final PlayingPlayerType playingPlayerType = gameManager.getPlayingPlayer().getPlayerType();
+        final String message = playingPlayerType.equals(updatePointOfView) ?
                 gameManager.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message) :
                 getString(R.string.not_your_turn_message) ;
         ((TextView) findViewById(R.id.textView)).setText(message);

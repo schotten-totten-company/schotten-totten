@@ -63,7 +63,7 @@ public abstract class LanGameActivity extends GameActivity {
                 updateTextField(playingPlayerType);
                 // update board
                 for (int i = 0; i < gameManager.getMilestones().size(); i++) {
-                    updateMilestoneView(i, playingPlayerType);
+                    updateMilestoneView(gameManager.getMilestones().get(i), i, playingPlayerType);
                 }
             }
         });

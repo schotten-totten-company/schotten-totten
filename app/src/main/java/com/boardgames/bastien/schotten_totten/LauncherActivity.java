@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import java.io.PrintWriter;
@@ -177,21 +178,14 @@ public class LauncherActivity extends Activity {
                 final String gameName = input.getText().toString().trim();
                 waitingDialog.show();
                 try {
-//                    final Future<Boolean> future =
-//                            new GameClient().createGame(gameName, new SimpleGameManager("P1", "P2"));
-//                    // show waiting pop up
-//                    future.get();
+                    final RestGameClient restGameClient = new RestGameClient("https://schotten-totten.herokuapp.com", gameName);
+                    restGameClient.createGame();
+                    restGameClient.getPlayingPlayer();
+                    // show waiting pop up
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     joinIntent.putExtra("gameName", gameName);
                     joinIntent.putExtra("type", PlayingPlayerType.ONE.toString());
                     startActivity(joinIntent);
-//                } catch (final ExecutionException e) {
-//                    if (e.getCause() instanceof GameAlreadyExistsException) {
-//                        showError(getString(R.string.warning_title),
-//                                gameName + getString(R.string.game_already_exist));
-//                    } else {
-//                        showError(e);
-//                    }
                 } catch (Exception e) {
                     showError(e);
                 }
