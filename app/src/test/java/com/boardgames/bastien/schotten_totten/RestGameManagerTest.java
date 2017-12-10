@@ -1,5 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.util.Log;
+
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.exceptions.GameCreationException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
