@@ -22,11 +22,11 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.concurrent.Future;
+import java.util.List;
 
 public class LauncherActivity extends Activity {
 
+    private final String url = "https://schotten-totten.herokuapp.com";
     private ProgressDialog waitingDialog;
 
     @Override
@@ -178,7 +178,7 @@ public class LauncherActivity extends Activity {
                 final String gameName = input.getText().toString().trim();
                 waitingDialog.show();
                 try {
-                    final RestGameClient restGameClient = new RestGameClient("https://schotten-totten.herokuapp.com", gameName);
+                    final RestGameClient restGameClient = new RestGameClient(url, gameName);
                     restGameClient.createGame();
                     restGameClient.getPlayingPlayer();
                     // show waiting pop up
@@ -208,10 +208,9 @@ public class LauncherActivity extends Activity {
 
     private void joinGame() {
         try {
-            final Future<ArrayList<String>> future =  null;//new GameClient().listGame();
             // show waiting pop up
             waitingDialog.show();
-            final ArrayList<String> list = future.get();
+            final List<String> list = new RestGameClient(url, "").listGames();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.choose_game_name));
 

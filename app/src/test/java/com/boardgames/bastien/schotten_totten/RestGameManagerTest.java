@@ -22,7 +22,7 @@ public class RestGameManagerTest {
                     "testGame-" + System.currentTimeMillis());
 
     @Test
-    public void TestPing() {
+    public void TestPing() throws Exception {
         System.out.println(restGameClient.ping());
     }
 

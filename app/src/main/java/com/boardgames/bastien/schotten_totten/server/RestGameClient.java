@@ -73,6 +73,25 @@ public class RestGameClient extends AbstractGameManager {
         }
     }
 
+    public List<String> listGames() {
+        try {
+            return Executors.newSingleThreadExecutor().submit(new Callable<List<String>>() {
+                @Override
+                public List<String> call() throws Exception {
+                    final ResponseEntity<String[]> list =
+                            restTemplate.getForEntity(url + "/listGames", String[].class);
+                    return Arrays.asList(list.getBody());
+                }
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean deleteGame() {
         try {
             return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {

@@ -66,8 +66,8 @@ public class ServerGameActivity extends GameActivity {
 
     @Override
     protected void endOfTurn() {
-        gameManager.swapPlayers();
         updateUI(type);
+        gameManager.swapPlayers();
         disableClick();
         Executors.newSingleThreadExecutor().submit(new GameClientThread());
         updateTextField(type);
