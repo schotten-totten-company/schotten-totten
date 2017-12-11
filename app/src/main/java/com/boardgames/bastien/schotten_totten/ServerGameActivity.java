@@ -1,6 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ public class ServerGameActivity extends GameActivity {
         try {
             this.gameManager = new RestGameClient("https://schotten-totten.herokuapp.com", this.gameName);
             initUI(type);
-            updateTextField(type);
+            updateTextField(type.toString());
             if (!this.gameManager.getPlayingPlayer().getPlayerType().equals(type)) {
                 disableClick();
                 Executors.newSingleThreadExecutor().submit(new GameClientThread());
@@ -46,11 +47,10 @@ public class ServerGameActivity extends GameActivity {
                     showErrorMessage(e);
                 }
             }
-            enableClick();
             // update ui
             runOnUiThread(new Runnable() {
                 public void run() {
-                    updateUI(gameManager.getPlayingPlayer().getPlayerType());
+                    updateUI(type);
                     // check victory
                     try {
                         endOfTheGame(gameManager.getWinner());
@@ -61,16 +61,17 @@ public class ServerGameActivity extends GameActivity {
                     }
                 }
             });
+            enableClick();
         }
     }
 
     @Override
     protected void endOfTurn() {
-        updateUI(type);
-        gameManager.swapPlayers();
         disableClick();
+        passButton.setVisibility(View.INVISIBLE);
+        gameManager.swapPlayers();
         Executors.newSingleThreadExecutor().submit(new GameClientThread());
-        updateTextField(type);
+        updateTextField(type.toString());
     }
 
     @Override
@@ -84,10 +85,11 @@ public class ServerGameActivity extends GameActivity {
     }
 
     @Override
-    protected void updateTextField(final PlayingPlayerType updatePointOfView) {
-        final PlayingPlayerType playingPlayerType = gameManager.getPlayingPlayer().getPlayerType();
-        final String message = playingPlayerType.equals(updatePointOfView) ?
-                gameManager.getPlayingPlayer().getName() + getString(R.string.it_is_your_turn_message) :
+    protected void updateTextField(final String updatePointOfViewPlayerName) {
+        final Player playingPlayer = gameManager.getPlayingPlayer();
+        final PlayingPlayerType playingPlayerType = playingPlayer.getPlayerType();
+        final String message = playingPlayerType.equals(type) ?
+                playingPlayer.getName() + getString(R.string.it_is_your_turn_message) :
                 getString(R.string.not_your_turn_message) ;
         ((TextView) findViewById(R.id.textView)).setText(message);
     }

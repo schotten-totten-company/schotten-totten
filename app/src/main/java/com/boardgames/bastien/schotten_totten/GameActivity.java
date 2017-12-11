@@ -138,7 +138,8 @@ public abstract class GameActivity extends AppCompatActivity {
             milestoneView.add(new MilestoneView(m, mPlayer, mOpponent, pSide, oSide));
         }
 
-        final int handSize = gameManager.getPlayer(updatePointOfView).getHand().getHandSize();
+        final Player updatePointOfViewPlayer = this.gameManager.getPlayer(updatePointOfView);
+        final int handSize = updatePointOfViewPlayer.getHand().getHandSize();
         for (int i = 0; i < handSize; i++) {
             final int id = getResources().getIdentifier("h" + i, "id", getPackageName());
             handView.add((ImageButton)findViewById(id));
@@ -146,13 +147,13 @@ public abstract class GameActivity extends AppCompatActivity {
 
         selectedCard = -1;
 
-        updateTextField(gameManager.getPlayingPlayer().getPlayerType());
+        updateTextField(gameManager.getPlayingPlayer().getName());
 
         initPassButton();
 
-        initBoard(updatePointOfView);
+        initBoard(updatePointOfViewPlayer);
 
-        initHand(updatePointOfView);
+        initHand(updatePointOfViewPlayer);
 
     }
 
@@ -166,10 +167,10 @@ public abstract class GameActivity extends AppCompatActivity {
         passButton.setVisibility(View.INVISIBLE);
     }
 
-    protected void initBoard(final PlayingPlayerType updatePointOfView) {
+    protected void initBoard(final Player updatePointOfViewPlayer) {
         final List<Milestone> milestones = gameManager.getMilestones();
         for (int i = 0; i < milestones.size(); i++) {
-            updateMilestoneView(milestones.get(i), i, updatePointOfView);
+            updateMilestoneView(milestones.get(i), i, updatePointOfViewPlayer.getPlayerType());
             milestoneView.get(i).getMilestone().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -180,14 +181,15 @@ public abstract class GameActivity extends AppCompatActivity {
                         final ImageButton cardView = ((ImageButton) v);
                         final int index = Integer.valueOf(
                                 getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
-                        final Milestone m = milestones.get(index);
+                        Milestone m = milestones.get(index);
                         // check if the milestone has already been captured
                         if (!m.getCaptured().equals(MilestonePlayerType.NONE)) {
                             showAlertMessage(getString(R.string.milestone_already_captured_message));
                             return;
                         }
                         // reclaim
-                        final PlayingPlayerType playingPlayerType = gameManager.getPlayingPlayer().getPlayerType();
+                        final Player playingPlayer = gameManager.getPlayingPlayer();
+                        final PlayingPlayerType playingPlayerType = playingPlayer.getPlayerType();
                         if (selectedCard == -1) {
                             // reclaim
 
@@ -222,13 +224,14 @@ public abstract class GameActivity extends AppCompatActivity {
                                     try {
                                         // play
                                         gameManager.playerPlays(playingPlayerType, selectedCard, index);
+                                        m = gameManager.getMilestones().get(index);
 
                                         // update hand card;
                                         handView.get(selectedCard).startAnimation(
                                             AnimationUtils.loadAnimation(
                                                     getApplicationContext(), R.anim.zoomout));
                                         selectCard(handView.get(selectedCard));
-                                        updateHand(playingPlayerType);
+                                        updateHand(gameManager.getPlayingPlayer().getHand());
                                         selectedCard = -1;
 
                                     } catch (final EmptyDeckException e) {
@@ -274,9 +277,10 @@ public abstract class GameActivity extends AppCompatActivity {
         passButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomin));
     }
 
-    protected void initHand(final PlayingPlayerType updatePointOfView) {
-        final Hand handToUpdate = gameManager.getPlayer(updatePointOfView).getHand();
-        for (int i = 0; i < handToUpdate.getHandSize(); i++) {
+    protected void initHand(final Player updatePointOfViewPlayer) {
+        final Hand handToUpdate = updatePointOfViewPlayer.getHand();
+        final int handSize = handToUpdate.getHandSize();
+        for (int i = 0; i < handSize; i++) {
             final ImageButton handCardView = handView.get(i);
             updateHandCard(handCardView, handToUpdate.getCards().get(i));
             handCardView.setOnClickListener(new View.OnClickListener() {
@@ -291,7 +295,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                 getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
 
                         // unselect
-                        for (int i = 0; i < handToUpdate.getHandSize(); i++) {
+                        for (int i = 0; i < handSize; i++) {
                             unSelectCard(handView.get(i));
                         }
 
@@ -309,19 +313,14 @@ public abstract class GameActivity extends AppCompatActivity {
         }
     }
 
-    protected void selectCard(ImageButton cardView) {
-        final int handSize = gameManager.getPlayingPlayer().getHand().getHandSize();
-        for (int i = 0; i < handSize; i++) {
+    protected void selectCard(final ImageButton cardView) {
+        for (int i = 0; i < handView.size(); i++) {
             handView.get(i).setAlpha((float) 0.42);
         }
         cardView.setAlpha((float) 1.0);
     }
 
-    protected void unSelectCard(ImageButton cardView) {
-        final int handSize = gameManager.getPlayingPlayer().getHand().getHandSize();
-        for (int i = 0; i < handSize; i++) {
-            handView.get(i).setAlpha((float) 1.0);
-        }
+    protected void unSelectCard(final ImageButton cardView) {
         cardView.setAlpha((float) 1.0);
     }
 
@@ -455,21 +454,21 @@ public abstract class GameActivity extends AppCompatActivity {
 
     protected abstract void endOfTurn();
 
-    protected void updateTextField(final PlayingPlayerType updatePointOfView) {
-        textView.setText(gameManager.getPlayer(updatePointOfView).getName() + getString(R.string.it_is_your_turn_message));
+    protected void updateTextField(final String updatePointOfViewPlayerName) {
+        textView.setText(updatePointOfViewPlayerName + getString(R.string.it_is_your_turn_message));
     }
 
-    private void updateHand(final PlayingPlayerType updatePointOfView) {
+    private void updateHand(final Hand hand) {
         // update hand
-        final Hand hand = gameManager.getPlayer(updatePointOfView).getHand();
-        for (int i = 0; i < hand.getHandSize(); i++) {
+        final int handSize = hand.getHandSize();
+        for (int i = 0; i < handSize; i++) {
             final ImageButton handCardView = handView.get(i);
             updateHandCard(handCardView, hand.getCards().get(i));
             unSelectCard(handCardView);
             handCardView.setVisibility(View.VISIBLE);
         }
         // cards if hand is not full (no more cards to draw)
-        for (int i = hand.getHandSize(); i < hand.MAX_HAND_SIZE; i++) {
+        for (int i = handSize; i < hand.MAX_HAND_SIZE; i++) {
             final ImageButton handCardView = handView.get(i);
             unSelectCard(handCardView);
             handCardView.setVisibility(View.INVISIBLE);
@@ -483,11 +482,13 @@ public abstract class GameActivity extends AppCompatActivity {
             updateMilestoneView(milestones.get(i), i, updatePointOfView);
         }
 
+        final Player updatePointOfViewPlayer = gameManager.getPlayer(updatePointOfView);
+
         handLayout.setVisibility(View.VISIBLE);
-        updateHand(updatePointOfView);
+        updateHand(updatePointOfViewPlayer.getHand());
 
         // update playing player text
-        updateTextField(updatePointOfView);
+        updateTextField(updatePointOfViewPlayer.getName());
 
         // show/hide skip button
         passButton.setVisibility(View.VISIBLE);

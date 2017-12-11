@@ -44,9 +44,8 @@ public abstract class LanGameActivity extends GameActivity {
 //    }
 
     @Override
-    protected void updateTextField(final PlayingPlayerType updatePointOfView) {
-        final PlayingPlayerType playingPlayerType = gameManager.getPlayingPlayer().getPlayerType();
-        final String message = playingPlayerType.equals(updatePointOfView) ?
+    protected void updateTextField(final String updatePointOfViewPlayerName) {
+        final String message = playerType.equals(gameManager.getPlayingPlayer().getPlayerType()) ?
                 playerName + getString(R.string.it_is_your_turn_message) :
                 getString(R.string.not_your_turn_message) ;
         ((TextView) findViewById(R.id.textView)).setText(message);
@@ -60,7 +59,7 @@ public abstract class LanGameActivity extends GameActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 // update playing player text
-                updateTextField(playingPlayerType);
+                updateTextField(gameManager.getPlayingPlayer().getName());
                 // update board
                 for (int i = 0; i < gameManager.getMilestones().size(); i++) {
                     updateMilestoneView(gameManager.getMilestones().get(i), i, playingPlayerType);
