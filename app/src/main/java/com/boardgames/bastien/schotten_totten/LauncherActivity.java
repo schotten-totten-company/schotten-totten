@@ -175,8 +175,9 @@ public class LauncherActivity extends Activity {
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final String gameName = input.getText().toString().trim();
+                dialog.dismiss();
                 waitingDialog.show();
+                final String gameName = input.getText().toString().trim();
                 try {
                     final RestGameClient restGameClient = new RestGameClient(url, gameName);
                     restGameClient.createGame();

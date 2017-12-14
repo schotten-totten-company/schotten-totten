@@ -1,6 +1,10 @@
 package com.boardgames.bastien.schotten_totten.server;
 
 
+import android.app.ProgressDialog;
+
+import com.boardgames.bastien.schotten_totten.LauncherActivity;
+import com.boardgames.bastien.schotten_totten.R;
 import com.boradgames.bastien.schotten_totten.core.controllers.AbstractGameManager;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.NoPlayerException;
@@ -273,15 +277,15 @@ public class RestGameClient extends AbstractGameManager {
 
 
         try {
-            return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
+            final Boolean aBoolean = Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
                 @Override
                 public Boolean call() throws Exception {
                     final ResponseEntity<Boolean> result =
                             restTemplate.getForEntity(url + "/playerPlays?"
-                            + "gamename=" + guid
-                            + "&p=" + p.toString()
-                            + "&indexInPlayingPlayerHand=" + indexInPlayingPlayerHand
-                            + "&milestoneIndex=" + milestoneIndex, Boolean.class);
+                                    + "gamename=" + guid
+                                    + "&p=" + p.toString()
+                                    + "&indexInPlayingPlayerHand=" + indexInPlayingPlayerHand
+                                    + "&milestoneIndex=" + milestoneIndex, Boolean.class);
 
                     if (result.getStatusCode() == HttpStatus.OK) {
                         return result.getBody().booleanValue();
@@ -292,6 +296,7 @@ public class RestGameClient extends AbstractGameManager {
                     }
                 }
             }).get();
+            return aBoolean;
         } catch (InterruptedException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

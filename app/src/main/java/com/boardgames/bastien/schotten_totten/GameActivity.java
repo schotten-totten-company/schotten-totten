@@ -1,6 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -44,6 +45,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected View handLayout;
     protected TextView textView;
     protected View gameLayout;
+    private ProgressDialog waitingDialog;
 
     private final List<MilestoneView> milestoneView = new ArrayList<>();
     private final List<ImageButton> handView = new ArrayList<>();
@@ -65,6 +67,13 @@ public abstract class GameActivity extends AppCompatActivity {
         handLayout = findViewById(R.id.handLayout);
         textView = ((TextView) findViewById(R.id.textView));
         gameLayout = findViewById(R.id.gameLayout);
+
+        waitingDialog = new ProgressDialog(GameActivity.this);
+        waitingDialog.setTitle(getString(R.string.contacting_server));
+        waitingDialog.setMessage(getString(R.string.please_wait));
+        waitingDialog.setCanceledOnTouchOutside(false);
+        waitingDialog.setCancelable(false);
+        waitingDialog.dismiss();
     }
 
     @Override
@@ -195,8 +204,10 @@ public abstract class GameActivity extends AppCompatActivity {
 
                             // test reclaim
                             try {
+                                waitingDialog.show();
                                 final boolean reclaim =
                                         gameManager.reclaimMilestone(playingPlayerType, index);
+                                waitingDialog.dismiss();
                                 if (reclaim) {
                                     // capture the milestone
                                     updateMilestoneView(m, index, playingPlayerType);
@@ -211,6 +222,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                     showAlertMessage(getString(R.string.cannot_capture_milestone_message));
                                 }
                             } catch (final NotYourTurnException e) {
+                                waitingDialog.dismiss();
                                 showErrorMessage(e);
                             }
 
@@ -223,6 +235,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                 try {
                                     try {
                                         // play
+                                        waitingDialog.show();
                                         gameManager.playerPlays(playingPlayerType, selectedCard, index);
                                         m = gameManager.getMilestones().get(index);
 
@@ -239,6 +252,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                         selectedCard = -1;
                                     } finally {
                                         updateMilestoneView(m, m.getId(), playingPlayerType);
+                                        waitingDialog.dismiss();
                                     }
 
                                 } catch (final NotYourTurnException e) {

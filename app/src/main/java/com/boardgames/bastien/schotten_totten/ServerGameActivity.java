@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -20,12 +21,14 @@ public class ServerGameActivity extends GameActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         this.type = getIntent().getStringExtra("type").equals(PlayingPlayerType.ONE.toString())
                 ? PlayingPlayerType.ONE : PlayingPlayerType.TWO;
         this.gameName = getIntent().getStringExtra("gameName");
 
         try {
-            this.gameManager = new RestGameClient("https://schotten-totten.herokuapp.com", this.gameName);
+            this.gameManager = new RestGameClient(
+                    "https://schotten-totten.herokuapp.com", this.gameName);
             initUI(type);
             updateTextField(type.toString());
             if (!this.gameManager.getPlayingPlayer().getPlayerType().equals(type)) {
