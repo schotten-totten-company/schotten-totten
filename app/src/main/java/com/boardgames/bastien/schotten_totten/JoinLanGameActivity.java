@@ -20,7 +20,7 @@ public class JoinLanGameActivity extends LanGameActivity {
             playerName = getString(R.string.player2name);
             playerType = PlayingPlayerType.TWO;
             distantIp = getIntent().getStringExtra("distantIp");
-            gameManager = new RestGameClient("http://" + distantIp + ":8080", "");
+            //gameManager = new RestGameClient("http://" + distantIp + ":8080", "");
 
             try {
 

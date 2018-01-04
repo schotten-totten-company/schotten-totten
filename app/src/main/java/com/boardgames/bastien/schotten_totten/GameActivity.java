@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.boardgames.bastien.schotten_totten.view.MilestoneView;
-import com.boradgames.bastien.schotten_totten.core.controllers.AbstractGameManager;
+import com.boradgames.bastien.schotten_totten.core.controllers.GameManagerInterface;
 import com.boradgames.bastien.schotten_totten.core.exceptions.EmptyDeckException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.HandFullException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
@@ -37,7 +37,7 @@ import java.util.List;
 
 public abstract class GameActivity extends AppCompatActivity {
 
-    protected AbstractGameManager gameManager;
+    protected GameManagerInterface gameManager;
     protected int selectedCard;
     private boolean isClickEnabled = true;
 

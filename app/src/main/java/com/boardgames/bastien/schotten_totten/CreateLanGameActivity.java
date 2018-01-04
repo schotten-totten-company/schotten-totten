@@ -23,7 +23,7 @@ public class CreateLanGameActivity extends LanGameActivity {
         if (!alreadyLaunched) {
             playerType = PlayingPlayerType.ONE;
             lanGameManager.start();
-            gameManager = new RestGameClient("http://localhost:8080", "");
+            //gameManager = new RestGameClient("http://localhost:8080", "");
 
             try {
                 localIp = getIPAddress();

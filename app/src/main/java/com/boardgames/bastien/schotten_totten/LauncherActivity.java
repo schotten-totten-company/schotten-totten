@@ -181,7 +181,6 @@ public class LauncherActivity extends Activity {
                 try {
                     final RestGameClient restGameClient = new RestGameClient(url, gameName);
                     restGameClient.createGame();
-                    restGameClient.getPlayingPlayer();
                     // show waiting pop up
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     joinIntent.putExtra("gameName", gameName);
