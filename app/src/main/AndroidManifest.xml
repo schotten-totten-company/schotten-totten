@@ -24,11 +24,6 @@
             android:largeHeap="true"
             android:launchMode="singleTask">
         </activity>
-        <activity android:name=".JoinLanGameActivity"
-            android:screenOrientation="portrait"
-            android:largeHeap="true"
-            android:launchMode="singleTask">
-        </activity>
 
         <activity android:name=".SoloGameActivity"
             android:screenOrientation="portrait"
