@@ -15,9 +15,10 @@ import java.util.concurrent.Executors;
 
 public class ServerGameActivity extends GameActivity {
 
-    private PlayingPlayerType type;
-    private String gameName;
-    private RestGameClient gameClient;
+    protected PlayingPlayerType type;
+    protected String gameName;
+    protected RestGameClient gameClient;
+    protected String serverUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +27,10 @@ public class ServerGameActivity extends GameActivity {
         this.type = getIntent().getStringExtra("type").equals(PlayingPlayerType.ONE.toString())
                 ? PlayingPlayerType.ONE : PlayingPlayerType.TWO;
         this.gameName = getIntent().getStringExtra("gameName");
+        this.serverUrl = getIntent().getStringExtra("serverUrl");
 
         try {
-            gameClient = new RestGameClient(this.gameName);
+            gameClient = new RestGameClient(this.serverUrl, this.gameName);
             this.gameManager =
                     new OnlineGameManager(gameClient.getGame(), this.gameName);
             initUI(type);
@@ -42,7 +44,7 @@ public class ServerGameActivity extends GameActivity {
         }
     }
 
-    private class GameClientThread implements Runnable {
+    protected class GameClientThread implements Runnable {
         @Override
         public void run() {
             while(!gameClient.getPlayingPlayer().getPlayerType().equals(type)) {

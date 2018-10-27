@@ -31,14 +31,6 @@ public class RestGameClient {
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     }
 
-    public RestGameClient(final String guid) {
-        this.url = "https://schotten-totten.herokuapp.com";
-        //this.url = "http://192.168.1.3:8080";
-        this.guid = guid;
-        restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-    }
-
     public String ping() throws InterruptedException, ExecutionException {
         try {
             return Executors.newSingleThreadExecutor().submit(new Callable<String>() {
