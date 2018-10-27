@@ -28,7 +28,7 @@ public class ServerGameActivity extends GameActivity {
         this.gameName = getIntent().getStringExtra("gameName");
 
         try {
-            gameClient = new RestGameClient("http://192.168.1.3:8080", this.gameName);
+            gameClient = new RestGameClient(this.gameName);
             this.gameManager =
                     new OnlineGameManager(gameClient.getGame(), this.gameName);
             initUI(type);
