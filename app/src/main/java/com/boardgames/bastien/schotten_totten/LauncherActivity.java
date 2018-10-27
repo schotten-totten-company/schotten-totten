@@ -26,7 +26,6 @@ import java.util.List;
 
 public class LauncherActivity extends Activity {
 
-    private final String url = "https://schotten-totten.herokuapp.com";
     private ProgressDialog waitingDialog;
 
     @Override
@@ -179,7 +178,7 @@ public class LauncherActivity extends Activity {
                 waitingDialog.show();
                 final String gameName = input.getText().toString().trim();
                 try {
-                    final RestGameClient restGameClient = new RestGameClient(url, gameName);
+                    final RestGameClient restGameClient = new RestGameClient(gameName);
                     restGameClient.createGame();
                     // show waiting pop up
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
@@ -210,7 +209,7 @@ public class LauncherActivity extends Activity {
         try {
             // show waiting pop up
             waitingDialog.show();
-            final List<String> list = new RestGameClient(url, "").listGames();
+            final List<String> list = new RestGameClient("").listGames();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.choose_game_name));
 

@@ -3,11 +3,7 @@ package com.boardgames.bastien.schotten_totten.server;
 
 import com.boradgames.bastien.schotten_totten.core.model.Game;
 import com.boradgames.bastien.schotten_totten.core.model.Player;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +26,14 @@ public class RestGameClient {
 
     public RestGameClient(final String url, final String guid) {
         this.url = url;
+        this.guid = guid;
+        restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+    }
+
+    public RestGameClient(final String guid) {
+        this.url = "https://schotten-totten.herokuapp.com";
+        //this.url = "http://192.168.1.3:8080";
         this.guid = guid;
         restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -111,14 +115,9 @@ public class RestGameClient {
         try {
             return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
                 @Override
-                public Boolean call() throws Exception {
-                    final String writeValueAsString = new ObjectMapper().writeValueAsString(game);
-                    System.out.println("JSON: " + writeValueAsString);
-                    final HttpHeaders headers = new HttpHeaders();
-                    headers.setContentType(MediaType.APPLICATION_JSON);
-                    final HttpEntity<String> entity = new HttpEntity<>(writeValueAsString, headers);
+                public Boolean call() {
                     return restTemplate.postForObject(url + "/updateGame?"
-                            + "gamename=" + guid, entity, Boolean.class).booleanValue();
+                            + "gamename=" + guid, game, Boolean.class).booleanValue();
                 }
             }).get();
         } catch (InterruptedException e) {
