@@ -27,6 +27,8 @@ import java.util.List;
 public class LauncherActivity extends Activity {
 
     private ProgressDialog waitingDialog;
+    private String onlineUrl = "https://schotten-totten.herokuapp.com";
+    //private String onlineUrl = "http://192.168.1.3:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class LauncherActivity extends Activity {
         waitingDialog.dismiss();
 
 
+        // hot seat
         final TextView hotSeatLauncherText = (TextView) findViewById(R.id.hotSeatLauncherText);
         hotSeatLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,33 +53,7 @@ public class LauncherActivity extends Activity {
             }
         });
 
-        final TextView createOnLineLauncherText = (TextView) findViewById(R.id.createOnLineLauncherText);
-        createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent createIntent = new Intent(LauncherActivity.this, CreateLanGameActivity.class);
-                startActivity(createIntent);
-            }
-        });
-
-        final TextView createServerLauncherText = (TextView) findViewById(R.id.createServerLauncherTest);
-        createServerLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enterGameName();
-            }
-        });
-
-        final TextView joinServerLauncherText = (TextView) findViewById(R.id.joinServerLauncherText);
-        joinServerLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                joinGame();
-            }
-        });
-
-        mangeJoinButton();
-
+        // solo vs IA
         final TextView soloLauncherText = (TextView) findViewById(R.id.soloLauncherText);
         soloLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +62,46 @@ public class LauncherActivity extends Activity {
             }
         });
 
+        // create lan game
+        final TextView createOnLineLauncherText = (TextView) findViewById(R.id.createOnLineLauncherText);
+        createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent createIntent = new Intent(LauncherActivity.this, CreateLanGameActivity.class);
+                createIntent.putExtra("serverUrl", "http://localhost:8080");
+                createIntent.putExtra("gameName", "lanGame");
+                createIntent.putExtra("type", PlayingPlayerType.ONE.toString());
+                startActivity(createIntent);
+            }
+        });
+        // join lan game
+        final TextView joinOnlineLauncherText = (TextView) findViewById(R.id.joinOnlineLauncherText);
+
+        joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enterDistantIp();
+            }
+        });
+
+        // create online game
+        final TextView createServerLauncherText = (TextView) findViewById(R.id.createServerLauncherTest);
+        createServerLauncherText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enterGameName();
+            }
+        });
+        // join online game
+        final TextView joinServerLauncherText = (TextView) findViewById(R.id.joinServerLauncherText);
+        joinServerLauncherText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                joinGame();
+            }
+        });
+
+        // about
         findViewById(R.id.aboutLauncherText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +110,7 @@ public class LauncherActivity extends Activity {
 
 
         });
-
+        // guit
         findViewById(R.id.quitLauncherText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,26 +124,6 @@ public class LauncherActivity extends Activity {
     public void onResume() {
         super.onResume();
         waitingDialog.dismiss();
-        mangeJoinButton();
-    }
-
-    private void mangeJoinButton() {
-        final TextView joinOnlineLauncherText = (TextView) findViewById(R.id.joinOnlineLauncherText);
-        if (JoinLanGameActivity.joinAlreadyLaunched) {
-            joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(LauncherActivity.this, JoinLanGameActivity.class));
-                }
-            });
-        } else {
-            joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    enterDistantIp();
-                }
-            });
-        }
     }
 
     private void enterDistantIp() {
@@ -144,8 +141,10 @@ public class LauncherActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String distantIp = input.getText().toString();
-                final Intent joinIntent = new Intent(LauncherActivity.this, JoinLanGameActivity.class);
-                joinIntent.putExtra("distantIp", distantIp);
+                final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                joinIntent.putExtra("serverUrl", "http://" + distantIp + ":8080");
+                joinIntent.putExtra("gameName", "lanGame");
+                joinIntent.putExtra("type", PlayingPlayerType.TWO.toString());
                 startActivity(joinIntent);
             }
         });
@@ -178,11 +177,12 @@ public class LauncherActivity extends Activity {
                 waitingDialog.show();
                 final String gameName = input.getText().toString().trim();
                 try {
-                    final RestGameClient restGameClient = new RestGameClient(gameName);
+                    final RestGameClient restGameClient = new RestGameClient(onlineUrl, gameName);
                     restGameClient.createGame();
                     // show waiting pop up
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     joinIntent.putExtra("gameName", gameName);
+                    joinIntent.putExtra("serverUrl", onlineUrl);
                     joinIntent.putExtra("type", PlayingPlayerType.ONE.toString());
                     startActivity(joinIntent);
                 } catch (Exception e) {
@@ -209,7 +209,7 @@ public class LauncherActivity extends Activity {
         try {
             // show waiting pop up
             waitingDialog.show();
-            final List<String> list = new RestGameClient("").listGames();
+            final List<String> list = new RestGameClient(onlineUrl, "").listGames();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.choose_game_name));
 
@@ -253,6 +253,7 @@ public class LauncherActivity extends Activity {
                     final RadioButton selectedButton =
                             (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
                     joinIntent.putExtra("type", selectedButton.getText().toString());
+                    joinIntent.putExtra("serverUrl", onlineUrl);
                     startActivity(joinIntent);
                     // dismiss waiting pop up
                     waitingDialog.dismiss();
