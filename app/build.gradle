@@ -44,17 +44,12 @@ dependencies {
     implementation 'com.android.support:support-v13:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     testImplementation 'junit:junit:4.12'
-    //testCompile 'org.apache.httpcomponents:httpclient:4.5.4'
-    //testCompile 'org.powermock:powermock-module-junit4:1.7.3'
-    //testCompile 'org.powermock:powermock-api-mockito:1.7.3'
     implementation 'org.apache.commons:commons-collections4:4.1'
     implementation 'org.apache.commons:commons-math3:3.6.1'
-    //compile 'commons-io:commons-io:2.6'
-    //compile 'org.nanoframework:nano-webmvc:1.4.10'
     implementation 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
-    //compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
     implementation 'org.springframework.android:spring-android-core:1.0.1.RELEASE'
+    implementation 'org.nanohttpd:nanohttpd-nanolets:2.3.1'
     //implementation 'org.springframework.android:spring-android:1.0.1.RELEASE'
     implementation ('com.github.schotten-totten-company:schotten-totten-core:1.4'){changing=true}
 }
