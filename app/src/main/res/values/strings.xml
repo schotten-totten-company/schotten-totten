@@ -24,6 +24,8 @@
     <string name="unknown_host_title">No local network connection</string>
     <string name="unknown_host_message">Not connected on WLAN or VLAN,
         please first connect to a WiFi or PPTP VPN local network.</string>
+    <string name="no_local_server_title">No local server found</string>
+    <string name="no_local_server_message">No local server found on your local network.</string>
 
     <string name="connection_ok">Connection established</string>
     <string name="game_do_not_exist">\u0020do not exist.</string>
@@ -54,6 +56,14 @@
 
     <string name="it_is_your_turn_message">, it is your turn to play.</string>
     <string name="not_your_turn_message">Your opponent is playing ...</string>
+
+    <string name="online_url">https://schotten-totten.herokuapp.com</string>
+    <!--<string name="online_url">http://192.168.1.3:8080</string>-->
+    <string name="localhost_url">http://localhost:8080</string>
+    <string name="server_url_key">serverUrl</string>
+    <string name="game_name_key">gameName</string>
+    <string name="type_key">type</string>
+    <string name="lan_game">lanGame</string>
 
     <string name="about_title">About</string>
     <string name="about_content">

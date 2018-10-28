@@ -22,19 +22,27 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.UnknownHostException;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 public class LauncherActivity extends Activity {
 
     private ProgressDialog waitingDialog;
-    private String onlineUrl = "https://schotten-totten.herokuapp.com";
-    //private String onlineUrl = "http://192.168.1.3:8080";
+    private String onlineUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_launcher);
+
+        onlineUrl = getString(R.string.online_url);
 
         waitingDialog = new ProgressDialog(LauncherActivity.this);
         waitingDialog.setTitle(getString(R.string.contacting_server));
@@ -68,9 +76,9 @@ public class LauncherActivity extends Activity {
             @Override
             public void onClick(View v) {
                 final Intent createIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                createIntent.putExtra("serverUrl", "http://localhost:8080");
-                createIntent.putExtra("gameName", "lanGame");
-                createIntent.putExtra("type", PlayingPlayerType.ONE.toString());
+                createIntent.putExtra(getString(R.string.server_url_key), getString(R.string.localhost_url));
+                createIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
+                createIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.ONE.toString());
                 startActivity(createIntent);
             }
         });
@@ -80,7 +88,7 @@ public class LauncherActivity extends Activity {
         joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enterDistantIp();
+                scanForLanServer();
             }
         });
 
@@ -142,9 +150,9 @@ public class LauncherActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 final String distantIp = input.getText().toString();
                 final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                joinIntent.putExtra("serverUrl", "http://" + distantIp + ":8080");
-                joinIntent.putExtra("gameName", "lanGame");
-                joinIntent.putExtra("type", PlayingPlayerType.TWO.toString());
+                joinIntent.putExtra(getString(R.string.server_url_key), "http://" + distantIp + ":8080");
+                joinIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
+                joinIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.TWO.toString());
                 startActivity(joinIntent);
             }
         });
@@ -158,7 +166,60 @@ public class LauncherActivity extends Activity {
         builder.show();
     }
 
+    private void scanForLanServer() {
+        waitingDialog.show();
+        try {
+            // get ip
+            final String serverIp = Executors.newSingleThreadExecutor().submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    String serverIp = "";
+                    // get ip
+                    final String myIp = getIPAddress();
+                    final String mySubLan = myIp.substring(0, myIp.lastIndexOf('.') + 1);
+
+                    // scan
+                    for (int i = 1; i < 250; i++) {
+                        final String ipToScan = mySubLan + i;
+                        final RestGameClient restGameClient =
+                                new RestGameClient("http://" + ipToScan + ":8080", getString(R.string.lan_game));
+                        try {
+                            final String pingResult = restGameClient.ping();
+                            if (pingResult.contains("SCHOTTEN")) {
+                                serverIp = ipToScan;
+                                break;
+                            }
+                        } catch (ExecutionException | InterruptedException e) {
+                            // timeout, not the right host
+                        }
+                    }
+                    waitingDialog.dismiss();
+                    return serverIp;
+                }
+            }).get();
+            // start game
+            if (!serverIp.isEmpty()) {
+                final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                joinIntent.putExtra(getString(R.string.server_url_key), "http://" + serverIp + ":8080");
+                joinIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
+                joinIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.TWO.toString());
+                startActivity(joinIntent);
+            } else {
+                // no server found
+                showError(getString(R.string.no_local_server_title), getString(R.string.no_local_server_message));
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            showError(e);
+        } finally {
+            waitingDialog.dismiss();
+        }
+
+    }
+
     private void enterGameName() {
+
+        waitingDialog.show();
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.choose_game_name));
 
@@ -174,16 +235,16 @@ public class LauncherActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                waitingDialog.show();
                 final String gameName = input.getText().toString().trim();
                 try {
                     final RestGameClient restGameClient = new RestGameClient(onlineUrl, gameName);
                     restGameClient.createGame();
+                    waitingDialog.dismiss();
                     // show waiting pop up
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                    joinIntent.putExtra("gameName", gameName);
-                    joinIntent.putExtra("serverUrl", onlineUrl);
-                    joinIntent.putExtra("type", PlayingPlayerType.ONE.toString());
+                    joinIntent.putExtra(getString(R.string.game_name_key), gameName);
+                    joinIntent.putExtra(getString(R.string.server_url_key), onlineUrl);
+                    joinIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.ONE.toString());
                     startActivity(joinIntent);
                 } catch (Exception e) {
                     showError(e);
@@ -210,6 +271,7 @@ public class LauncherActivity extends Activity {
             // show waiting pop up
             waitingDialog.show();
             final List<String> list = new RestGameClient(onlineUrl, "").listGames();
+            waitingDialog.dismiss();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.choose_game_name));
 
@@ -233,10 +295,10 @@ public class LauncherActivity extends Activity {
             //set player type
             final RadioGroup radioGroup = new RadioGroup(this);
             final RadioButton p1Button = new RadioButton(this);
-            p1Button.setText("ONE");
+            p1Button.setText(PlayingPlayerType.ONE.toString());
             radioGroup.addView(p1Button);
             final RadioButton p2Button = new RadioButton(this);
-            p2Button.setText("TWO");
+            p2Button.setText(PlayingPlayerType.TWO.toString());
             radioGroup.addView(p2Button);
             radioGroup.check(p2Button.getId());
             layout.addView(radioGroup);
@@ -249,11 +311,11 @@ public class LauncherActivity extends Activity {
                 public void onClick(DialogInterface dialog, int which) {
                     final String gameName = spinner.getSelectedItem().toString();
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                    joinIntent.putExtra("gameName", gameName);
+                    joinIntent.putExtra(getString(R.string.game_name_key), gameName);
                     final RadioButton selectedButton =
                             (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
-                    joinIntent.putExtra("type", selectedButton.getText().toString());
-                    joinIntent.putExtra("serverUrl", onlineUrl);
+                    joinIntent.putExtra(getString(R.string.type_key), selectedButton.getText().toString());
+                    joinIntent.putExtra(getString(R.string.server_url_key), onlineUrl);
                     startActivity(joinIntent);
                     // dismiss waiting pop up
                     waitingDialog.dismiss();
@@ -350,4 +412,39 @@ public class LauncherActivity extends Activity {
         alertDialog.setCancelable(true);
         alertDialog.show();
     }
+
+    protected String getIPAddress() throws UnknownHostException {
+        try {
+            final List<NetworkInterface> interfaces =
+                    Collections.list(NetworkInterface.getNetworkInterfaces());
+
+            // find vpn
+            for (final NetworkInterface i : interfaces) {
+                if (i.getName().equals("ppp0")) {
+                    for (final InetAddress a : Collections.list(i.getInetAddresses())) {
+                        if (!a.isLoopbackAddress()
+                                && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+                            return a.getHostAddress();
+                        }
+                    }
+                }
+            }
+            // find wifi
+            for (final NetworkInterface i : interfaces) {
+                if (i.getName().equals("wlan0")) {
+                    for (final InetAddress a : Collections.list(i.getInetAddresses())) {
+                        if (!a.isLoopbackAddress()
+                                && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+                            return a.getHostAddress();
+                        }
+                    }
+                }
+            }
+
+        } catch (final Exception ex) {
+            showError(ex);
+        }
+        throw new UnknownHostException();
+    }
+
 }

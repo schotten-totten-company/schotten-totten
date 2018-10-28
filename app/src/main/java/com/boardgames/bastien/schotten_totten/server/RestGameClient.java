@@ -41,8 +41,8 @@ public class RestGameClient {
                     restTemplateForPing.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                     final HttpComponentsClientHttpRequestFactory rf =
                             (HttpComponentsClientHttpRequestFactory) restTemplateForPing.getRequestFactory();
-                    rf.setReadTimeout(1 * 1000);
-                    rf.setConnectTimeout(1 * 1000);
+                    rf.setReadTimeout(2 * 1000);
+                    rf.setConnectTimeout(2 * 1000);
                     return restTemplateForPing.getForObject(url + "/ping", String.class);
                 }
             }).get();

@@ -29,11 +29,10 @@ public class ServerGameActivity extends GameActivity {
 
         this.type = getIntent().getStringExtra("type").equals(PlayingPlayerType.ONE.toString())
                 ? PlayingPlayerType.ONE : PlayingPlayerType.TWO;
-        this.gameName = getIntent().getStringExtra("gameName");
-        this.serverUrl = getIntent().getStringExtra("serverUrl");
+        this.gameName = getIntent().getStringExtra(getString(R.string.game_name_key));
+        this.serverUrl = getIntent().getStringExtra(getString(R.string.server_url_key));
 
         try {
-
             gameClient = new RestGameClient(this.serverUrl, this.gameName);
             if (this.serverUrl.contains("localhost")) {
                 if (!lanGameServer.isAlive()) {
