@@ -27,14 +27,10 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 
 public class LauncherActivity extends Activity {
 
-    private ProgressDialog waitingDialog;
-    private String onlineUrl;
+    protected String onlineUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +39,6 @@ public class LauncherActivity extends Activity {
         setContentView(R.layout.activity_launcher);
 
         onlineUrl = getString(R.string.online_url);
-
-        waitingDialog = new ProgressDialog(LauncherActivity.this);
-        waitingDialog.setTitle(getString(R.string.contacting_server));
-        waitingDialog.setMessage(getString(R.string.please_wait));
-        waitingDialog.setCanceledOnTouchOutside(false);
-        waitingDialog.setCancelable(false);
-        waitingDialog.dismiss();
-
 
         // hot seat
         final TextView hotSeatLauncherText = (TextView) findViewById(R.id.hotSeatLauncherText);
@@ -88,7 +76,9 @@ public class LauncherActivity extends Activity {
         joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scanForLanServer();
+                final ScanForLanServerBackgroundTask task =
+                        new ScanForLanServerBackgroundTask(LauncherActivity.this);
+                task.execute();
             }
         });
 
@@ -128,12 +118,6 @@ public class LauncherActivity extends Activity {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        waitingDialog.dismiss();
-    }
-
     private void enterDistantIp() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.enter_ip_message));
@@ -166,59 +150,7 @@ public class LauncherActivity extends Activity {
         builder.show();
     }
 
-    private void scanForLanServer() {
-        waitingDialog.show();
-        try {
-            // get ip
-            final String serverIp = Executors.newSingleThreadExecutor().submit(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    String serverIp = "";
-                    // get ip
-                    final String myIp = getIPAddress();
-                    final String mySubLan = myIp.substring(0, myIp.lastIndexOf('.') + 1);
-
-                    // scan
-                    for (int i = 1; i < 250; i++) {
-                        final String ipToScan = mySubLan + i;
-                        final RestGameClient restGameClient =
-                                new RestGameClient("http://" + ipToScan + ":8080", getString(R.string.lan_game));
-                        try {
-                            final String pingResult = restGameClient.ping();
-                            if (pingResult.contains("SCHOTTEN")) {
-                                serverIp = ipToScan;
-                                break;
-                            }
-                        } catch (ExecutionException | InterruptedException e) {
-                            // timeout, not the right host
-                        }
-                    }
-                    waitingDialog.dismiss();
-                    return serverIp;
-                }
-            }).get();
-            // start game
-            if (!serverIp.isEmpty()) {
-                final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                joinIntent.putExtra(getString(R.string.server_url_key), "http://" + serverIp + ":8080");
-                joinIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
-                joinIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.TWO.toString());
-                startActivity(joinIntent);
-            } else {
-                // no server found
-                showError(getString(R.string.no_local_server_title), getString(R.string.no_local_server_message));
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            showError(e);
-        } finally {
-            waitingDialog.dismiss();
-        }
-
-    }
-
     private void enterGameName() {
-
-        waitingDialog.show();
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.choose_game_name));
@@ -236,19 +168,9 @@ public class LauncherActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 final String gameName = input.getText().toString().trim();
-                try {
-                    final RestGameClient restGameClient = new RestGameClient(onlineUrl, gameName);
-                    restGameClient.createGame();
-                    waitingDialog.dismiss();
-                    // show waiting pop up
-                    final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                    joinIntent.putExtra(getString(R.string.game_name_key), gameName);
-                    joinIntent.putExtra(getString(R.string.server_url_key), onlineUrl);
-                    joinIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.ONE.toString());
-                    startActivity(joinIntent);
-                } catch (Exception e) {
-                    showError(e);
-                }
+                final CreateOnlineGameBackgroundTask task =
+                        new CreateOnlineGameBackgroundTask(LauncherActivity.this, gameName);
+                task.execute();
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -269,9 +191,9 @@ public class LauncherActivity extends Activity {
     private void joinGame() {
         try {
             // show waiting pop up
-            waitingDialog.show();
+            //waitingDialog.show();
             final List<String> list = new RestGameClient(onlineUrl, "").listGames();
-            waitingDialog.dismiss();
+            //waitingDialog.dismiss();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.choose_game_name));
 
@@ -318,7 +240,7 @@ public class LauncherActivity extends Activity {
                     joinIntent.putExtra(getString(R.string.server_url_key), onlineUrl);
                     startActivity(joinIntent);
                     // dismiss waiting pop up
-                    waitingDialog.dismiss();
+                    //waitingDialog.dismiss();
 
                 }
             });
@@ -327,7 +249,7 @@ public class LauncherActivity extends Activity {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                     // dismiss waiting pop up
-                    waitingDialog.dismiss();
+                    //waitingDialog.dismiss();
                 }
             });
 
@@ -379,13 +301,13 @@ public class LauncherActivity extends Activity {
         builder.show();
     }
 
-    private final void showError(final Exception e) {
+    public final void showError(final Exception e) {
         final StringWriter message = new StringWriter();
         e.printStackTrace(new PrintWriter(message));
         showError(getString(R.string.error_title) + e.getMessage(), message.toString());
     }
 
-    private final void showError(final String title, final String message) {
+    public final void showError(final String title, final String message) {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
