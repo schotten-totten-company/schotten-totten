@@ -6,6 +6,7 @@ import com.boradgames.bastien.schotten_totten.core.model.Player;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,10 +40,13 @@ public class RestGameClient {
                 public String call() throws Exception {
                     final RestTemplate restTemplateForPing = new RestTemplate();
                     restTemplateForPing.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    final HttpComponentsClientHttpRequestFactory rf =
-                            (HttpComponentsClientHttpRequestFactory) restTemplateForPing.getRequestFactory();
-                    rf.setReadTimeout(2 * 1000);
-                    rf.setConnectTimeout(2 * 1000);
+                    if (restTemplateForPing.getRequestFactory() instanceof SimpleClientHttpRequestFactory) {
+                        ((SimpleClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setConnectTimeout(1000);
+                        ((SimpleClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setReadTimeout(5000);
+                    } else if (restTemplateForPing.getRequestFactory() instanceof HttpComponentsClientHttpRequestFactory) {
+                        ((HttpComponentsClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setReadTimeout(5000);
+                        ((HttpComponentsClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setConnectTimeout(1000);
+                    }
                     return restTemplateForPing.getForObject(url + "/ping", String.class);
                 }
             }).get();
