@@ -43,7 +43,8 @@ public class LanGameServer extends NanoHTTPD {
             case GET:
                 switch (session.getUri()) {
                     case "/ping":
-                        return NanoHTTPD.newFixedLengthResponse(Response.Status.OK, NanoHTTPD.MIME_PLAINTEXT, new Date().toString() + " - it is time to SCHOTTEN !!!!");
+                        final String message = new Date().toString() + " - it is time to SCHOTTEN !!!!";
+                        return serializeObjectToResponse(message);
                     case "/createGame":
                         final String gamename = session.getParameters().get("gamename").get(0);
                         if (gameMap.containsKey(gamename)) {
