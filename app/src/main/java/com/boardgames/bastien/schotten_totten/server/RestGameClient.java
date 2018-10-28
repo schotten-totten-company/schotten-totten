@@ -5,6 +5,7 @@ import com.boradgames.bastien.schotten_totten.core.model.Game;
 import com.boradgames.bastien.schotten_totten.core.model.Player;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,7 +37,13 @@ public class RestGameClient {
             return Executors.newSingleThreadExecutor().submit(new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                  return restTemplate.getForObject(url + "/ping", String.class);
+                    final RestTemplate restTemplateForPing = new RestTemplate();
+                    restTemplateForPing.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                    final HttpComponentsClientHttpRequestFactory rf =
+                            (HttpComponentsClientHttpRequestFactory) restTemplateForPing.getRequestFactory();
+                    rf.setReadTimeout(1 * 1000);
+                    rf.setConnectTimeout(1 * 1000);
+                    return restTemplateForPing.getForObject(url + "/ping", String.class);
                 }
             }).get();
         } catch (InterruptedException e) {
