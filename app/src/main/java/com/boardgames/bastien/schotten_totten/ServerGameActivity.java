@@ -5,12 +5,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.boardgames.bastien.schotten_totten.server.LanGameServer;
 import com.boardgames.bastien.schotten_totten.server.OnlineGameManager;
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.exceptions.NoPlayerException;
 import com.boradgames.bastien.schotten_totten.core.model.Player;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
+import java.net.ConnectException;
 import java.util.concurrent.Executors;
 
 public class ServerGameActivity extends GameActivity {
@@ -19,6 +21,7 @@ public class ServerGameActivity extends GameActivity {
     protected String gameName;
     protected RestGameClient gameClient;
     protected String serverUrl;
+    private final LanGameServer lanGameServer = new LanGameServer(8080);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,25 @@ public class ServerGameActivity extends GameActivity {
         this.serverUrl = getIntent().getStringExtra("serverUrl");
 
         try {
+
             gameClient = new RestGameClient(this.serverUrl, this.gameName);
+            if (this.serverUrl.contains("localhost")) {
+                if (!lanGameServer.isAlive()) {
+                    lanGameServer.start();
+                }
+                while (!lanGameServer.isAlive()) {
+                    try {
+                        Thread.sleep(10);
+                    } catch (final InterruptedException e) {
+                        showErrorMessage(e);
+                    }
+                }
+                if (!lanGameServer.isAlive()) {
+                    throw new ConnectException(this.serverUrl + " cannot start.");
+                }
+                gameClient.createGame();
+            }
+
             this.gameManager =
                     new OnlineGameManager(gameClient.getGame(), this.gameName);
             initUI(type);
@@ -105,5 +126,11 @@ public class ServerGameActivity extends GameActivity {
                 playingPlayer.getName() + getString(R.string.it_is_your_turn_message) :
                 getString(R.string.not_your_turn_message) ;
         ((TextView) findViewById(R.id.textView)).setText(message);
+    }
+
+    @Override
+    public void finish() {
+        this.lanGameServer.stop();
+        super.finish();
     }
 }

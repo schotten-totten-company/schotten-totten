@@ -67,7 +67,7 @@ public class LauncherActivity extends Activity {
         createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent createIntent = new Intent(LauncherActivity.this, CreateLanGameActivity.class);
+                final Intent createIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                 createIntent.putExtra("serverUrl", "http://localhost:8080");
                 createIntent.putExtra("gameName", "lanGame");
                 createIntent.putExtra("type", PlayingPlayerType.ONE.toString());
