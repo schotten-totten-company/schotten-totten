@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -128,10 +129,21 @@ public class ServerGameActivity extends GameActivity {
     @Override
     public void finish() {
         // wait 4 seconds, thus the other player is notified
-        //Thread.sleep(4000);
-        // play 1 delete the game
+        //final WaitingBackgroundTask task = new WaitingBackgroundTask(ServerGameActivity.this, 4000);
+        //task.execute();
+        //final ProgressDialog waitingDialog; waitingDialog = new ProgressDialog(ServerGameActivity.this);
+        //waitingDialog.setTitle(getString(R.string.contacting_server));
+        //waitingDialog.setMessage(getString(R.string.please_wait));
+        //waitingDialog.show();
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            showErrorMessage(e);
+        }
+
+        // player 1 delete the game
         if (type.equals(PlayingPlayerType.ONE)) {
-            ((RestGameClient)gameManager).deleteGame();
+            gameClient.deleteGame();
         }
         this.lanGameServer.stop();
         super.finish();

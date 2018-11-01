@@ -1,8 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
@@ -14,23 +12,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class ScanForLanServerBackgroundTask extends AsyncTask<Void, Void, String> {
+public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
 
-    private ProgressDialog waitingDialog;
-    private LauncherActivity activity;
-
-    public ScanForLanServerBackgroundTask(final LauncherActivity activity) {
-        waitingDialog = new ProgressDialog(activity);
-        waitingDialog.setTitle(activity.getString(R.string.contacting_server));
-        waitingDialog.setMessage(activity.getString(R.string.please_wait));
-        this.activity = activity;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        waitingDialog.setCanceledOnTouchOutside(false);
-        waitingDialog.setCancelable(false);
-        waitingDialog.show();
+    public ScanForLanServerBackgroundTask(LauncherActivity activity) {
+        super(activity);
     }
 
     @Override
