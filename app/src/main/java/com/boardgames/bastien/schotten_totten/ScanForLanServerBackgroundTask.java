@@ -39,7 +39,7 @@ public class ScanForLanServerBackgroundTask extends AsyncTask<Void, Void, String
         // start game
         if (!serverIp.isEmpty()) {
             final Intent joinIntent = new Intent(activity, ServerGameActivity.class);
-            joinIntent.putExtra(activity.getString(R.string.server_url_key), "http://" + serverIp + ":8080");
+            joinIntent.putExtra(activity.getString(R.string.server_url_key), activity.getString(R.string.http_prefix) + serverIp + activity.getString(R.string.localhost_port));
             joinIntent.putExtra(activity.getString(R.string.game_name_key), activity.getString(R.string.lan_game));
             joinIntent.putExtra(activity.getString(R.string.type_key), PlayingPlayerType.TWO.toString());
             activity.startActivity(joinIntent);
@@ -63,10 +63,10 @@ public class ScanForLanServerBackgroundTask extends AsyncTask<Void, Void, String
             for (int i = 1; i < 250; i++) {
                 final String ipToScan = mySubLan + i;
                 final RestGameClient restGameClient =
-                        new RestGameClient("http://" + ipToScan + ":8080", "lanGame");
+                        new RestGameClient(activity.getString(R.string.http_prefix) + ipToScan + activity.getString(R.string.localhost_port), activity.getString(R.string.lan_game));
                 try {
                     final String pingResult = restGameClient.ping();
-                    if (pingResult.contains("SCHOTTEN")) {
+                    if (pingResult.contains(activity.getString(R.string.SCHOTTEN))) {
                         serverIp = ipToScan;
                         break;
                     }
@@ -88,7 +88,7 @@ public class ScanForLanServerBackgroundTask extends AsyncTask<Void, Void, String
 
             // find vpn
             for (final NetworkInterface i : interfaces) {
-                if (i.getName().equals("ppp0")) {
+                if (i.getName().equals(activity.getString(R.string.vpn_interface_name))) {
                     for (final InetAddress a : Collections.list(i.getInetAddresses())) {
                         if (!a.isLoopbackAddress()
                                 && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
@@ -99,7 +99,7 @@ public class ScanForLanServerBackgroundTask extends AsyncTask<Void, Void, String
             }
             // find wifi
             for (final NetworkInterface i : interfaces) {
-                if (i.getName().equals("wlan0")) {
+                if (i.getName().equals(activity.getString(R.string.wlan_interface_name))) {
                     for (final InetAddress a : Collections.list(i.getInetAddresses())) {
                         if (!a.isLoopbackAddress()
                                 && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {

@@ -2,7 +2,6 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,10 +21,6 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.UnknownHostException;
-import java.util.Collections;
 import java.util.List;
 
 public class LauncherActivity extends Activity {
@@ -134,7 +129,7 @@ public class LauncherActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 final String distantIp = input.getText().toString();
                 final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                joinIntent.putExtra(getString(R.string.server_url_key), "http://" + distantIp + ":8080");
+                joinIntent.putExtra(getString(R.string.server_url_key), getString(R.string.http_prefix) + distantIp + getString(R.string.localhost_port));
                 joinIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
                 joinIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.TWO.toString());
                 startActivity(joinIntent);
@@ -286,8 +281,8 @@ public class LauncherActivity extends Activity {
                 final String player1Name = player1NameInput.getText().toString().trim();
                 final String player2Name = player2NameInput.getText().toString().trim();
                 final Intent hotSeatIntent = new Intent(LauncherActivity.this, HotSeatGameActivity.class);
-                hotSeatIntent.putExtra("player1Name", player1Name);
-                hotSeatIntent.putExtra("player2Name", player2Name);
+                hotSeatIntent.putExtra(getString(R.string.player1_name_key), player1Name);
+                hotSeatIntent.putExtra(getString(R.string.player2_name_key), player2Name);
                 startActivity(hotSeatIntent);
             }
         });
@@ -333,40 +328,6 @@ public class LauncherActivity extends Activity {
                 });
         alertDialog.setCancelable(true);
         alertDialog.show();
-    }
-
-    protected String getIPAddress() throws UnknownHostException {
-        try {
-            final List<NetworkInterface> interfaces =
-                    Collections.list(NetworkInterface.getNetworkInterfaces());
-
-            // find vpn
-            for (final NetworkInterface i : interfaces) {
-                if (i.getName().equals("ppp0")) {
-                    for (final InetAddress a : Collections.list(i.getInetAddresses())) {
-                        if (!a.isLoopbackAddress()
-                                && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
-                            return a.getHostAddress();
-                        }
-                    }
-                }
-            }
-            // find wifi
-            for (final NetworkInterface i : interfaces) {
-                if (i.getName().equals("wlan0")) {
-                    for (final InetAddress a : Collections.list(i.getInetAddresses())) {
-                        if (!a.isLoopbackAddress()
-                                && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
-                            return a.getHostAddress();
-                        }
-                    }
-                }
-            }
-
-        } catch (final Exception ex) {
-            showError(ex);
-        }
-        throw new UnknownHostException();
     }
 
 }

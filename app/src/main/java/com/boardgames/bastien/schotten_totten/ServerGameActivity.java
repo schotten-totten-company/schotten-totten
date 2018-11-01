@@ -27,14 +27,14 @@ public class ServerGameActivity extends GameActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.type = getIntent().getStringExtra("type").equals(PlayingPlayerType.ONE.toString())
+        this.type = getIntent().getStringExtra(getString(R.string.type_key)).equals(PlayingPlayerType.ONE.toString())
                 ? PlayingPlayerType.ONE : PlayingPlayerType.TWO;
         this.gameName = getIntent().getStringExtra(getString(R.string.game_name_key));
         this.serverUrl = getIntent().getStringExtra(getString(R.string.server_url_key));
 
         try {
             gameClient = new RestGameClient(this.serverUrl, this.gameName);
-            if (this.serverUrl.contains("localhost")) {
+            if (this.serverUrl.contains(getString(R.string.localhost))) {
                 if (!lanGameServer.isAlive()) {
                     lanGameServer.start();
                 }
@@ -46,7 +46,7 @@ public class ServerGameActivity extends GameActivity {
                     }
                 }
                 if (!lanGameServer.isAlive()) {
-                    throw new ConnectException(this.serverUrl + " cannot start.");
+                    throw new ConnectException(this.serverUrl + getString(R.string.server_cannot_start_message));
                 }
                 gameClient.createGame();
             }

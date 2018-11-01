@@ -16,8 +16,8 @@ public class HotSeatGameActivity extends GameActivity {
         super.onCreate(savedInstanceState);
 
         try {
-            this.gameManager = new SimpleGameManager(getIntent().getStringExtra("player1Name"),
-                    getIntent().getStringExtra("player2Name"));
+            this.gameManager = new SimpleGameManager(getIntent().getStringExtra(getString(R.string.player1_name_key)),
+                    getIntent().getStringExtra(getString(R.string.player2_name_key)));
             initUI(this.gameManager.getPlayingPlayer().getPlayerType());
 
         } catch (final GameCreationException e) {

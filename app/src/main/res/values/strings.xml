@@ -47,6 +47,9 @@
     <string name="enter_game_name">Enter Game name:</string>
     <string name="contacting_server">Contacting Server</string>
     <string name="please_wait">Please Wait ...</string>
+    <string name="server_cannot_start_message">" cannot start."</string>
+    <string name="player1_name_key">player1Name</string>
+    <string name="player2_name_key">player2Name</string>
 
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
@@ -64,6 +67,13 @@
     <string name="game_name_key">gameName</string>
     <string name="type_key">type</string>
     <string name="lan_game">lanGame</string>
+    <string name="http_prefix">http://</string>
+    <string name="localhost_port">:8080</string>
+    <string name="localhost">localhost</string>
+    <string name="SCHOTTEN">SCHOTTEN</string>
+
+    <string name="vpn_interface_name">ppp0</string>
+    <string name="wlan_interface_name">wlan0</string>
 
     <string name="about_title">About</string>
     <string name="about_content">
