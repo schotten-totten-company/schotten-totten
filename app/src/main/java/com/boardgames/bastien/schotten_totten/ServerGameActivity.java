@@ -131,10 +131,10 @@ public class ServerGameActivity extends GameActivity {
         // wait 4 seconds, thus the other player is notified
         //final WaitingBackgroundTask task = new WaitingBackgroundTask(ServerGameActivity.this, 4000);
         //task.execute();
-        //final ProgressDialog waitingDialog; waitingDialog = new ProgressDialog(ServerGameActivity.this);
-        //waitingDialog.setTitle(getString(R.string.contacting_server));
-        //waitingDialog.setMessage(getString(R.string.please_wait));
-        //waitingDialog.show();
+        //final ProgressDialog w = new ProgressDialog(ServerGameActivity.this);
+        //w.setTitle(getString(R.string.contacting_server));
+        //w.setMessage(getString(R.string.please_wait));
+        //w.show();
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {

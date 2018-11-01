@@ -10,39 +10,39 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 public class WaitingBackgroundTask extends AsyncTask<Void, Void, String> {
 
     protected final int delay;
-    protected final ProgressDialog waitingDialog;
+    protected final ProgressDialog w;
     protected final ServerGameActivity activity;
 
 
     public WaitingBackgroundTask(final ServerGameActivity activity, final int delay) {
-        waitingDialog = new ProgressDialog(activity);
-        waitingDialog.setTitle(activity.getString(R.string.contacting_server));
-        waitingDialog.setMessage(activity.getString(R.string.please_wait));
+        w = new ProgressDialog(activity);
+        w.setTitle(activity.getString(R.string.contacting_server));
+        w.setMessage(activity.getString(R.string.please_wait));
         this.activity = activity;
         this.delay = delay;
     }
 
     @Override
     protected void onPreExecute() {
-        waitingDialog.setCanceledOnTouchOutside(false);
-        waitingDialog.setCancelable(false);
-        waitingDialog.show();
+        w.setCanceledOnTouchOutside(false);
+        w.setCancelable(false);
+        w.show();
     }
 
     @Override
     protected void onPostExecute(String result) {
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (waitingDialog.isShowing()) {
-            waitingDialog.dismiss();
+        if (w.isShowing()) {
+            w.dismiss();
         }
     }
 
     @Override
     protected String doInBackground(Void... params) {
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return "";
     }
 
