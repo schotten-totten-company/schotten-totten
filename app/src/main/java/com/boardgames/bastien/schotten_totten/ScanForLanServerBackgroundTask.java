@@ -34,8 +34,7 @@ public class ScanForLanServerBackgroundTask extends AsyncTask<Void, Void, String
     }
 
     @Override
-    protected void onPostExecute(String result) {
-        final String serverIp = result;
+    protected void onPostExecute(String serverIp) {
         // start game
         if (!serverIp.isEmpty()) {
             final Intent joinIntent = new Intent(activity, ServerGameActivity.class);
@@ -81,7 +80,7 @@ public class ScanForLanServerBackgroundTask extends AsyncTask<Void, Void, String
         return serverIp;
     }
 
-    protected String getIPAddress() throws UnknownHostException {
+    private String getIPAddress() throws UnknownHostException {
         try {
             final List<NetworkInterface> interfaces =
                     Collections.list(NetworkInterface.getNetworkInterfaces());

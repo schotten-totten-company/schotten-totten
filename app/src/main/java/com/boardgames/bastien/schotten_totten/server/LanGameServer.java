@@ -61,7 +61,7 @@ public class LanGameServer extends NanoHTTPD {
                     case "/getGame":
                         return serializeObjectToResponse(gameMap.get(session.getParameters().get("gamename").get(0)));
                     case "/listGames":
-                        return serializeObjectToResponse(new ArrayList<String>(gameMap.keySet()));
+                        return serializeObjectToResponse(new ArrayList<>(gameMap.keySet()));
                     case "/deleteGame":
                         return serializeObjectToResponse(gameMap.remove(session.getParameters().get("gamename").get(0)) != null);
                     case "/getPlayingPlayer":
@@ -74,7 +74,7 @@ public class LanGameServer extends NanoHTTPD {
                     case "/updateGame":
                         try {
                             final String gamename = session.getParameters().get("gamename").get(0);
-                            final HashMap<String, String> map = new HashMap<String, String>();
+                            final HashMap<String, String> map = new HashMap<>();
                             session.parseBody(map);
                             final String jsonGame = map.get("postData");
                             final Game game = objectMapper.readValue(jsonGame, Game.class);

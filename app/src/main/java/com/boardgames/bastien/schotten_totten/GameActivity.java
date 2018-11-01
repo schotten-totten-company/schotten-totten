@@ -63,9 +63,9 @@ public abstract class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hot_seat_game);
-        passButton = (ImageButton) findViewById(R.id.passButton);
+        passButton = findViewById(R.id.passButton);
         handLayout = findViewById(R.id.handLayout);
-        textView = ((TextView) findViewById(R.id.textView));
+        textView = findViewById(R.id.textView);
         gameLayout = findViewById(R.id.gameLayout);
 
         waitingDialog = new ProgressDialog(GameActivity.this);
@@ -129,11 +129,11 @@ public abstract class GameActivity extends AppCompatActivity {
         final List<Milestone> milestones = gameManager.getMilestones();
         for (int i = 0; i < milestones.size(); i++) {
             final int id = getResources().getIdentifier("m" + i + "Milestone", "id", getPackageName());
-            final ImageButton m = (ImageButton)findViewById(id);
+            final ImageButton m = findViewById(id);
             final int milestonePlayerSideId = getResources().getIdentifier("m" + i + "CapturedMilestonePlayerSide", "id", getPackageName());
             final int milestoneOpponentId = getResources().getIdentifier("m" + i + "CapturedMilestoneOpponentSide", "id", getPackageName());
-            final ImageView mPlayer = (ImageView) findViewById(milestonePlayerSideId);
-            final ImageView mOpponent = (ImageView) findViewById(milestoneOpponentId);
+            final ImageView mPlayer = findViewById(milestonePlayerSideId);
+            final ImageView mOpponent = findViewById(milestoneOpponentId);
             final List<ImageView> pSide = new ArrayList<>();
             for (int j = 0; j < milestones.get(i).MAX_CARDS_PER_SIDE; j++) {
                 final int pSideId = getResources().getIdentifier("m" + i + "Card" + j + "PlayerSide", "id", getPackageName());
@@ -255,9 +255,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                         waitingDialog.dismiss();
                                     }
 
-                                } catch (final NotYourTurnException e) {
-                                    showErrorMessage(e);
-                                } catch (final HandFullException e) {
+                                } catch (final NotYourTurnException | HandFullException e) {
                                     showErrorMessage(e);
                                 }
 
@@ -345,7 +343,7 @@ public abstract class GameActivity extends AppCompatActivity {
         final ImageView milestonePlayerSide = milestoneView.get(i).getMilestonePlayer();
         final ImageView milestoneOpponentSide = milestoneView.get(i).getMilestoneOpponent();
         // update milestones views
-        if (milestone.getCaptured().toString() == updatePointOfView.toString()) {
+        if (milestone.getCaptured().toString().equals(updatePointOfView.toString())) {
             milestoneImageButton.setVisibility(View.INVISIBLE);
             milestonePlayerSide.setVisibility(View.VISIBLE);
             milestoneOpponentSide.setVisibility(View.INVISIBLE);
@@ -469,7 +467,8 @@ public abstract class GameActivity extends AppCompatActivity {
     protected abstract void endOfTurn();
 
     protected void updateTextField(final String updatePointOfViewPlayerName) {
-        textView.setText(updatePointOfViewPlayerName + getString(R.string.it_is_your_turn_message));
+        final String message = updatePointOfViewPlayerName + getString(R.string.it_is_your_turn_message);
+        textView.setText(message);
     }
 
     private void updateHand(final Hand hand) {

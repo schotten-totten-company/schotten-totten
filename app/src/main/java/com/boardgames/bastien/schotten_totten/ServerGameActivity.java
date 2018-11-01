@@ -69,7 +69,7 @@ public class ServerGameActivity extends GameActivity {
         public void run() {
             while(!gameClient.getPlayingPlayer().getPlayerType().equals(type)) {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(3000);
                 } catch (final InterruptedException e) {
                     showErrorMessage(e);
                 }
@@ -110,11 +110,9 @@ public class ServerGameActivity extends GameActivity {
     @Override
     protected void endOfTheGame(final Player winner) {
         super.endOfTheGame(winner);
-        if (winner.getPlayerType().equals(type)) {
-            gameManager.swapPlayers();
-        } else {
-            ((RestGameClient)gameManager).deleteGame();
-        }
+        gameManager.swapPlayers();
+        // update game on server
+        gameClient.updateGame(((OnlineGameManager)this.gameManager).getGame());
     }
 
     @Override
@@ -129,6 +127,12 @@ public class ServerGameActivity extends GameActivity {
 
     @Override
     public void finish() {
+        // wait 4 seconds, thus the other player is notified
+        //Thread.sleep(4000);
+        // play 1 delete the game
+        if (type.equals(PlayingPlayerType.ONE)) {
+            ((RestGameClient)gameManager).deleteGame();
+        }
         this.lanGameServer.stop();
         super.finish();
     }

@@ -36,7 +36,7 @@ public class LauncherActivity extends Activity {
         onlineUrl = getString(R.string.online_url);
 
         // hot seat
-        final TextView hotSeatLauncherText = (TextView) findViewById(R.id.hotSeatLauncherText);
+        final TextView hotSeatLauncherText = findViewById(R.id.hotSeatLauncherText);
         hotSeatLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +45,7 @@ public class LauncherActivity extends Activity {
         });
 
         // solo vs IA
-        final TextView soloLauncherText = (TextView) findViewById(R.id.soloLauncherText);
+        final TextView soloLauncherText = findViewById(R.id.soloLauncherText);
         soloLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,7 @@ public class LauncherActivity extends Activity {
         });
 
         // create lan game
-        final TextView createOnLineLauncherText = (TextView) findViewById(R.id.createOnLineLauncherText);
+        final TextView createOnLineLauncherText = findViewById(R.id.createOnLineLauncherText);
         createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +66,7 @@ public class LauncherActivity extends Activity {
             }
         });
         // join lan game
-        final TextView joinOnlineLauncherText = (TextView) findViewById(R.id.joinOnlineLauncherText);
+        final TextView joinOnlineLauncherText = findViewById(R.id.joinOnlineLauncherText);
 
         joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +78,7 @@ public class LauncherActivity extends Activity {
         });
 
         // create online game
-        final TextView createServerLauncherText = (TextView) findViewById(R.id.createServerLauncherTest);
+        final TextView createServerLauncherText = findViewById(R.id.createServerLauncherTest);
         createServerLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +86,7 @@ public class LauncherActivity extends Activity {
             }
         });
         // join online game
-        final TextView joinServerLauncherText = (TextView) findViewById(R.id.joinServerLauncherText);
+        final TextView joinServerLauncherText = findViewById(R.id.joinServerLauncherText);
         joinServerLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,37 +113,37 @@ public class LauncherActivity extends Activity {
 
     }
 
-    private void enterDistantIp() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.enter_ip_message));
-
-        // Set up the input
-        final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String distantIp = input.getText().toString();
-                final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                joinIntent.putExtra(getString(R.string.server_url_key), getString(R.string.http_prefix) + distantIp + getString(R.string.localhost_port));
-                joinIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
-                joinIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.TWO.toString());
-                startActivity(joinIntent);
-            }
-        });
-        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-    }
+//    private void enterDistantIp() {
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(getString(R.string.enter_ip_message));
+//
+//        // Set up the input
+//        final EditText input = new EditText(this);
+//        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+//        input.setInputType(InputType.TYPE_CLASS_TEXT);
+//        builder.setView(input);
+//
+//        // Set up the buttons
+//        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                final String distantIp = input.getText().toString();
+//                final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+//                joinIntent.putExtra(getString(R.string.server_url_key), getString(R.string.http_prefix) + distantIp + getString(R.string.localhost_port));
+//                joinIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
+//                joinIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.TWO.toString());
+//                startActivity(joinIntent);
+//            }
+//        });
+//        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//            }
+//        });
+//
+//        builder.show();
+//    }
 
     private void enterGameName() {
 
@@ -154,7 +154,8 @@ public class LauncherActivity extends Activity {
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setText(getString(R.string.game_name) + System.currentTimeMillis());
+        final String message = getString(R.string.game_name) + System.currentTimeMillis();
+        input.setText(message);
         builder.setView(input);
 
         // Set up the buttons
@@ -230,7 +231,7 @@ public class LauncherActivity extends Activity {
                     final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     joinIntent.putExtra(getString(R.string.game_name_key), gameName);
                     final RadioButton selectedButton =
-                            (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+                            radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
                     joinIntent.putExtra(getString(R.string.type_key), selectedButton.getText().toString());
                     joinIntent.putExtra(getString(R.string.server_url_key), onlineUrl);
                     startActivity(joinIntent);
@@ -316,7 +317,7 @@ public class LauncherActivity extends Activity {
         alertDialog.show();
     }
 
-    private final void showAboutDialog() {
+    private void showAboutDialog() {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.about_title));
         alertDialog.setMessage(getString(R.string.about_content));
