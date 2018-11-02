@@ -2,8 +2,10 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -21,6 +23,8 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class LauncherActivity extends Activity {
@@ -154,7 +158,8 @@ public class LauncherActivity extends Activity {
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        final String message = getString(R.string.game_name) + System.currentTimeMillis();
+        final String currentDate = new SimpleDateFormat(" (dd-MM-yyyy, HH:mm:ss)").format(new Date());
+        final String message = getString(R.string.game_name) + currentDate;
         input.setText(message);
         builder.setView(input);
 

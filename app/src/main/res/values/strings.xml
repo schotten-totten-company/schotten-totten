@@ -33,7 +33,7 @@
 
     <string name="it_is_your_turn">It is your turn</string>
 
-    <string name="game_name">Game_</string>
+    <string name="game_name">Game</string>
 
     <string name="cannot_capture_milestone_message">This Milestone cannot yet be captured.</string>
 
