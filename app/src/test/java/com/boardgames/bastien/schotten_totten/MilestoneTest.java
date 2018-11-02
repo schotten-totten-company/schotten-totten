@@ -41,6 +41,22 @@ public class MilestoneTest {
     }
 
     @Test
+    public void SameThreeOfAKindTest() throws MilestoneSideMaxReachedException {
+        // play one
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.GREY), PlayingPlayerType.ONE);
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.RED), PlayingPlayerType.ONE);
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.YELLOW), PlayingPlayerType.ONE);
+
+        // player two
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.BLUE), PlayingPlayerType.TWO);
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.CYAN), PlayingPlayerType.TWO);
+        testMilestone.addCard(new Card(Card.NUMBER.EIGHT, Card.COLOR.GREEN), PlayingPlayerType.TWO);
+
+        Assert.assertFalse(testMilestone.reclaim(PlayingPlayerType.TWO, new ArrayList<Card>()));
+        Assert.assertTrue(testMilestone.reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
+    }
+
+    @Test
     public void ThreeOfAKindVsFlushTest() throws MilestoneSideMaxReachedException {
         // play one
         testMilestone.addCard(new Card(Card.NUMBER.ONE, Card.COLOR.BLUE), PlayingPlayerType.ONE);
