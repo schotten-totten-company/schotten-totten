@@ -224,19 +224,16 @@ public abstract class GameActivity extends AppCompatActivity {
                                     try {
                                         // play
                                         gameManager.playerPlays(playingPlayerType, selectedCard, index);
-
                                         // update hand card;
                                         handView.get(selectedCard).startAnimation(
-                                            AnimationUtils.loadAnimation(
-                                                    getApplicationContext(), R.anim.zoomout));
-                                        selectCard(handView.get(selectedCard));
-                                        updateHand(gameManager.getPlayingPlayer().getHand());
-                                        selectedCard = -1;
-
+                                                AnimationUtils.loadAnimation(
+                                                        getApplicationContext(), R.anim.zoomout));
                                     } catch (final EmptyDeckException e) {
                                         // nothing special to do
-                                        selectedCard = -1;
+                                        // maybe add a popup ...
                                     } finally {
+                                        updateHand(gameManager.getPlayingPlayer().getHand());
+                                        selectedCard = -1;
                                         updateMilestoneView(index, playingPlayerType);
                                     }
 
