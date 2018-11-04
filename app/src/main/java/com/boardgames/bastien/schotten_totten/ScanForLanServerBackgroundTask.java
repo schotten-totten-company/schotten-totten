@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
@@ -7,6 +8,7 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +18,19 @@ public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
 
     public ScanForLanServerBackgroundTask(LauncherActivity activity) {
         super(activity);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        waitingDialog.setCanceledOnTouchOutside(false);
+        waitingDialog.setCancelable(true);
+        waitingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                ScanForLanServerBackgroundTask.this.cancel(true);
+            }
+        });
+        waitingDialog.show();
     }
 
     @Override
@@ -29,7 +44,7 @@ public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
             activity.startActivity(joinIntent);
         } else {
             // no server found
-           activity.showError(activity.getString(R.string.no_local_server_title), activity.getString(R.string.no_local_server_message));
+            ((LauncherActivity)activity).showError(activity.getString(R.string.no_local_server_title), activity.getString(R.string.no_local_server_message));
         }
         if (waitingDialog.isShowing()) {
             waitingDialog.dismiss();
@@ -58,43 +73,43 @@ public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
                     // timeout, not the right host
                 }
             }
-        } catch (final UnknownHostException e) {
-           activity.showError(e);
+        } catch (final UnknownHostException | SocketException e) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((LauncherActivity)activity).showError(e);
+                }
+            });
         }
 
         return serverIp;
     }
 
-    private String getIPAddress() throws UnknownHostException {
-        try {
-            final List<NetworkInterface> interfaces =
-                    Collections.list(NetworkInterface.getNetworkInterfaces());
+    private String getIPAddress() throws UnknownHostException, SocketException {
+        final List<NetworkInterface> interfaces =
+                Collections.list(NetworkInterface.getNetworkInterfaces());
 
-            // find vpn
-            for (final NetworkInterface i : interfaces) {
-                if (i.getName().equals(activity.getString(R.string.vpn_interface_name))) {
-                    for (final InetAddress a : Collections.list(i.getInetAddresses())) {
-                        if (!a.isLoopbackAddress()
-                                && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
-                            return a.getHostAddress();
-                        }
+        // find vpn
+        for (final NetworkInterface i : interfaces) {
+            if (i.getName().equals(activity.getString(R.string.vpn_interface_name))) {
+                for (final InetAddress a : Collections.list(i.getInetAddresses())) {
+                    if (!a.isLoopbackAddress()
+                            && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+                        return a.getHostAddress();
                     }
                 }
             }
-            // find wifi
-            for (final NetworkInterface i : interfaces) {
-                if (i.getName().equals(activity.getString(R.string.wlan_interface_name))) {
-                    for (final InetAddress a : Collections.list(i.getInetAddresses())) {
-                        if (!a.isLoopbackAddress()
-                                && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
-                            return a.getHostAddress();
-                        }
+        }
+        // find wifi
+        for (final NetworkInterface i : interfaces) {
+            if (i.getName().equals(activity.getString(R.string.wlan_interface_name))) {
+                for (final InetAddress a : Collections.list(i.getInetAddresses())) {
+                    if (!a.isLoopbackAddress()
+                            && a.getHostAddress().matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+                        return a.getHostAddress();
                     }
                 }
             }
-
-        } catch (final Exception ex) {
-            activity.showError(ex);
         }
         throw new UnknownHostException();
     }

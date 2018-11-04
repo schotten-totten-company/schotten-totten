@@ -3,6 +3,7 @@ package com.boardgames.bastien.schotten_totten;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -129,20 +130,33 @@ public class ServerGameActivity extends GameActivity {
     }
 
     @Override
-    public void finish() {
-        // wait 4 seconds, thus the other player is notified
-//        final WaitingBackgroundTask task = new WaitingBackgroundTask(ServerGameActivity.this, 4000);
-//        task.execute();
-//        final ProgressDialog w = new ProgressDialog(ServerGameActivity.this);
-//        w.setTitle(getString(R.string.contacting_server));
-//        w.setMessage(getString(R.string.please_wait));
-//        w.show();
-        try {
-            Thread.sleep(3333);
-        } catch (InterruptedException e) {
-            showErrorMessage(e);
-        }
+    public void onBackPressed() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.quit_title));
 
+        // Set up the buttons
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                // wait 4 seconds, thus the other player is notified
+                final WaitingBackgroundTask task =
+                        new WaitingBackgroundTask(ServerGameActivity.this, 3333);
+                task.execute();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    @Override
+    public void finish() {
         // player 1 delete the game
         try {
             gameManager.getWinner();

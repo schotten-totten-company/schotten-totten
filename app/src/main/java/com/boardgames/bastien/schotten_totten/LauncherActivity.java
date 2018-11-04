@@ -309,7 +309,7 @@ public class LauncherActivity extends Activity {
     }
 
     public final void showError(final String title, final String message) {
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(LauncherActivity.this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),

@@ -7,9 +7,9 @@ import android.os.AsyncTask;
 public abstract class AbstractBackgroundTask extends AsyncTask<Void, Void, String> {
 
     protected final ProgressDialog waitingDialog;
-    protected final LauncherActivity activity;
+    protected final Activity activity;
 
-    public AbstractBackgroundTask(final LauncherActivity activity) {
+    public AbstractBackgroundTask(final Activity activity) {
         waitingDialog = new ProgressDialog(activity);
         waitingDialog.setTitle(activity.getString(R.string.contacting_server));
         waitingDialog.setMessage(activity.getString(R.string.please_wait));
@@ -21,6 +21,14 @@ public abstract class AbstractBackgroundTask extends AsyncTask<Void, Void, Strin
         waitingDialog.setCanceledOnTouchOutside(false);
         waitingDialog.setCancelable(false);
         waitingDialog.show();
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        if (waitingDialog.isShowing()) {
+            waitingDialog.dismiss();
+        }
+        activity.finish();
     }
 
 }

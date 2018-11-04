@@ -20,7 +20,7 @@ public class CreateOnlineGameBackgroundTask extends AbstractBackgroundTask {
     protected void onPostExecute(String result) {
         final Intent joinIntent = new Intent(activity, ServerGameActivity.class);
         joinIntent.putExtra(activity.getString(R.string.game_name_key), gameName);
-        joinIntent.putExtra(activity.getString(R.string.server_url_key), activity.onlineUrl);
+        joinIntent.putExtra(activity.getString(R.string.server_url_key), ((LauncherActivity)activity).onlineUrl);
         joinIntent.putExtra(activity.getString(R.string.type_key), PlayingPlayerType.ONE.toString());
         activity.startActivity(joinIntent);
         if (waitingDialog.isShowing()) {
@@ -30,7 +30,7 @@ public class CreateOnlineGameBackgroundTask extends AbstractBackgroundTask {
 
     @Override
     protected String doInBackground(Void... params) {
-        final RestGameClient restGameClient = new RestGameClient(activity.onlineUrl, gameName);
+        final RestGameClient restGameClient = new RestGameClient(((LauncherActivity)activity).onlineUrl, gameName);
         restGameClient.createGame();
         return "";
     }
