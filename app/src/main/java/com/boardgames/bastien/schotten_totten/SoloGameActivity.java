@@ -31,13 +31,9 @@ public class SoloGameActivity extends GameActivity {
     protected void endOfTurn() {
         updateUI(this.gameManager.getPlayingPlayer().getPlayerType());
         disableClick();
-        //gameManager.swapPlayingPlayer();
-        try {
-            ai.reclaimAndPlay(gameManager);
-        } catch (final MilestoneSideMaxReachedException | NoPlayerException |
-                CardInitialisationException |HandFullException e) {
-            showErrorMessage(e);
-        }
+        gameManager.swapPlayers();
+        ai.reclaimAndPlay(gameManager);
+        gameManager.swapPlayers();
         enableClick();
         updateUI(this.gameManager.getPlayingPlayer().getPlayerType());
     }
