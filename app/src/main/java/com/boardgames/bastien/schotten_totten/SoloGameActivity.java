@@ -2,13 +2,13 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.os.Bundle;
 
+import com.boardgames.bastien.schotten_totten.ai.AiGameManager;
 import com.boardgames.bastien.schotten_totten.ai.GameAI;
 import com.boardgames.bastien.schotten_totten.ai.GameAiImpl;
-import com.boradgames.bastien.schotten_totten.core.controllers.SimpleGameManager;
-import com.boradgames.bastien.schotten_totten.core.exceptions.CardInitialisationException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.EmptyDeckException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.HandFullException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
-import com.boradgames.bastien.schotten_totten.core.exceptions.NoPlayerException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.NotYourTurnException;
 
 public class SoloGameActivity extends GameActivity {
 
@@ -19,7 +19,7 @@ public class SoloGameActivity extends GameActivity {
         super.onCreate(savedInstanceState);
 
         try {
-            this.gameManager = new SimpleGameManager(getString(R.string.player1name), getString(R.string.player2name));
+            this.gameManager = new AiGameManager(getString(R.string.player1name), getString(R.string.player2name));
             initUI(this.gameManager.getPlayingPlayer().getPlayerType());
 
         } catch (final Exception e) {
@@ -32,7 +32,11 @@ public class SoloGameActivity extends GameActivity {
         updateUI(this.gameManager.getPlayingPlayer().getPlayerType());
         disableClick();
         gameManager.swapPlayers();
-        ai.reclaimAndPlay(gameManager);
+        try {
+            ai.reclaimAndPlay((AiGameManager) gameManager);
+        } catch (MilestoneSideMaxReachedException | HandFullException | EmptyDeckException | NotYourTurnException e) {
+           showErrorMessage(e);
+        }
         gameManager.swapPlayers();
         enableClick();
         updateUI(this.gameManager.getPlayingPlayer().getPlayerType());
