@@ -43,7 +43,8 @@ public abstract class GameAI {
         // test if AI can play
         for (final Milestone m : gameManager.getMilestones()) {
             final List<Card> side = m.getPlayer2Side();
-            if (side.size() < Milestone.MAX_CARDS_PER_SIDE) {
+            final List<Card> hand = gameManager.getPlayingPlayer().getHand().getCards();
+            if (side.size() < Milestone.MAX_CARDS_PER_SIDE && !hand.isEmpty()) {
                 // play
                 play(gameManager);
                 break;

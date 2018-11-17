@@ -241,10 +241,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                     showErrorMessage(e);
                                 }
 
-                                // end of the turn
-                                disableClick();
-                                passButton.setVisibility(View.VISIBLE);
-                                passButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomin));
+                                cardPlayedLeadingToTheEndOfTheTurn();
 
                             } catch (final MilestoneSideMaxReachedException e) {
                                 // return, cannot play here
@@ -255,6 +252,13 @@ public abstract class GameActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    protected void cardPlayedLeadingToTheEndOfTheTurn() {
+        // end of the turn
+        disableClick();
+        passButton.setVisibility(View.VISIBLE);
+        passButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomin));
     }
 
     protected void endOfTheGame(final Player winner) {

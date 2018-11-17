@@ -1,10 +1,13 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.AnimationUtils;
 
 import com.boardgames.bastien.schotten_totten.ai.AiGameManager;
 import com.boardgames.bastien.schotten_totten.ai.GameAI;
 import com.boardgames.bastien.schotten_totten.ai.GameAiImpl;
+import com.boardgames.bastien.schotten_totten.ai.GameAiLucieImpl;
 import com.boradgames.bastien.schotten_totten.core.exceptions.EmptyDeckException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.HandFullException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
@@ -12,7 +15,7 @@ import com.boradgames.bastien.schotten_totten.core.exceptions.NotYourTurnExcepti
 
 public class SoloGameActivity extends GameActivity {
 
-    private final GameAI ai = new GameAiImpl();
+    private final GameAI ai = new GameAiLucieImpl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,12 @@ public class SoloGameActivity extends GameActivity {
         } catch (final Exception e) {
             showErrorMessage(e);
         }
+    }
+
+    @Override
+    protected void cardPlayedLeadingToTheEndOfTheTurn() {
+        // end of the turn
+        endOfTurn();
     }
 
     @Override

@@ -31,6 +31,34 @@ public class GameTest {
     }
 
     @Test
+    public void browseMilestonesListByTheMiddle() {
+        final int MAX = testGame.getGameBoard().getMilestones().size();
+        int index = MAX/2;
+        for (int i = 0; i < MAX; i++) {
+            if (i%2 == 0) {
+                index = index + i;
+            } else {
+                index = index - i;
+            }
+            System.out.println(index);
+        }
+    }
+
+    @Test
+    public void browseMilestonesListFromTheEdges() {
+        final int MAX = testGame.getGameBoard().getMilestones().size();
+        int index = 0;
+        for (int i = MAX-1; i > 0; i--) {
+            if (i%2 == 0) {
+                index = index + i;
+            } else {
+                index = index - i;
+            }
+            System.out.println(index);
+        }
+    }
+
+    @Test
     public void player1WinsWith3MilestonesInARow() throws MilestoneSideMaxReachedException, NoPlayerException {
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(0), Card.NUMBER.EIGHT, PlayingPlayerType.ONE);
