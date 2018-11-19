@@ -1,14 +1,23 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        SchottenTottenRelease {
-            keyAlias 'SchottenTottenKey'
-            keyPassword 'baba-keystore'
-            storeFile file('C:/Users/Bastien/CloudStation/AndroidStudio/baba-keystore.jks')
-            storePassword 'baba-keystore'
+
+    allprojects {
+        afterEvaluate { project ->
+            def propsFile = rootProject.file('keystore.properties')
+            def configName = 'release'
+
+            if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                android.signingConfigs[configName].storeFile = file(props['storeFile'])
+                android.signingConfigs[configName].storePassword = props['storePassword']
+                android.signingConfigs[configName].keyAlias = props['keyAlias']
+                android.signingConfigs[configName].keyPassword = props['keyPassword']
+            }
         }
     }
+
     compileSdkVersion 27
     buildToolsVersion '28.0.3'
     defaultConfig {
@@ -51,5 +60,5 @@ dependencies {
     implementation 'org.springframework.android:spring-android-core:1.0.1.RELEASE'
     implementation 'org.nanohttpd:nanohttpd-nanolets:2.3.1'
     //implementation 'org.springframework.android:spring-android:1.0.1.RELEASE'
-    implementation ('com.github.schotten-totten-company:schotten-totten-core:1.6'){changing=true}
+    implementation ('com.github.schotten-totten-company:schotten-totten-core:1.7'){changing=true}
 }
