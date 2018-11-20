@@ -4,6 +4,7 @@ package com.boardgames.bastien.schotten_totten.ai;
 import com.boradgames.bastien.schotten_totten.core.model.Card;
 import com.boradgames.bastien.schotten_totten.core.model.Milestone;
 import com.boradgames.bastien.schotten_totten.core.model.MilestonePlayerType;
+import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
@@ -17,7 +18,14 @@ import java.util.List;
 
 public class GameAiLucieImpl extends GameAI {
 
-    protected Indexes handCardIndexAndMilestoneIndex(final List<Card> hand, final List<Milestone> milestones, final List<Card> cardsNotYetPlayed, final List<Card> allTheCards) {
+    public GameAiLucieImpl(final PlayingPlayerType pType) {
+        this.name = "Lilouhbe 1";
+        this.playingPlayerType = pType;
+    }
+
+    protected Indexes handCardIndexAndMilestoneIndex(
+            final List<Card> hand, final List<Milestone> milestones,
+            final List<Card> cardsNotYetPlayed, final List<Card> allTheCards,  final PlayingPlayerType pType) {
 
 
         // if straight flush in hand

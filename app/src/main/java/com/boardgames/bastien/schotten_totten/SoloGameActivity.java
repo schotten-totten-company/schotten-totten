@@ -12,10 +12,11 @@ import com.boradgames.bastien.schotten_totten.core.exceptions.EmptyDeckException
 import com.boradgames.bastien.schotten_totten.core.exceptions.HandFullException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.NotYourTurnException;
+import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 public class SoloGameActivity extends GameActivity {
 
-    private final GameAI ai = new GameAiLucieImpl();
+    private final GameAI ai = new GameAiLucieImpl(PlayingPlayerType.TWO);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
