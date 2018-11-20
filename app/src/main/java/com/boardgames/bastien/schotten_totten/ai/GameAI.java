@@ -18,6 +18,14 @@ import java.util.List;
 
 public abstract class GameAI {
 
+    protected String name = this.getClass().getSimpleName();
+
+    protected PlayingPlayerType playingPlayerType = PlayingPlayerType.TWO;
+
+    public String getName() {
+        return this.name;
+    }
+
     protected class Indexes {
         private final int handIndex;
         private final int milestoneIndex;
@@ -35,7 +43,7 @@ public abstract class GameAI {
         }
     }
 
-    public void reclaimAndPlay(final AiGameManager gameManager) throws MilestoneSideMaxReachedException, EmptyDeckException, HandFullException, NotYourTurnException {
+    public void reclaimAndPlay(final AiGameManager gameManager) throws MilestoneSideMaxReachedException, HandFullException, NotYourTurnException {
 
         // reclaim
         reclaim(gameManager);
@@ -67,7 +75,7 @@ public abstract class GameAI {
 
         final List<Card> hand = new ArrayList<>(gameManager.getPlayingPlayer().getHand().getCards());
         final List<Milestone> milestones = new ArrayList<>( gameManager.getMilestones());
-        final Indexes indexes = handCardIndexAndMilestoneIndex(hand, milestones, gameManager.getCardsNotYetPlayed(), gameManager.getAllTheCards());
+        final Indexes indexes = handCardIndexAndMilestoneIndex(hand, milestones, gameManager.getCardsNotYetPlayed(), gameManager.getAllTheCards(), playingPlayerType);
         try {
             gameManager.playerPlays(PlayingPlayerType.TWO, indexes.getHandIndex(), indexes.getMilestoneIndex());
         } catch (EmptyDeckException e) {
@@ -95,6 +103,30 @@ public abstract class GameAI {
         return index;
     }
 
-    protected abstract Indexes handCardIndexAndMilestoneIndex(final List<Card> hand, final List<Milestone> milestones, final List<Card> cardsNotYetPlayed, final List<Card> allTheCards);
+    protected abstract Indexes handCardIndexAndMilestoneIndex(
+            final List<Card> hand, final List<Milestone> milestones,
+            final List<Card> cardsNotYetPlayed, final List<Card> allTheCards, final PlayingPlayerType pType);
 
+
+    // used to test if the card in parameter can be played on the milestone in parameter
+    protected boolean tryToPlay(final Milestone milestoneTest, final Card cardToTest) {
+
+        try {
+            final Milestone mCopy = new Milestone(milestoneTest.getId());
+            if (playingPlayerType == PlayingPlayerType.ONE) {
+                for (final Card c : milestoneTest.getPlayer1Side()) {
+                    mCopy.addCard(c, PlayingPlayerType.ONE);
+                }
+            } else {
+                for (final Card c : milestoneTest.getPlayer2Side()) {
+                    mCopy.addCard(c, PlayingPlayerType.TWO);
+                }
+            }
+            mCopy.addCard(cardToTest, playingPlayerType);
+        } catch (final MilestoneSideMaxReachedException e) {
+            return false;
+        }
+        return true;
+
+    }
 }
