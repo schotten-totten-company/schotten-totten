@@ -1,8 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
