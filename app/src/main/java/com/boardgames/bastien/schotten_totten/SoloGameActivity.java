@@ -5,9 +5,9 @@ import android.os.Bundle;
 import com.boardgames.bastien.schotten_totten.ai.AiGameManager;
 import com.boardgames.bastien.schotten_totten.ai.GameAI;
 import com.boardgames.bastien.schotten_totten.ai.GameAiLucieImpl;
-import com.boradgames.bastien.schotten_totten.core.exceptions.EmptyDeckException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.HandFullException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
+import com.boradgames.bastien.schotten_totten.core.exceptions.NoPlayerException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.NotYourTurnException;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
@@ -29,7 +29,7 @@ public class SoloGameActivity extends GameActivity {
     }
 
     @Override
-    protected void cardPlayedLeadingToTheEndOfTheTurn() {
+    protected void cardPlayedLeadingToTheEndOfTheTurn(final PlayingPlayerType updatePointOfView) {
         // end of the turn
         endOfTurn();
     }
@@ -44,6 +44,13 @@ public class SoloGameActivity extends GameActivity {
         } catch (MilestoneSideMaxReachedException | HandFullException | NotYourTurnException e) {
            showErrorMessage(e);
         }
+        // check victory
+        try {
+            endOfTheGame(gameManager.getWinner());
+        } catch (final NoPlayerException e) {
+            // nothing to do, just continue to play
+        }
+
         gameManager.swapPlayers();
         enableClick();
         updateUI(this.gameManager.getPlayingPlayer().getPlayerType());
