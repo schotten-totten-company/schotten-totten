@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,7 +40,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected GameManagerInterface gameManager;
     private boolean isClickEnabled = true;
 
-    protected ImageButton passButton;
+    protected ImageView passButton;
     protected View handLayout;
     protected TextView textView;
     protected View gameLayout;
@@ -122,7 +121,7 @@ public abstract class GameActivity extends AppCompatActivity {
         final List<Milestone> milestones = gameManager.getMilestones();
         for (int i = 0; i < milestones.size(); i++) {
             final int id = getResources().getIdentifier("m" + i + "Milestone", "id", getPackageName());
-            final ImageButton m = findViewById(id);
+            final ImageView m = findViewById(id);
             final int milestonePlayerSideId = getResources().getIdentifier("m" + i + "CapturedMilestonePlayerSide", "id", getPackageName());
             final int milestoneOpponentId = getResources().getIdentifier("m" + i + "CapturedMilestoneOpponentSide", "id", getPackageName());
             final ImageView mPlayer = findViewById(milestonePlayerSideId);
@@ -186,7 +185,7 @@ public abstract class GameActivity extends AppCompatActivity {
                         // animate
                         v.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomout));
 
-                        final ImageButton cardView = ((ImageButton) v);
+                        final ImageView cardView = ((ImageView) v);
                         final int index = Integer.valueOf(
                                 getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
                         final Milestone m = gameManager.getMilestones().get(index);
@@ -303,20 +302,20 @@ public abstract class GameActivity extends AppCompatActivity {
     protected void updateMilestoneView(final int i, final PlayingPlayerType updatePointOfView) {
 
         final Milestone milestone = gameManager.getMilestones().get(i);
-        final ImageButton milestoneImageButton = milestoneView.get(i).getMilestone();
+        final ImageView milestoneImageView = milestoneView.get(i).getMilestone();
         final ImageView milestonePlayerSide = milestoneView.get(i).getMilestonePlayer();
         final ImageView milestoneOpponentSide = milestoneView.get(i).getMilestoneOpponent();
         // update milestones views
         if (milestone.getCaptured().toString().equals(updatePointOfView.toString())) {
-            milestoneImageButton.setVisibility(View.INVISIBLE);
+            milestoneImageView.setVisibility(View.INVISIBLE);
             milestonePlayerSide.setVisibility(View.VISIBLE);
             milestoneOpponentSide.setVisibility(View.INVISIBLE);
         } else if (milestone.getCaptured().equals(MilestonePlayerType.NONE)) {
-            milestoneImageButton.setVisibility(View.VISIBLE);
+            milestoneImageView.setVisibility(View.VISIBLE);
             milestonePlayerSide.setVisibility(View.INVISIBLE);
             milestoneOpponentSide.setVisibility(View.INVISIBLE);
         } else {
-            milestoneImageButton.setVisibility(View.INVISIBLE);
+            milestoneImageView.setVisibility(View.INVISIBLE);
             milestonePlayerSide.setVisibility(View.INVISIBLE);
             milestoneOpponentSide.setVisibility(View.VISIBLE);
         }
