@@ -264,6 +264,39 @@ public abstract class GameActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            handCardView.setOnDragListener(new View.OnDragListener() {
+                @Override
+                public boolean onDrag(View v, DragEvent event) {
+                    switch (event.getAction()) {
+                        case DragEvent.ACTION_DRAG_STARTED:
+                            return true;
+                        case DragEvent.ACTION_DRAG_ENTERED:
+                            return true;
+                        case DragEvent.ACTION_DRAG_EXITED:
+                            return true;
+                        case DragEvent.ACTION_DROP:
+                            // Dropped
+                            try {
+                                final int selectedCardIndex = Integer.valueOf(event.getClipData().getItemAt(0).getText().toString());
+                                final Card cardToMove = handToUpdate.getCards().get(selectedCardIndex);
+                                final Card cardToReplace = handToUpdate.getCards().get(handIndex);
+                                handToUpdate.getCards().remove(selectedCardIndex);
+                                handToUpdate.addCard(cardToReplace, selectedCardIndex);
+                                handToUpdate.getCards().remove(handIndex);
+                                handToUpdate.addCard(cardToMove, handIndex);
+                            } catch (HandFullException e) {
+                                // should not occurs
+                                showErrorMessage(e);
+                            }
+                            return true;
+                        case DragEvent.ACTION_DRAG_ENDED:
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
         }
     }
 
@@ -343,13 +376,13 @@ public abstract class GameActivity extends AppCompatActivity {
                     switch (event.getAction()) {
                         case DragEvent.ACTION_DRAG_STARTED:
                             v.setAlpha((float)0.8);
-                            break;
+                            return true;
                         case DragEvent.ACTION_DRAG_ENTERED:
                             v.setBackgroundColor(Color.DKGRAY);
-                            break;
+                            return true;
                         case DragEvent.ACTION_DRAG_EXITED:
                             v.setBackgroundColor(Color.LTGRAY);
-                            break;
+                            return true;
                         case DragEvent.ACTION_DROP:
                             // Dropped
                             final int selectedCardIndex = Integer.valueOf(event.getClipData().getItemAt(0).getText().toString());
@@ -383,17 +416,15 @@ public abstract class GameActivity extends AppCompatActivity {
                                 v.setBackgroundColor(Color.LTGRAY);
                                 updateHand(gameManager.getPlayingPlayer().getHand());
                             }
-                            break;
+                            return true;
                         case DragEvent.ACTION_DRAG_ENDED:
-                            if (!event.getResult()) {
-                                v.setAlpha((float) 0.3);
-                                v.setBackgroundColor(Color.LTGRAY);
-                                updateHand(gameManager.getPlayingPlayer().getHand());
-                            }
+                            v.setAlpha((float) 0.3);
+                            v.setBackgroundColor(Color.LTGRAY);
+                            updateHand(gameManager.getPlayingPlayer().getHand());
+                            return true;
                         default:
-                            break;
+                            return false;
                     }
-                    return true;
                 }
             });
         }
@@ -481,13 +512,11 @@ public abstract class GameActivity extends AppCompatActivity {
         for (int i = 0; i < handSize; i++) {
             final ImageView handCardView = handView.get(i);
             updateHandCard(handCardView, hand.getCards().get(i));
-            //unSelectCard(handCardView);
             handCardView.setVisibility(View.VISIBLE);
         }
         // cards if hand is not full (no more cards to draw)
         for (int i = handSize; i < hand.MAX_HAND_SIZE; i++) {
             final ImageView handCardView = handView.get(i);
-            //unSelectCard(handCardView);
             handCardView.setVisibility(View.INVISIBLE);
         }
     }
