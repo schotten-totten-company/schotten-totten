@@ -1258,7 +1258,7 @@
             android:orientation="horizontal"
             android:paddingTop="5dp">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/h0"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -1268,10 +1268,10 @@
                 android:baselineAligned="true"
                 android:cropToPadding="false"
                 android:padding="0dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/h1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -1281,10 +1281,10 @@
                 android:baselineAligned="true"
                 android:cropToPadding="false"
                 android:padding="0dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/h2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -1294,10 +1294,10 @@
                 android:baselineAligned="true"
                 android:cropToPadding="false"
                 android:padding="0dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/h3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -1307,10 +1307,10 @@
                 android:baselineAligned="true"
                 android:cropToPadding="false"
                 android:padding="0dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/h4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -1320,10 +1320,10 @@
                 android:baselineAligned="true"
                 android:cropToPadding="false"
                 android:padding="0dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/h5"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -1333,7 +1333,7 @@
                 android:baselineAligned="true"
                 android:cropToPadding="false"
                 android:padding="0dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
         </LinearLayout>
 

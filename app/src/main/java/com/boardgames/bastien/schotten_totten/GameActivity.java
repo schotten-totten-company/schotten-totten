@@ -1,11 +1,13 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,7 +39,6 @@ import java.util.List;
 public abstract class GameActivity extends AppCompatActivity {
 
     protected GameManagerInterface gameManager;
-    protected int selectedCard;
     private boolean isClickEnabled = true;
 
     protected ImageButton passButton;
@@ -46,7 +47,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected View gameLayout;
 
     private final List<MilestoneView> milestoneView = new ArrayList<>();
-    private final List<ImageButton> handView = new ArrayList<>();
+    private final List<ImageView> handView = new ArrayList<>();
 
 
     protected void disableClick() {
@@ -143,10 +144,8 @@ public abstract class GameActivity extends AppCompatActivity {
         final int handSize = updatePointOfViewPlayer.getHand().getHandSize();
         for (int i = 0; i < handSize; i++) {
             final int id = getResources().getIdentifier("h" + i, "id", getPackageName());
-            handView.add((ImageButton)findViewById(id));
+            handView.add((ImageView)findViewById(id));
         }
-
-        selectedCard = -1;
 
         updateTextField(gameManager.getPlayingPlayer().getName());
 
@@ -163,6 +162,15 @@ public abstract class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 endOfTurn();
+            }
+        });
+        passButton.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if (event.getAction() == DragEvent.ACTION_DRAG_ENDED && !event.getResult()) {
+                    updateHand(gameManager.getPlayingPlayer().getHand());
+                }
+                return false;
             }
         });
         passButton.setVisibility(View.INVISIBLE);
@@ -190,63 +198,26 @@ public abstract class GameActivity extends AppCompatActivity {
                         // reclaim
                         final Player playingPlayer = gameManager.getPlayingPlayer();
                         final PlayingPlayerType playingPlayerType = playingPlayer.getPlayerType();
-                        if (selectedCard == -1) {
-                            // reclaim
 
-                            // test reclaim
-                            try {
-                                final boolean reclaim =
-                                        gameManager.reclaimMilestone(playingPlayerType, index);
-                                if (reclaim) {
-                                    // capture the milestone
-                                    updateMilestoneView(index, playingPlayerType);
+                        // test reclaim
+                        try {
+                            final boolean reclaim =
+                                    gameManager.reclaimMilestone(playingPlayerType, index);
+                            if (reclaim) {
+                                // capture the milestone
+                                updateMilestoneView(index, playingPlayerType);
 
-                                    // check victory
-                                    try {
-                                        endOfTheGame(gameManager.getWinner());
-                                    } catch (final NoPlayerException e) {
-                                        // nothing to do, just continue to play
-                                    }
-                                } else {
-                                    showAlertMessage(getString(R.string.cannot_capture_milestone_message));
-                                }
-                            } catch (final NotYourTurnException e) {
-                                showErrorMessage(e);
-                            }
-
-
-                            // play a card
-                        } else {
-                            try {
-                                m.checkSideSize(playingPlayerType);
-                                // put card
+                                // check victory
                                 try {
-                                    try {
-                                        // play
-                                        gameManager.playerPlays(playingPlayerType, selectedCard, index);
-                                        // update hand card;
-                                        handView.get(selectedCard).startAnimation(
-                                                AnimationUtils.loadAnimation(
-                                                        getApplicationContext(), R.anim.zoomout));
-                                    } catch (final EmptyDeckException e) {
-                                        // nothing special to do
-                                        // maybe add a popup ...
-                                    } finally {
-                                        updateHand(gameManager.getPlayingPlayer().getHand());
-                                        selectedCard = -1;
-                                        updateMilestoneView(index, playingPlayerType);
-                                    }
-
-                                } catch (final NotYourTurnException | HandFullException e) {
-                                    showErrorMessage(e);
+                                    endOfTheGame(gameManager.getWinner());
+                                } catch (final NoPlayerException e) {
+                                    // nothing to do, just continue to play
                                 }
-
-                                cardPlayedLeadingToTheEndOfTheTurn();
-
-                            } catch (final MilestoneSideMaxReachedException e) {
-                                // return, cannot play here
-                                showAlertMessage(e.getMessage());
+                            } else {
+                                showAlertMessage(getString(R.string.cannot_capture_milestone_message));
                             }
+                        } catch (final NotYourTurnException e) {
+                            showErrorMessage(e);
                         }
                     }
                 }
@@ -254,7 +225,8 @@ public abstract class GameActivity extends AppCompatActivity {
         }
     }
 
-    protected void cardPlayedLeadingToTheEndOfTheTurn() {
+    protected void cardPlayedLeadingToTheEndOfTheTurn(final PlayingPlayerType updatePointOfView) {
+        updateUI(updatePointOfView);
         // end of the turn
         disableClick();
         passButton.setVisibility(View.VISIBLE);
@@ -279,47 +251,20 @@ public abstract class GameActivity extends AppCompatActivity {
         final Hand handToUpdate = updatePointOfViewPlayer.getHand();
         final int handSize = handToUpdate.getHandSize();
         for (int i = 0; i < handSize; i++) {
-            final ImageButton handCardView = handView.get(i);
+            final int handIndex = i;
+            final ImageView handCardView = handView.get(i);
             updateHandCard(handCardView, handToUpdate.getCards().get(i));
-            handCardView.setOnClickListener(new View.OnClickListener() {
+
+            handCardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
-                    if (isClickEnabled) {
-                        // animate
-                        v.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomout));
-
-                        final ImageButton cardView = ((ImageButton) v);
-                        final int index = Integer.valueOf(
-                                getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
-
-                        // unselect
-                        for (int i = 0; i < handSize; i++) {
-                            unSelectCard(handView.get(i));
-                        }
-
-                        // select clicked card
-                        if (index == selectedCard) {
-                            selectedCard = -1;
-                        } else {
-                            selectCard(cardView);
-                            selectedCard = index;
-                        }
-                    }
+                public boolean onLongClick(View v) {
+                    final ClipData data = ClipData.newPlainText("index", String.valueOf(handIndex));
+                    v.startDrag(data, new View.DragShadowBuilder(v), v, 0);
+                    v.setVisibility(View.INVISIBLE);
+                    return true;
                 }
             });
-            unSelectCard(handCardView);
         }
-    }
-
-    protected void selectCard(final ImageButton cardView) {
-        for (int i = 0; i < handView.size(); i++) {
-            handView.get(i).setAlpha((float) 0.42);
-        }
-        cardView.setAlpha((float) 1.0);
-    }
-
-    protected void unSelectCard(final ImageButton cardView) {
-        cardView.setAlpha((float) 1.0);
     }
 
     protected void updateMilestoneView(final int i, final PlayingPlayerType updatePointOfView) {
@@ -379,13 +324,86 @@ public abstract class GameActivity extends AppCompatActivity {
             }
         }
 
+        // reset dragndrop listeners on both sides
+        for (int j = 0; j < milestone.MAX_CARDS_PER_SIDE; j++) {
+            playerSide.get(j).setOnDragListener(null);
+            opponentSide.get(j).setOnDragListener(null);
+        }
+        // update dragndrop listeners
+        final int modelPlayingPlayerSideSize = (updatePointOfView.equals(PlayingPlayerType.ONE)) ?
+                milestone.getPlayer1Side().size() : milestone.getPlayer2Side().size();
+        if (milestone.getCaptured().equals(MilestonePlayerType.NONE) && modelPlayingPlayerSideSize < Milestone.MAX_CARDS_PER_SIDE) {
+            playerSide.get(modelPlayingPlayerSideSize).setOnDragListener(new View.OnDragListener() {
+                @Override
+                public boolean onDrag(View v, DragEvent event) {
+
+                    final Player playingPlayer = gameManager.getPlayingPlayer();
+                    final PlayingPlayerType playingPlayerType = playingPlayer.getPlayerType();
+
+                    switch (event.getAction()) {
+                        case DragEvent.ACTION_DRAG_STARTED:
+                            v.setAlpha((float)0.8);
+                            break;
+                        case DragEvent.ACTION_DRAG_ENTERED:
+                            v.setBackgroundColor(Color.DKGRAY);
+                            break;
+                        case DragEvent.ACTION_DRAG_EXITED:
+                            v.setBackgroundColor(Color.LTGRAY);
+                            break;
+                        case DragEvent.ACTION_DROP:
+                            // Dropped
+                            final int selectedCardIndex = Integer.valueOf(event.getClipData().getItemAt(0).getText().toString());
+                            try {
+
+                                milestone.checkSideSize(playingPlayerType);
+                                // put card
+                                try {
+                                    try {
+                                        // play
+                                        gameManager.playerPlays(playingPlayerType, selectedCardIndex, i);
+                                        // update hand card;
+                                        handView.get(selectedCardIndex).startAnimation(
+                                                AnimationUtils.loadAnimation(
+                                                        getApplicationContext(), R.anim.zoomout));
+                                    } catch (final EmptyDeckException e) {
+                                        // nothing special to do
+                                        // maybe add a popup ...
+                                    }
+
+                                } catch (final NotYourTurnException | HandFullException e) {
+                                    showErrorMessage(e);
+                                }
+
+                                cardPlayedLeadingToTheEndOfTheTurn(updatePointOfView);
+
+                            } catch (final MilestoneSideMaxReachedException e) {
+                                // return, cannot play here
+                                showAlertMessage(e.getMessage());
+                                v.setAlpha((float) 0.3);
+                                v.setBackgroundColor(Color.LTGRAY);
+                                updateHand(gameManager.getPlayingPlayer().getHand());
+                            }
+                            break;
+                        case DragEvent.ACTION_DRAG_ENDED:
+                            if (!event.getResult()) {
+                                v.setAlpha((float) 0.3);
+                                v.setBackgroundColor(Color.LTGRAY);
+                                updateHand(gameManager.getPlayingPlayer().getHand());
+                            }
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
     private void updatePlayedCard(final ImageView view, final Card card) {
         updateCard(view, card);
     }
 
-    private void updateHandCard(final ImageButton view, final Card card) {
+    private void updateHandCard(final ImageView view, final Card card) {
         updateCard(view, card);
     }
 
@@ -447,7 +465,7 @@ public abstract class GameActivity extends AppCompatActivity {
     private void resetPlayedCard(final ImageView view) {
         view.setImageResource(R.drawable.empty);
         view.setBackgroundColor(Color.LTGRAY);
-        view.setAlpha((float) 0.5);
+        view.setAlpha((float) 0.3);
     }
 
     protected abstract void endOfTurn();
@@ -461,15 +479,15 @@ public abstract class GameActivity extends AppCompatActivity {
         // update hand
         final int handSize = hand.getHandSize();
         for (int i = 0; i < handSize; i++) {
-            final ImageButton handCardView = handView.get(i);
+            final ImageView handCardView = handView.get(i);
             updateHandCard(handCardView, hand.getCards().get(i));
-            unSelectCard(handCardView);
+            //unSelectCard(handCardView);
             handCardView.setVisibility(View.VISIBLE);
         }
         // cards if hand is not full (no more cards to draw)
         for (int i = handSize; i < hand.MAX_HAND_SIZE; i++) {
-            final ImageButton handCardView = handView.get(i);
-            unSelectCard(handCardView);
+            final ImageView handCardView = handView.get(i);
+            //unSelectCard(handCardView);
             handCardView.setVisibility(View.INVISIBLE);
         }
     }
