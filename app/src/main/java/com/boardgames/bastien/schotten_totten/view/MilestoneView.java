@@ -15,12 +15,12 @@ public class MilestoneView {
     private final List<ImageView> playerSide;
     private final List<ImageView> opponentSide;
 
-    private final ImageButton milestone;
+    private final ImageView milestone;
     private final ImageView milestonePlayer;
     private final ImageView milestoneOpponent;
 
 
-    public MilestoneView(final ImageButton m, final ImageView mPlayer, final ImageView mOpponent,
+    public MilestoneView(final ImageView m, final ImageView mPlayer, final ImageView mOpponent,
                             final List<ImageView> pSide, final List<ImageView> oSide) {
         playerSide = pSide;
         opponentSide = oSide;
@@ -118,7 +118,7 @@ public class MilestoneView {
         return opponentSide;
     }
 
-    public ImageButton getMilestone() {
+    public ImageView getMilestone() {
         return milestone;
     }
 
