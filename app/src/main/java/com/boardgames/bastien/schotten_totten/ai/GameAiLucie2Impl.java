@@ -1,21 +1,22 @@
 package com.boardgames.bastien.schotten_totten.ai;
 
 
+
 import com.boradgames.bastien.schotten_totten.core.model.Card;
+import com.boradgames.bastien.schotten_totten.core.model.Hand;
 import com.boradgames.bastien.schotten_totten.core.model.Milestone;
 import com.boradgames.bastien.schotten_totten.core.model.MilestonePlayerType;
+import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.stream.IntStream;
 
 /**
  * Created by Lucie on 21/11/2018.
@@ -26,200 +27,194 @@ public class GameAiLucie2Impl extends GameAI {
     @JsonIgnore
     private final int MAX_MILESTONES = 9;
 
-    protected Indexes handCardIndexAndMilestoneIndex(final List<Card> hand, final List<Milestone> milestones, final List<Card> cardsNotYetPlayed, final List<Card> allTheCards) {
-
-
-        // if straight flush in hand
-        for (int i = 0; i < hand.size(); i++) {
-            final Card c = hand.get(i);
-            // find same color but number +1
-            for (int j = 0; j < hand.size(); j++) {
-                if (hand.get(j).getColor().equals(c.getColor()) && (hand.get(j).getNumber().ordinal() == (c.getNumber().ordinal() + 1))) {
-                    // find same color but number -1
-                    for (int k = 0; k < hand.size(); k++) {
-                        if (hand.get(k).getColor().equals(c.getColor()) && (hand.get(k).getNumber().ordinal() == (c.getNumber().ordinal() - 1))) {
-
-                            final List<Card> sideToTest = new ArrayList<>();
-                            sideToTest.add(hand.get(i));
-                            sideToTest.add(hand.get(j));
-                            sideToTest.add(hand.get(k));
-
-                            try {
-                                return testCombinationFromTheMiddleMilestone(milestones, cardsNotYetPlayed, sideToTest, k);
-                            } catch (NoIndexFoundException e) {
-                                // nothing special to do
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // if 3 of a kind in hand
-        for (int i = 0; i < hand.size(); i++) {
-            final Card c = hand.get(i);
-            // find same number but other color
-            for (int j = 0; j < hand.size(); j++) {
-                if (!hand.get(j).getColor().equals(c.getColor()) && (hand.get(j).getNumber().ordinal() == c.getNumber().ordinal())) {
-                    // find same number but other color
-                    for (int k = 0; k < hand.size(); k++) {
-                        if (!hand.get(k).getColor().equals(hand.get(j).getColor())
-                                && !hand.get(k).getColor().equals(c.getColor())
-                                && (hand.get(k).getNumber().ordinal() == hand.get(j).getNumber().ordinal())
-                                && (hand.get(k).getNumber().ordinal() == c.getNumber().ordinal())) {
-
-                            final List<Card> sideToTest = new ArrayList<>();
-                            sideToTest.add(hand.get(i));
-                            sideToTest.add(hand.get(j));
-                            sideToTest.add(hand.get(k));
-
-                            try {
-                                return testCombinationFromTheMiddleMilestone(milestones, cardsNotYetPlayed, sideToTest, k);
-                            } catch (NoIndexFoundException e) {
-                                // nothing special to do
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-
-        // try to complete a straight flush, then a 3 of a kind (if a side has already 1 or 2 cards)
-        int pimPamIndex = milestones.size()/2;
-        for (int im = 0; im < milestones.size(); im++) {
-
-            // do the pim pam
-            if (im % 2 == 0) {
-                pimPamIndex = pimPamIndex + im;
-            } else {
-                pimPamIndex = pimPamIndex - im;
-            }
-
-            // milestone to test
-            final Milestone m = milestones.get(pimPamIndex);
-            if (m.getCaptured().equals(MilestonePlayerType.NONE)) {
-                final List<Card> opponent = m.getPlayer1Side();
-                final List<Card> side = m.getPlayer2Side();
-                if (opponent.size() != Milestone.MAX_CARDS_PER_SIDE && !side.isEmpty()) {
-                    switch (side.size()) {
-                        case 0:
-                            break;
-                        case 1:
-                            for (final Card c : cardsNotYetPlayed) {
-                                for (int i = 0; i < hand.size(); i++) {
-                                    final List<Card> sideToTest = new ArrayList<>();
-                                    sideToTest.addAll(side);
-                                    sideToTest.add(hand.get(i));
-                                    sideToTest.add(c);
-                                    // try straight flush
-                                    if (m.sideStrength(sideToTest) > 500) {
-                                        return new Indexes(i, m.getId());
-                                    }
-                                }
-                                for (int i = 0; i < hand.size(); i++) {
-                                    final List<Card> sideToTest = new ArrayList<>();
-                                    sideToTest.addAll(side);
-                                    sideToTest.add(hand.get(i));
-                                    sideToTest.add(c);
-                                    // try 3 of a kind
-                                    if (m.sideStrength(sideToTest) > 400) {
-                                        return new Indexes(i, m.getId());
-                                    }
-                                }
-                            }
-                            break;
-                        case 2:
-                            for (int i = 0; i < hand.size(); i++) {
-                                final List<Card> sideToTest = new ArrayList<>();
-                                sideToTest.addAll(side);
-                                sideToTest.add(hand.get(i));
-                                // try straight flush
-                                if (m.sideStrength(sideToTest) > 500) {
-                                    return new Indexes(i, m.getId());
-                                }
-                            }
-                            for (int i = 0; i < hand.size(); i++) {
-                                final List<Card> sideToTest = new ArrayList<>();
-                                sideToTest.addAll(side);
-                                sideToTest.add(hand.get(i));
-                                // try 3 of a kind
-                                if (m.sideStrength(sideToTest) > 400) {
-                                    return new Indexes(i, m.getId());
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
-        }
-
-        // put strongest card somewhere empty doing the pim pam from the edges
-        int pimPamIndex2 = 0;
-        for (int im = milestones.size()-1; im > 0; im--) {
-
-            // do the pim pam from the edges
-            if (im % 2 == 0) {
-                pimPamIndex2 = pimPamIndex2 + im;
-            } else {
-                pimPamIndex2 = pimPamIndex2 - im;
-            }
-
-            // milestone to test
-            final Milestone m = milestones.get(pimPamIndex2);
-            if (m.getCaptured().equals(MilestonePlayerType.NONE) && m.getPlayer2Side().isEmpty()) {
-                return new Indexes(getStrongestCardIndex(hand), m.getId());
-            }
-        }
-
-        // desperate case ....
-        // put weakest card somewhere not full
-        for (final Milestone m : milestones) {
-            if (m.getCaptured().equals(MilestonePlayerType.NONE) && (m.getPlayer2Side().size() != Milestone.MAX_CARDS_PER_SIDE)) {
-                return new Indexes(getWeakestCardIndex(hand), m.getId());
-            }
-        }
-
-        // cannot play, should not occur
-        return null;
+    public GameAiLucie2Impl(final PlayingPlayerType pType) {
+        this.name = "Basic Lucie";
+        this.playingPlayerType = pType;
     }
 
-    private Indexes testCombinationFromTheMiddleMilestone(final List<Milestone> milestones, final List<Card> cardsNotYetPlayed,  final List<Card> sideToTest, final int handCardIndex) throws NoIndexFoundException {
-        // find a milestone in the middle or around
-        int pimPamIndex = milestones.size()/2;
-        for (int m = 0; m < milestones.size(); m++) {
 
-            // do the pim pam
-            if (m%2 == 0) {
-                pimPamIndex = pimPamIndex + m;
-            } else {
-                pimPamIndex = pimPamIndex - m;
+    protected class Combination {
+        private final List<Card> cards;
+        private int strenght;
+        private int proba;
+
+        public Combination(final List<Card> cards  ) {
+            this.cards = cards;
+
+            this.strenght = Milestone.sideStrength(cards);
+            this.proba = -1;
+        }
+
+        public List<Card> getCards() {
+            return this.cards;
+        }
+        public int getStrenght() {
+            return this.strenght;
+        }
+        public int getProba() {
+            return this.proba;
+        }
+        public void setProba(int proba){this.proba=proba;}
+
+    }
+
+    private int getHandCardIndex(Combination combination, Hand myHand) throws NoIndexFoundException {
+
+        List<Card> list = new ArrayList<Card>();
+
+        for(int i=0; i<myHand.getCards().size();i++) {
+            if (combination.getCards().contains(myHand.getCards().get(i))) {
+                return i;
             }
+        }
+        throw new NoIndexFoundException();
+    }
 
-            // milestone to test
-            final Milestone milestoneToTry = milestones.get(pimPamIndex);
+    /**
+     * Return the combination with the highest strenght reachable for a given player on a given milestone, regarding the remaining cards
+     * @param playedCards
+     * @param availableCards all the remaining cards (could be cards not played, cards not played + current hands, etc)
+     * @return the highest strenght combination
+     */
+    private Combination getBestPossibleCombination(List<Card> playedCards, List<Card> availableCards) {
 
+        // List<Card> playedCards = PlayingPlayerType.ONE.equals(pType) ? milestone.getPlayer1Side() : milestone.getPlayer2Side();
+        Combination bestCombination=null;
+
+        //case where 3 cards has already been played
+        if (playedCards.size()==Milestone.MAX_CARDS_PER_SIDE) {
+            return new Combination(playedCards);
+        }
+
+        final Iterator<int[]> combinationsIterator =
+                CombinatoricsUtils.combinationsIterator(availableCards.size(), Milestone.MAX_CARDS_PER_SIDE - playedCards.size());
+        while(combinationsIterator.hasNext()){
+            int[] tuple = combinationsIterator.next();
+
+            final List<Card> newCombination = new ArrayList(playedCards);
+            for (final int index : tuple) {
+                newCombination.add(availableCards.get(index)); //a tester, itération sur des int[] plutot que sur int?
+            }
+            Combination currentCombination = new Combination(newCombination);
+            if (bestCombination==null || currentCombination.getStrenght()>bestCombination.getStrenght()) {
+                bestCombination=currentCombination;
+            }
+            if (bestCombination.getStrenght()==524) {
+                return bestCombination;
+            }
+        }
+        return bestCombination;
+
+    }
+
+
+
+    protected class Analyser {
+        private final Milestone milestone;
+        private final Hand hand;
+
+        public Analyser(final Milestone milestone, final Hand hand) {
+            this.milestone = milestone;
+            this.hand = hand;
+        }
+
+        public int getMilestoneIndex() {
+            return this.milestone.getId();
+        }
+    }
+
+    protected int handCardIndex(final List<Card> hand, final Milestone milestone, final ArrayList<Card> cardsNotYetPlayed) throws NoIndexFoundException {
+
+        //First, get the best opponent strenght reachable
+        ArrayList<Card> cardsLeft = (ArrayList<Card>) cardsNotYetPlayed.clone();
+        cardsLeft.removeAll(hand);
+        Combination bestOpponentPossibleCombination = this.getBestPossibleCombination(milestone.getPlayer1Side(), cardsLeft);
+
+        //Then, find the first combination that beat this
+        for (int index=0;index<hand.size();index++) {
+            Card c = hand.get(index);
+
+            //creation of the hypotetical hand : current milestone cards + one hand card
+            List<Card> hypotheticPlayedCards = milestone.getPlayer2Side();
+            hypotheticPlayedCards.add(c);
+
+            //build cardNotYetPlayed without hypotetic card
+            cardsLeft = (ArrayList<Card>) cardsNotYetPlayed.clone();
+            cardsLeft.remove(c);
+
+            Combination combination = this.getBestPossibleCombination(hypotheticPlayedCards, cardsLeft);
+
+            if (combination.getStrenght()>bestOpponentPossibleCombination.getStrenght()) {
+                return index;
+            }
+        }
+        throw new NoIndexFoundException();
+    }
+
+
+    protected Indexes handCardIndexAndMilestoneIndex(final List<Card> hand, final List<Milestone> milestones, final List<Card> cardsNotYetPlayed, final List<Card> allTheCards,  final PlayingPlayerType pType) {
+
+        ArrayList<Integer> milestonesOrder = this.milestonesOrder(milestones);
+        for(int milestoneIndex : milestonesOrder ) {
+            try{
+                int cardIndex = this.handCardIndex(hand, milestones.get(milestoneIndex), (ArrayList<Card>) cardsNotYetPlayed);
+                return new Indexes(cardIndex,milestoneIndex);
+            } catch (NoIndexFoundException e) {
+                //nothing to do, just iterate
+            }
+        }
+        return new Indexes(getWeakestCardIndex(hand), milestonesOrder.get(milestonesOrder.size()-1));
+    }
+
+
+    private Indexes testCombinationfinal(final List<Milestone> milestones, final Hand hand, final List<Card> cardsNotYetPlayed, int strenghtToBeat) throws NoIndexFoundException {
+        // Loop over milestones in the desired order
+        for (Milestone milestoneToTry : milestones) {
             if (milestoneToTry.getPlayer2Side().size() != Milestone.MAX_CARDS_PER_SIDE) {
-                // complex algorithm to compare a combination with all the possible combinations on the opponent side
-                final List<Card> opponentSide = milestoneToTry.getPlayer1Side();
+                int handCardIndex = findStrongestCardInHand(milestoneToTry, hand, cardsNotYetPlayed, strenghtToBeat);
+                return new Indexes(handCardIndex, milestoneToTry.getId());
+                }
+            }
+        throw new NoIndexFoundException();
+    }
 
-                final int sideToCompareStrength = milestoneToTry.sideStrength(sideToTest);
+    private int findStrongestCardInHand(final Milestone milestoneToTry, final Hand hand, final List<Card> cardsNotYetPlayed, int strenghtToBeat) throws NoIndexFoundException {
+        int indexToPlay = 0;
+
+        if (milestoneToTry.getPlayer2Side().size() != Milestone.MAX_CARDS_PER_SIDE) {
+            // boucler sur les cartes de ma main
+            for (int index = 0; index < hand.getHandSize(); index++) {
+                // initializing the milestone
+                final List<Card> oneSide = milestoneToTry.getPlayer2Side();
+                // playing the card
+                final Card cardToCheck = hand.playCard(index);
+                oneSide.add(cardToCheck);
+
+                List<Card> cardsAvailable = cardsNotYetPlayed; // TODO : BLE check
+                cardsAvailable.addAll(hand.getCards());
+
+                // Boucler sur toutes les combinaisons possibles
+
                 final Iterator<int[]> combinationsIterator =
-                        CombinatoricsUtils.combinationsIterator(cardsNotYetPlayed.size(), Milestone.MAX_CARDS_PER_SIDE - opponentSide.size());
+                        CombinatoricsUtils.combinationsIterator(cardsAvailable.size(), Milestone.MAX_CARDS_PER_SIDE - oneSide.size());
                 while(combinationsIterator.hasNext()){
-                    final List<Card> newCombination = new ArrayList(opponentSide);
-                    for (final int index : combinationsIterator.next()) {
-                        newCombination.add(cardsNotYetPlayed.get(index));
+                    final List<Card> newCombination = new ArrayList(oneSide);
+                    for (final int i : combinationsIterator.next()) {
+                        newCombination.add(cardsNotYetPlayed.get(i));
                     }
-                    if (sideToCompareStrength > milestoneToTry.sideStrength(newCombination)) {
-                        // if the milestone is empty AND no overall combination (including me hand) can beat this one,
-                        // put the weakest card of the combination
-                        return new Indexes(handCardIndex, pimPamIndex);
+                    // if the combinaison has a higher strenght thant the one to beat
+                    if (milestoneToTry.sideStrength(newCombination) > strenghtToBeat) {
+                        strenghtToBeat = milestoneToTry.sideStrength(newCombination);
+                        indexToPlay = index;
+
+                        // TODO : tester les proba d'une telle combinaison
                     }
                 }
+                // unplaying the card
+                //hand.addCard(cardToCheck, index);
+            }
+            if (indexToPlay > 0) {
+                return indexToPlay;
             }
         }
         throw new NoIndexFoundException();
@@ -245,70 +240,36 @@ public class GameAiLucie2Impl extends GameAI {
     }
 
     public ArrayList<Integer> milestonesOrder(final List<Milestone> milestones) {
-        // sort the milestones by interest
-        final LinkedHashSet<Integer> milestonesOrder = new LinkedHashSet<Integer>();
-        final ArrayList<Integer> milestonesWith0Card = new ArrayList<Integer>();
-        final ArrayList<Integer> milestonesWith1Card = new ArrayList<Integer>();
-        final ArrayList<Integer> milestonesWith2Cards = new ArrayList<Integer>();
+        // add chaos
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        for (int i = 0; i < MAX_MILESTONES; i++) {
+            indexes.add(i);
+        }
+        Collections.shuffle(milestones, new Random(System.currentTimeMillis()));
 
-        // Adding chaos at the begging
-        final ArrayList<Integer> indexes_chaos = random_indexes();
-
-        // Adding chaos into the way to look neighbours
-        final ArrayList<Integer> neighbours = random_neighbours();
-
-        //  Top priority if the milestone is not full on my side
-        for (int index  : indexes_chaos) {
-            // First look to the milestone close to the ones already captured
-            if (milestones.get(index).getPlayer2Side().size() < Milestone.MAX_CARDS_PER_SIDE) {
-                if (8 > index & index > 0) {
-                    for (int i : neighbours) {
-                        if (milestones.get(index + i).getPlayer2Side().size() == Milestone.MAX_CARDS_PER_SIDE) {
-                            milestonesOrder.add(index);
-                        }
-                    }
-                } else if (index > 0) {
-                    if (milestones.get(index - 1).getPlayer2Side().size() == Milestone.MAX_CARDS_PER_SIDE) {
-                        milestonesOrder.add(index);
-                    }
-                } else {
-                    if (milestones.get(index + 1).getPlayer2Side().size() == Milestone.MAX_CARDS_PER_SIDE) {
-                        milestonesOrder.add(index);
-                    }
+        // sort the milestones by number of cards already played
+        Collections.sort(milestones, new Comparator<Milestone>() {
+            @Override
+            public int compare(Milestone milestone1, Milestone milestone2) {
+                int t = milestone2.getPlayer2Side().size()-milestone1.getPlayer2Side().size();
+                if (t == 0) {
+                    return milestone2.getPlayer1Side().size()-milestone1.getPlayer1Side().size();
                 }
+                return t;
+            }
+        });
+        System.out.println(milestones);
+        final ArrayList<Integer> milestonesOrder = new ArrayList<Integer>();
+        for (Milestone m : milestones) {
+            if (m.getPlayer2Side().size() < 3) {
+                milestonesOrder.add(m.getId());
             }
         }
-        // faire le tri sur milestonesOrder
-        // faire le tri sur ndex_chaos.clone().removeAll(milestonesOrder)
-
-        milestonesOrder.addAll(indexes_chaos);
-
-        for (int index : milestonesOrder) {
-            // First look to the milestone close to the ones already captured
-            if (milestones.get(index).getPlayer2Side().size() < Milestone.MAX_CARDS_PER_SIDE) {
-                switch (milestones.get(index).getPlayer2Side().size()) {
-                    case 0:
-                        milestonesWith0Card.add(index);
-                        break;
-                    case 1:
-                        milestonesWith1Card.add(index);
-                        break;
-                    case 2:
-                        milestonesWith2Cards.add(index);
-                        break;
-                }
-            }
-        }
-        milestonesOrder.clear();
-
-        final ArrayList<Integer> milestonesOrderResult = new ArrayList<Integer>();
-        milestonesOrderResult.addAll(milestonesWith2Cards);
-        milestonesOrderResult.addAll(milestonesWith1Card);
-        milestonesOrderResult.addAll(milestonesWith0Card);
+        // TODO : First look to the milestone close to the ones already captured
 
         //System.out.println("Final results");
         //System.out.println(milestonesOrder);
-        return milestonesOrderResult;
+        return milestonesOrder;
     }
     //System.out.println();
 

@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 public class GameAiLucie2ImplTest {
 
     private Game testGame;
-    private GameAiLucie2Impl ai = new GameAiLucie2Impl();
+    private GameAiLucie2Impl ai = new GameAiLucie2Impl(PlayingPlayerType.TWO);
     private final static int MAX_CARDS_PER_SIDE = 3;
 
 
@@ -96,7 +96,7 @@ public class GameAiLucie2ImplTest {
     }
 
     @Test
-    public void iterateOverFreeMilestones() {
+    public void iterateOverFreeMilestones() throws EmptyDeckException, MilestoneSideMaxReachedException {
         // Test if the list does not contain full milestone
 
         // Define set of milestones to be tested
@@ -120,7 +120,7 @@ public class GameAiLucie2ImplTest {
     }
 
     @Test
-    public void sortFreeMilestones() {
+    public void sortFreeMilestones() throws EmptyDeckException, MilestoneSideMaxReachedException {
         // Test if the list does not contain full milestone
 
         // Define set of milestones to be tested1
@@ -151,7 +151,7 @@ public class GameAiLucie2ImplTest {
     }
 
     @Test
-    public void chooseNextToFullLeft() {
+    public void chooseNextToFullLeft() throws EmptyDeckException, MilestoneSideMaxReachedException {
         // Test if the list does not contain full milestone
 
         // Define set of milestones to be tested1
@@ -170,7 +170,7 @@ public class GameAiLucie2ImplTest {
     }
 
     @Test
-    public void chooseNextToFullRight() {
+    public void chooseNextToFullRight() throws EmptyDeckException, MilestoneSideMaxReachedException {
         // Test if the list does not contain full milestone
 
         // Define set of milestones to be tested1
@@ -189,7 +189,7 @@ public class GameAiLucie2ImplTest {
     }
 
     @Test
-    public void chooseNextToFullMiddle() {
+    public void chooseNextToFullMiddle() throws EmptyDeckException, MilestoneSideMaxReachedException {
         // Test if the list does not contain full milestone
 
         // Define set of milestones to be tested1
@@ -214,7 +214,7 @@ public class GameAiLucie2ImplTest {
     }
 
     @Test
-    public void chooseNextToFullRight2() {
+    public void chooseNextToFullRight2() throws EmptyDeckException, MilestoneSideMaxReachedException {
         // Test if the list does not contain full milestone
 
         // Define set of milestones to be tested1
@@ -232,14 +232,9 @@ public class GameAiLucie2ImplTest {
         assertEquals(testOrder.size(), 7);
         assertEquals(referenceOrder.get(0), testOrder.get(0));
     }
-    private void addCards(Milestone milestone, final int number, final PlayingPlayerType pType) {
+    private void addCards(Milestone milestone, final int number, final PlayingPlayerType pType) throws EmptyDeckException, MilestoneSideMaxReachedException{
         for (int m = 0; m < number; m++) {
-            // BLE tu peux me dire comment mieux gerer cette exception
-            try {
-                milestone.addCard(testGame.getGameBoard().getDeck().drawCard(), pType);
-            } catch (EmptyDeckException | MilestoneSideMaxReachedException e) {
-                // nothing special to do
-            }
+            milestone.addCard(testGame.getGameBoard().getDeck().drawCard(), pType);
         }
     }
 
@@ -251,5 +246,7 @@ public class GameAiLucie2ImplTest {
         System.out.println("Ref:");
         System.out.println(referenceOrder);
     }
+
+
 }
 

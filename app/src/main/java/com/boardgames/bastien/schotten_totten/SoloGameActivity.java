@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import com.boardgames.bastien.schotten_totten.ai.AiGameManager;
 import com.boardgames.bastien.schotten_totten.ai.GameAI;
+import com.boardgames.bastien.schotten_totten.ai.GameAiImpl;
 import com.boardgames.bastien.schotten_totten.ai.GameAiLucieImpl;
+import com.boradgames.bastien.schotten_totten.core.exceptions.EmptyDeckException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.HandFullException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.NoPlayerException;
