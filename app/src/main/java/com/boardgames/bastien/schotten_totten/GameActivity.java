@@ -257,10 +257,15 @@ public abstract class GameActivity extends AppCompatActivity {
             handCardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    final ClipData data = ClipData.newPlainText("index", String.valueOf(handIndex));
-                    v.startDrag(data, new View.DragShadowBuilder(v), v, 0);
-                    v.setVisibility(View.INVISIBLE);
-                    return true;
+                    if (isClickEnabled) {
+                        final ClipData data = ClipData.newPlainText("index", String.valueOf(handIndex));
+                        v.startDrag(data, new View.DragShadowBuilder(v), v, 0);
+                        v.setVisibility(View.INVISIBLE);
+                        return true;
+                    } else {
+                        return false;
+                    }
+
                 }
             });
 
