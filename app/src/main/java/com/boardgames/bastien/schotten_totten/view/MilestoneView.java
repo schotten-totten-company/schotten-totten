@@ -1,7 +1,6 @@
 package com.boardgames.bastien.schotten_totten.view;
 
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import java.util.List;
@@ -12,8 +11,8 @@ import java.util.List;
 
 public class MilestoneView {
 
-    private final List<ImageView> playerSide;
-    private final List<ImageView> opponentSide;
+    private final List<PlayablePlaceImageView> playerSide;
+    private final List<PlayablePlaceImageView> opponentSide;
 
     private final ImageView milestone;
     private final ImageView milestonePlayer;
@@ -21,7 +20,7 @@ public class MilestoneView {
 
 
     public MilestoneView(final ImageView m, final ImageView mPlayer, final ImageView mOpponent,
-                            final List<ImageView> pSide, final List<ImageView> oSide) {
+                            final List<PlayablePlaceImageView> pSide, final List<PlayablePlaceImageView> oSide) {
         playerSide = pSide;
         opponentSide = oSide;
         milestone = m;
@@ -110,11 +109,11 @@ public class MilestoneView {
 //        milestoneOpponent.setTextSize(size);
 //    }
 
-    public List<ImageView> getPlayerSide() {
+    public List<PlayablePlaceImageView> getPlayerSide() {
         return playerSide;
     }
 
-    public List<ImageView> getOpponentSide() {
+    public List<PlayablePlaceImageView> getOpponentSide() {
         return opponentSide;
     }
 
