@@ -20,7 +20,7 @@ public class SoloGameActivity extends GameActivity {
         super.onCreate(savedInstanceState);
 
         try {
-            this.gameManager = new AiGameManager(getString(R.string.player1name), getString(R.string.player2name));
+            this.gameManager = new AiGameManager(getString(R.string.player1name), ai.getName());
             initUI(this.gameManager.getPlayingPlayer().getPlayerType());
 
         } catch (final Exception e) {
