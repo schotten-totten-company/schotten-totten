@@ -32,7 +32,6 @@ public class GameAiLucie2Impl extends GameAI {
         this.playingPlayerType = pType;
     }
 
-
     protected class Combination {
         private final List<Card> cards;
         private int strenght;
@@ -55,7 +54,6 @@ public class GameAiLucie2Impl extends GameAI {
             return this.proba;
         }
         public void setProba(int proba){this.proba=proba;}
-
     }
 
     private int getHandCardIndex(Combination combination, Hand myHand) throws NoIndexFoundException {
@@ -89,45 +87,48 @@ public class GameAiLucie2Impl extends GameAI {
         final Iterator<int[]> combinationsIterator =
                 CombinatoricsUtils.combinationsIterator(availableCards.size(), Milestone.MAX_CARDS_PER_SIDE - playedCards.size());
         while(combinationsIterator.hasNext()){
-            int[] tuple = combinationsIterator.next();
-
             final List<Card> newCombination = new ArrayList(playedCards);
-            for (final int index : tuple) {
+            for (int index : combinationsIterator.next()) {
                 newCombination.add(availableCards.get(index)); //a tester, itération sur des int[] plutot que sur int?
             }
             Combination currentCombination = new Combination(newCombination);
             if (bestCombination==null || currentCombination.getStrenght()>bestCombination.getStrenght()) {
                 bestCombination=currentCombination;
             }
-            if (bestCombination.getStrenght()==524) {
+            if (bestCombination.getStrenght() == 521) {
                 return bestCombination;
             }
         }
         return bestCombination;
-
     }
 
+    protected ArrayList<Card> cardsLeft(final ArrayList<Card> cardsNotYetPlayed, final ArrayList<Card> cardsToRemove){
 
-
-    protected class Analyser {
-        private final Milestone milestone;
-        private final Hand hand;
-
-        public Analyser(final Milestone milestone, final Hand hand) {
-            this.milestone = milestone;
-            this.hand = hand;
+        ArrayList<Card> cardsLeft = new ArrayList<Card>();
+        for (Card c1 : cardsNotYetPlayed){
+            boolean isCardInHand = false;
+            for (Card c2 : cardsToRemove){
+                // check if the card is in my hand
+                if (c1.getNumber().equals(c2.getNumber())
+                        && c1.getColor().equals(c2.getColor())) {
+                    isCardInHand = true; // Todo : BLE, tu peux m'écrire ça sur une seule ligne avec des ? et des :
+                }
+            }
+            // if the card is not in cardsToRemove, add it to the list of cards left
+            if (!isCardInHand){
+                cardsLeft.add(c1);
+            }
         }
-
-        public int getMilestoneIndex() {
-            return this.milestone.getId();
-        }
+        return  cardsLeft;
     }
 
     protected int handCardIndex(final List<Card> hand, final Milestone milestone, final ArrayList<Card> cardsNotYetPlayed) throws NoIndexFoundException {
 
         //First, get the best opponent strenght reachable
-        ArrayList<Card> cardsLeft = (ArrayList<Card>) cardsNotYetPlayed.clone();
-        cardsLeft.removeAll(hand);
+
+        // Set of possible cards excluding my hand
+        ArrayList<Card> cardsLeft = cardsLeft(cardsNotYetPlayed, (ArrayList<Card>) hand);
+
         Combination bestOpponentPossibleCombination = this.getBestPossibleCombination(milestone.getPlayer1Side(), cardsLeft);
 
         //Then, find the first combination that beat this
@@ -135,14 +136,16 @@ public class GameAiLucie2Impl extends GameAI {
             Card c = hand.get(index);
 
             //creation of the hypotetical hand : current milestone cards + one hand card
-            List<Card> hypotheticPlayedCards = milestone.getPlayer2Side();
+            List<Card> player2PlayedCards = milestone.getPlayer2Side();
+            List<Card> hypotheticPlayedCards = new ArrayList<Card>();
+            hypotheticPlayedCards.addAll(player2PlayedCards);
             hypotheticPlayedCards.add(c);
 
             //build cardNotYetPlayed without hypotetic card
-            cardsLeft = (ArrayList<Card>) cardsNotYetPlayed.clone();
-            cardsLeft.remove(c);
-
-            Combination combination = this.getBestPossibleCombination(hypotheticPlayedCards, cardsLeft);
+            ArrayList<Card> hypoteticCard = new ArrayList<Card>();
+            hypoteticCard.add(c);
+            ArrayList<Card> hypotheticCardsLeft = cardsLeft(cardsNotYetPlayed, hypoteticCard);
+            Combination combination = this.getBestPossibleCombination(hypotheticPlayedCards, hypotheticCardsLeft);
 
             if (combination.getStrenght()>bestOpponentPossibleCombination.getStrenght()) {
                 return index;
@@ -151,21 +154,19 @@ public class GameAiLucie2Impl extends GameAI {
         throw new NoIndexFoundException();
     }
 
-
     protected Indexes handCardIndexAndMilestoneIndex(final List<Card> hand, final List<Milestone> milestones, final List<Card> cardsNotYetPlayed, final List<Card> allTheCards,  final PlayingPlayerType pType) {
 
-        ArrayList<Integer> milestonesOrder = this.milestonesOrder(milestones);
-        for(int milestoneIndex : milestonesOrder ) {
+        ArrayList<Milestone> milestonesOrder = this.milestonesOrder(milestones);
+        for(Milestone milestone : milestonesOrder ) {
             try{
-                int cardIndex = this.handCardIndex(hand, milestones.get(milestoneIndex), (ArrayList<Card>) cardsNotYetPlayed);
-                return new Indexes(cardIndex,milestoneIndex);
+                int cardIndex = this.handCardIndex(hand, milestone, (ArrayList<Card>) cardsNotYetPlayed);
+                return new Indexes(cardIndex, milestone.getId());
             } catch (NoIndexFoundException e) {
                 //nothing to do, just iterate
             }
         }
-        return new Indexes(getWeakestCardIndex(hand), milestonesOrder.get(milestonesOrder.size()-1));
+        return new Indexes(getWeakestCardIndex(hand), milestonesOrder.get(milestonesOrder.size()-1).getId());
     }
-
 
     private Indexes testCombinationfinal(final List<Milestone> milestones, final Hand hand, final List<Card> cardsNotYetPlayed, int strenghtToBeat) throws NoIndexFoundException {
         // Loop over milestones in the desired order
@@ -239,7 +240,7 @@ public class GameAiLucie2Impl extends GameAI {
         return neighbours_chaos;
     }
 
-    public ArrayList<Integer> milestonesOrder(final List<Milestone> milestones) {
+    public ArrayList<Milestone> milestonesOrder(final List<Milestone> milestones) {
         // add chaos
         ArrayList<Integer> indexes = new ArrayList<Integer>();
         for (int i = 0; i < MAX_MILESTONES; i++) {
@@ -259,10 +260,10 @@ public class GameAiLucie2Impl extends GameAI {
             }
         });
         System.out.println(milestones);
-        final ArrayList<Integer> milestonesOrder = new ArrayList<Integer>();
+        final ArrayList<Milestone> milestonesOrder = new ArrayList<Milestone>();
         for (Milestone m : milestones) {
             if (m.getPlayer2Side().size() < 3) {
-                milestonesOrder.add(m.getId());
+                milestonesOrder.add(m);
             }
         }
         // TODO : First look to the milestone close to the ones already captured
