@@ -19,8 +19,11 @@ import java.util.List;
 public class GameAiLucieImpl extends GameAI {
 
     public GameAiLucieImpl(final PlayingPlayerType pType) {
-        this.name = "Lilouhbe 1";
         this.playingPlayerType = pType;
+    }
+
+    public String getName() {
+        return "Lilouhbe (Advanced)";
     }
 
     protected Indexes handCardIndexAndMilestoneIndex(

@@ -2,10 +2,8 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -17,6 +15,8 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.boardgames.bastien.schotten_totten.ai.GameAiImpl;
+import com.boardgames.bastien.schotten_totten.ai.GameAiLucieImpl;
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
@@ -53,7 +53,7 @@ public class LauncherActivity extends Activity {
         soloLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LauncherActivity.this, SoloGameActivity.class));
+                chooseAI();
             }
         });
 
@@ -251,6 +251,55 @@ public class LauncherActivity extends Activity {
                     dialog.cancel();
                     // dismiss waiting pop up
                     //waitingDialog.dismiss();
+                }
+            });
+
+            builder.show();
+
+        } catch (Exception e) {
+            showError(e);
+        }
+    }
+
+    private void chooseAI() {
+        try {
+            // show waiting pop up
+            final List<String> list = null;
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.choose_ai_title));
+
+            final LinearLayout layout = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+
+            //set player type
+            final RadioGroup radioGroup = new RadioGroup(this);
+            final RadioButton easyAI = new RadioButton(this);
+            easyAI.setText(new GameAiImpl(PlayingPlayerType.TWO).getName());
+            radioGroup.addView(easyAI);
+            final RadioButton lucyAI = new RadioButton(this);
+            lucyAI.setText(new GameAiLucieImpl(PlayingPlayerType.TWO).getName());
+            radioGroup.addView(lucyAI);
+            radioGroup.check(easyAI.getId());
+            layout.addView(radioGroup);
+
+            builder.setView(layout);
+
+            // Set up the buttons
+            builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    final Intent joinIntent = new Intent(LauncherActivity.this, SoloGameActivity.class);
+                    final RadioButton selectedButton =
+                            radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+                    joinIntent.putExtra(getString(R.string.chosen_ai_name_key), selectedButton.getText().toString());
+                    startActivity(joinIntent);
+
+                }
+            });
+            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
                 }
             });
 

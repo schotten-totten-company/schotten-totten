@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.boardgames.bastien.schotten_totten.ai.AiGameManager;
 import com.boardgames.bastien.schotten_totten.ai.GameAI;
+import com.boardgames.bastien.schotten_totten.ai.GameAiImpl;
 import com.boardgames.bastien.schotten_totten.ai.GameAiLucieImpl;
 import com.boradgames.bastien.schotten_totten.core.exceptions.HandFullException;
 import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxReachedException;
@@ -13,13 +14,24 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 public class SoloGameActivity extends GameActivity {
 
-    private final GameAI ai = new GameAiLucieImpl(PlayingPlayerType.TWO);
+    private GameAI ai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try {
+            final String aiName = getIntent().getStringExtra(getString(R.string.chosen_ai_name_key));
+            final GameAI luAI = new GameAiLucieImpl(PlayingPlayerType.TWO);
+            final GameAI baAI = new GameAiImpl(PlayingPlayerType.TWO);
+            if (aiName.equals(luAI.getName())) {
+                ai = luAI;
+            } else if (aiName.equals(baAI.getName())) {
+                ai = baAI;
+            } else {
+                ai = baAI;
+            }
+
             this.gameManager = new AiGameManager(getString(R.string.player1name), ai.getName());
             initUI(this.gameManager.getPlayingPlayer().getPlayerType());
 

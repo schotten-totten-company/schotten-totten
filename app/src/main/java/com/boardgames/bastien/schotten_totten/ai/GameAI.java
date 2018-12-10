@@ -18,13 +18,7 @@ import java.util.List;
 
 public abstract class GameAI {
 
-    protected String name = this.getClass().getSimpleName();
-
     protected PlayingPlayerType playingPlayerType = PlayingPlayerType.TWO;
-
-    public String getName() {
-        return this.name;
-    }
 
     protected class Indexes {
         private final int handIndex;
@@ -42,6 +36,8 @@ public abstract class GameAI {
             return this.milestoneIndex;
         }
     }
+
+    public abstract String getName();
 
     public void reclaimAndPlay(final AiGameManager gameManager) throws MilestoneSideMaxReachedException, HandFullException, NotYourTurnException {
 

@@ -51,6 +51,9 @@
     <string name="player1_name_key">player1Name</string>
     <string name="player2_name_key">player2Name</string>
 
+    <string name="choose_ai_title">Choose AI:</string>
+    <string name="chosen_ai_name_key">chosenAIname</string>
+
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
