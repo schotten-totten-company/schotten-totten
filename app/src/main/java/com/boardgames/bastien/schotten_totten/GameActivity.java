@@ -164,15 +164,6 @@ public abstract class GameActivity extends AppCompatActivity {
                 endOfTurn();
             }
         });
-        passButton.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                if (event.getAction() == DragEvent.ACTION_DRAG_ENDED && !event.getResult()) {
-                    updateHand(gameManager.getPlayingPlayer().getHand());
-                }
-                return false;
-            }
-        });
         passButton.setVisibility(View.INVISIBLE);
     }
 
@@ -297,7 +288,6 @@ public abstract class GameActivity extends AppCompatActivity {
                     case DragEvent.ACTION_DRAG_ENDED:
                         v.setAlpha((float) 0.3);
                         v.setBackgroundColor(Color.LTGRAY);
-                        updateHand(gameManager.getPlayingPlayer().getHand());
                         return true;
                     default:
                         return false;
@@ -331,6 +321,18 @@ public abstract class GameActivity extends AppCompatActivity {
     }
 
     protected void initHand(final Player updatePointOfViewPlayer) {
+
+        // set update listener on drag and drop
+        textView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if (event.getAction() == DragEvent.ACTION_DRAG_ENDED && !event.getResult()) {
+                    updateHand(gameManager.getPlayingPlayer().getHand());
+                }
+                return false;
+            }
+        });
+
         final Hand handToUpdate = updatePointOfViewPlayer.getHand();
         final int handSize = handToUpdate.getHandSize();
         for (int i = 0; i < handSize; i++) {
@@ -373,6 +375,7 @@ public abstract class GameActivity extends AppCompatActivity {
                                 handToUpdate.addCard(cardToReplace, selectedCardIndex);
                                 handToUpdate.getCards().remove(handIndex);
                                 handToUpdate.addCard(cardToMove, handIndex);
+                                updateHand(gameManager.getPlayingPlayer().getHand());
                             } catch (HandFullException e) {
                                 // should not occurs
                                 showErrorMessage(e);

@@ -100,6 +100,14 @@ public class ServerGameActivity extends GameActivity {
     }
 
     @Override
+    protected void cardPlayedLeadingToTheEndOfTheTurn(final PlayingPlayerType updatePointOfView) {
+        updateUI(updatePointOfView);
+        // end of the turn
+        disableClick();
+        endOfTurn();
+    }
+
+    @Override
     protected void endOfTurn() {
         disableClick();
         passButton.setVisibility(View.INVISIBLE);

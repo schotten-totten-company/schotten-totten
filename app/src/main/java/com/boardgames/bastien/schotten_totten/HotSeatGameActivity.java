@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.boradgames.bastien.schotten_totten.core.controllers.SimpleGameManager;
 import com.boradgames.bastien.schotten_totten.core.exceptions.GameCreationException;
+import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 public class HotSeatGameActivity extends GameActivity {
 
@@ -23,6 +24,12 @@ public class HotSeatGameActivity extends GameActivity {
         } catch (final GameCreationException e) {
             showErrorMessage(e);
         }
+    }
+
+    @Override
+    protected void cardPlayedLeadingToTheEndOfTheTurn(final PlayingPlayerType updatePointOfView) {
+        // end of the turn
+        endOfTurn();
     }
 
     @Override
