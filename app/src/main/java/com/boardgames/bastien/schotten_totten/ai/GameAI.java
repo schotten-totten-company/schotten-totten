@@ -7,6 +7,7 @@ import com.boradgames.bastien.schotten_totten.core.exceptions.MilestoneSideMaxRe
 import com.boradgames.bastien.schotten_totten.core.exceptions.NotYourTurnException;
 import com.boradgames.bastien.schotten_totten.core.model.Card;
 import com.boradgames.bastien.schotten_totten.core.model.Milestone;
+import com.boradgames.bastien.schotten_totten.core.model.MilestonePlayerType;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import java.util.ArrayList;
@@ -72,6 +73,9 @@ public abstract class GameAI {
         final List<Card> hand = new ArrayList<>(gameManager.getPlayingPlayer().getHand().getCards());
         final List<Milestone> milestones = new ArrayList<>( gameManager.getMilestones());
         final Indexes indexes = handCardIndexAndMilestoneIndex(hand, milestones, gameManager.getCardsNotYetPlayed(), gameManager.getAllTheCards(), playingPlayerType);
+        if (!gameManager.getMilestones().get(indexes.getMilestoneIndex()).getCaptured().equals(MilestonePlayerType.NONE)) {
+            throw new MilestoneSideMaxReachedException(indexes.getMilestoneIndex());
+        }
         try {
             gameManager.playerPlays(PlayingPlayerType.TWO, indexes.getHandIndex(), indexes.getMilestoneIndex());
         } catch (EmptyDeckException e) {
