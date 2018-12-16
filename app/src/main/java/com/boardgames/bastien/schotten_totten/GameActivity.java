@@ -290,7 +290,7 @@ public abstract class GameActivity extends AppCompatActivity {
                         v.setBackgroundColor(Color.LTGRAY);
                         return true;
                     default:
-                        return false;
+                        return true;
                 }
             } else {
                 return false;
@@ -326,10 +326,24 @@ public abstract class GameActivity extends AppCompatActivity {
         textView.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
-                if (event.getAction() == DragEvent.ACTION_DRAG_ENDED && !event.getResult()) {
-                    updateHand(gameManager.getPlayingPlayer().getHand());
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        return true;
+                    case DragEvent.ACTION_DROP:
+                        updateHand(gameManager.getPlayingPlayer().getHand());
+                        return false;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        if (!event.getResult()) {
+                            updateHand(gameManager.getPlayingPlayer().getHand());
+                        }
+                        return true;
+                    default:
+                        return true;
                 }
-                return false;
             }
         });
 
@@ -384,7 +398,7 @@ public abstract class GameActivity extends AppCompatActivity {
                         case DragEvent.ACTION_DRAG_ENDED:
                             return true;
                         default:
-                            return false;
+                            return true;
                     }
                 }
             });
