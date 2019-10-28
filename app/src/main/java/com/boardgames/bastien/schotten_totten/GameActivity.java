@@ -485,7 +485,7 @@ public abstract class GameActivity extends AppCompatActivity {
 
     private void updateCard(final ImageView view, final Card card) {
 
-        view.setAlpha((float) 1.0);
+        view.setAlpha((float) 0.9);
 
         switch (card.getNumber()) {
             case ONE:

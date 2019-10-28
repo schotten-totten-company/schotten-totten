@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainMemoLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:layout_weight="1"
-    android:background="@android:color/holo_green_dark"
+    android:background="@drawable/homescreen_backgroung"
     android:foregroundGravity="center"
     android:gravity="center"
     android:orientation="vertical"
@@ -14,29 +16,22 @@
 
     <LinearLayout
         android:id="@+id/headLauncherLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.17"
+        android:layout_weight="0.67"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="15dp"
         android:weightSum="1">
 
-        <TextView
-            android:id="@+id/titleText"
+        <ImageView
+            android:id="@+id/titleImageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.56"
-            android:fontFamily="casual"
-            android:freezesText="false"
-            android:gravity="left"
-            android:text="SCHOTTEN TOTTEN"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"
-            android:textSize="36sp"
-            android:textStyle="bold|italic" />
-
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/image_description"
+            android:cropToPadding="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/title" />
     </LinearLayout>
 
     <LinearLayout
@@ -51,11 +46,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="0.17"
+            android:fontFamily="@font/finger_paint"
             android:foregroundGravity="center"
             android:gravity="center"
             android:text="Local Game"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp"
+            android:textColor="@android:color/background_light"
+            android:textSize="36sp"
             android:textStyle="italic" />
 
         <LinearLayout
@@ -72,10 +69,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/gloria_hallelujah"
                 android:padding="10dp"
                 android:text="Hot Seat"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/background_light"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -84,10 +83,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/gloria_hallelujah"
                 android:padding="10dp"
                 android:text="Solo"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/background_light"
                 android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -99,12 +100,14 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:layout_weight="0.17"
+            android:fontFamily="@font/finger_paint"
             android:foregroundGravity="center"
             android:gravity="center"
             android:text="LAN Game"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp"
+            android:textColor="@android:color/background_light"
+            android:textSize="36sp"
             android:textStyle="italic" />
 
         <LinearLayout
@@ -121,10 +124,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/gloria_hallelujah"
                 android:padding="10dp"
                 android:text="Create"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/background_light"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -133,10 +138,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/gloria_hallelujah"
                 android:padding="10dp"
                 android:text="Join"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/background_light"
                 android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -148,11 +155,13 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:layout_weight="0.17"
+            android:fontFamily="@font/finger_paint"
             android:foregroundGravity="center"
             android:gravity="center"
             android:text="Server Game"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp"
+            android:textColor="@android:color/background_light"
+            android:textSize="36sp"
             android:textStyle="italic" />
 
         <LinearLayout
@@ -169,10 +178,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/gloria_hallelujah"
                 android:padding="10dp"
                 android:text="Create"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/background_light"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -181,10 +192,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/gloria_hallelujah"
                 android:padding="10dp"
                 android:text="Join"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/background_light"
                 android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -193,8 +206,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
             android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
             android:layout_weight="0.17"
             android:foregroundGravity="center"
             android:gravity="center"
@@ -204,27 +217,29 @@
                 android:id="@+id/aboutLauncherText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/bungee"
                 android:padding="10dp"
-                android:text="About ?"
+                android:text="About"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/background_light"
                 android:textSize="24sp"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/quitLauncherText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/bungee"
                 android:padding="10dp"
                 android:text="Quit"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/background_light"
                 android:textSize="24sp"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
