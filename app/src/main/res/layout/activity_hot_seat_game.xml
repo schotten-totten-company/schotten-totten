@@ -36,6 +36,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:elevation="0dp"
+                android:fontFamily="@font/finger_paint"
                 android:foregroundGravity="center"
                 android:gravity="center_vertical"
                 android:text="TextView"
@@ -100,7 +101,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -113,7 +113,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -126,7 +125,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -139,7 +137,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -152,7 +149,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -165,7 +161,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -178,7 +173,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -191,7 +185,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -204,7 +197,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
             </LinearLayout>
@@ -230,7 +222,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -243,7 +234,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -256,7 +246,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -269,7 +258,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -282,7 +270,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -295,7 +282,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -308,7 +294,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -321,7 +306,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -334,7 +318,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
             </LinearLayout>
@@ -360,7 +343,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -373,7 +355,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -386,7 +367,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -399,7 +379,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -412,7 +391,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -425,7 +403,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -438,7 +415,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -451,7 +427,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -464,7 +439,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
             </LinearLayout>
@@ -490,7 +464,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -503,7 +476,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -516,7 +488,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -529,7 +500,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -542,7 +512,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -555,7 +524,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -568,7 +536,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -581,7 +548,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -594,7 +560,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
             </LinearLayout>
@@ -620,7 +585,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -633,7 +597,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -646,7 +609,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -659,7 +621,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -672,7 +633,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -685,7 +645,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -698,7 +657,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -711,7 +669,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -724,7 +681,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
             </LinearLayout>
@@ -750,7 +706,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -763,7 +718,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -776,7 +730,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -789,7 +742,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -802,7 +754,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -815,7 +766,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -828,7 +778,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -841,7 +790,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -854,7 +802,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
             </LinearLayout>
@@ -880,7 +827,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -893,7 +839,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -906,7 +851,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -919,7 +863,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -932,7 +875,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -945,7 +887,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -958,7 +899,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -971,7 +911,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -984,7 +923,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
             </LinearLayout>
@@ -1010,7 +948,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -1023,7 +960,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1036,7 +972,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1049,7 +984,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1062,7 +996,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -1075,7 +1008,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1088,7 +1020,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1101,7 +1032,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1114,7 +1044,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
             </LinearLayout>
@@ -1140,7 +1069,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -1153,7 +1081,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1166,7 +1093,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1179,7 +1105,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1192,7 +1117,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
 
@@ -1205,7 +1129,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1218,7 +1141,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1231,7 +1153,6 @@
                     android:adjustViewBounds="true"
                     android:background="@android:color/darker_gray"
                     android:contentDescription="@string/card_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/empty" />
 
@@ -1244,7 +1165,6 @@
                     android:adjustViewBounds="true"
                     android:background="#80AAAAAA"
                     android:contentDescription="@string/milestone_description"
-                    android:cropToPadding="false"
                     android:scaleType="centerInside"
                     app:srcCompat="@drawable/milestone" />
             </LinearLayout>
@@ -1267,9 +1187,9 @@
                 android:layout_margin="2dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
                 android:baselineAligned="true"
                 android:contentDescription="@string/card_description"
-                android:cropToPadding="false"
                 android:padding="0dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
@@ -1281,9 +1201,9 @@
                 android:layout_margin="2dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
                 android:baselineAligned="true"
                 android:contentDescription="@string/card_description"
-                android:cropToPadding="false"
                 android:padding="0dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
@@ -1295,9 +1215,9 @@
                 android:layout_margin="2dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
                 android:baselineAligned="true"
                 android:contentDescription="@string/card_description"
-                android:cropToPadding="false"
                 android:padding="0dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
@@ -1309,9 +1229,9 @@
                 android:layout_margin="2dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
                 android:baselineAligned="true"
                 android:contentDescription="@string/card_description"
-                android:cropToPadding="false"
                 android:padding="0dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
@@ -1323,9 +1243,9 @@
                 android:layout_margin="2dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
                 android:baselineAligned="true"
                 android:contentDescription="@string/card_description"
-                android:cropToPadding="false"
                 android:padding="0dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />
@@ -1337,9 +1257,9 @@
                 android:layout_margin="2dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
                 android:baselineAligned="true"
                 android:contentDescription="@string/card_description"
-                android:cropToPadding="false"
                 android:padding="0dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/empty" />

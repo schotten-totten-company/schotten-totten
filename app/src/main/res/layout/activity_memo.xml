@@ -179,7 +179,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:cropToPadding="false"
+                    android:cropToPadding="true"
                     app:srcCompat="@drawable/card06" />
 
                 <ImageView
@@ -189,7 +189,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:cropToPadding="false"
+                    android:cropToPadding="true"
                     app:srcCompat="@drawable/card09" />
 
                 <ImageView
@@ -199,7 +199,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:cropToPadding="false"
+                    android:cropToPadding="true"
                     app:srcCompat="@drawable/card02" />
 
                 <TextView
