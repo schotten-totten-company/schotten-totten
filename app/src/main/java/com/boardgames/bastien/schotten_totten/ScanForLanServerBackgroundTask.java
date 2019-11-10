@@ -27,7 +27,9 @@ public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
         waitingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                ScanForLanServerBackgroundTask.this.cancel(true);
+                while (!ScanForLanServerBackgroundTask.this.isCancelled()) {
+                    ScanForLanServerBackgroundTask.this.cancel(true);
+                }
             }
         });
         waitingDialog.show();
@@ -35,6 +37,7 @@ public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
 
     @Override
     protected void onPostExecute(String serverIp) {
+        ScanForLanServerBackgroundTask.this.cancel(true);
         // start game
         if (!serverIp.isEmpty()) {
             final Intent joinIntent = new Intent(activity, ServerGameActivity.class);
@@ -60,6 +63,9 @@ public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
             final String mySubLan = myIp.substring(0, myIp.lastIndexOf('.') + 1);
             // scan
             for (int i = 1; i < 250; i++) {
+                if (ScanForLanServerBackgroundTask.this.isCancelled()) {
+                    return serverIp;
+                }
                 final String ipToScan = mySubLan + i;
                 final RestGameClient restGameClient =
                         new RestGameClient(activity.getString(R.string.http_prefix) + ipToScan + activity.getString(R.string.localhost_port), activity.getString(R.string.lan_game));
