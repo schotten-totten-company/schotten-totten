@@ -3,6 +3,7 @@ package com.boardgames.bastien.schotten_totten;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 
@@ -35,7 +36,7 @@ public class HotSeatGameActivity extends GameActivity {
     @Override
     protected void endOfTurn() {
         gameManager.swapPlayers();
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog)).create();
         alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
         alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + gameManager.getPlayingPlayer().getName());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),

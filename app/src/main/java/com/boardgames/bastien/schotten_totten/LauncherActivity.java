@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -151,7 +152,7 @@ public class LauncherActivity extends Activity {
 
     private void enterGameName() {
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog));
         builder.setTitle(getString(R.string.choose_game_name));
 
         // Set up the input
@@ -195,7 +196,7 @@ public class LauncherActivity extends Activity {
             //waitingDialog.show();
             final List<String> list = new RestGameClient(onlineUrl, "").listGames();
             //waitingDialog.dismiss();
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog));
             builder.setTitle(getString(R.string.choose_game_name));
 
             final LinearLayout layout = new LinearLayout(this);
@@ -265,7 +266,7 @@ public class LauncherActivity extends Activity {
         try {
             // show waiting pop up
             final List<String> list = null;
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog));
             builder.setTitle(getString(R.string.choose_ai_title));
 
             final LinearLayout layout = new LinearLayout(this);
@@ -311,7 +312,7 @@ public class LauncherActivity extends Activity {
     }
 
     private void enterPlayersNames() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog));
         builder.setTitle(getString(R.string.enter_game_name));
 
         final LinearLayout layout = new LinearLayout(this);
@@ -358,7 +359,7 @@ public class LauncherActivity extends Activity {
     }
 
     public final void showError(final String title, final String message) {
-        final AlertDialog alertDialog = new AlertDialog.Builder(LauncherActivity.this).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(LauncherActivity.this, R.style.CustomAlertDialog)).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
@@ -372,7 +373,7 @@ public class LauncherActivity extends Activity {
     }
 
     private void showAboutDialog() {
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog)).create();
         alertDialog.setTitle(getString(R.string.about_title));
         alertDialog.setMessage(getString(R.string.about_content));
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
