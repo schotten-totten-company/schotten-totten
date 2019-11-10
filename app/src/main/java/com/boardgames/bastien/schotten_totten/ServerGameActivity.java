@@ -1,9 +1,7 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -148,6 +146,8 @@ public class ServerGameActivity extends GameActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                lanGameServer.closeAllConnections();
+                lanGameServer.stop();
                 // wait 4 seconds, thus the other player is notified
                 final WaitingBackgroundTask task =
                         new WaitingBackgroundTask(ServerGameActivity.this, 3333);
