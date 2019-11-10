@@ -7,7 +7,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/finger_paint</item>
+        <item name="android:fontFamily">@font/gloria_hallelujah</item>
     </style>
 
     <style name="FullscreenTheme" parent="AppTheme">
@@ -32,15 +32,10 @@
     <style name="AppTheme.PopupOverlay" parent="Base.ThemeOverlay.AppCompat.Light" />
 
     <style name="CustomAlertDialog" parent="@android:style/Theme.Dialog">
-        <item name="android:titleTextStyle">@style/CustomAlertDialog.Title</item>
         <item name="android:backgroundTint">@android:color/darker_gray</item>
-        <item name="android:fontFamily">@font/gloria_hallelujah</item>
+        <item name="android:fontFamily">@font/finger_paint</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:buttonTint">@color/colorAccent</item>
-    </style>
-
-    <style name="CustomAlertDialog.Title" parent="@android:style/Theme.Dialog">
-        <item name="android:fontFamily">@font/finger_paint</item>
     </style>
 
 </resources>
