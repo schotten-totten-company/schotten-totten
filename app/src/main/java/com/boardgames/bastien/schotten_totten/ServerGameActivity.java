@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -139,7 +140,7 @@ public class ServerGameActivity extends GameActivity {
 
     @Override
     public void onBackPressed() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder((new ContextThemeWrapper(this, R.style.CustomAlertDialog)));
         builder.setTitle(getString(R.string.quit_title));
 
         // Set up the buttons
