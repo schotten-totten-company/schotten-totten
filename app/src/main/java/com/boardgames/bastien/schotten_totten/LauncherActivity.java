@@ -2,8 +2,11 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.ContextThemeWrapper;
@@ -76,9 +79,17 @@ public class LauncherActivity extends Activity {
         joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ScanForLanServerBackgroundTask task =
-                        new ScanForLanServerBackgroundTask(LauncherActivity.this);
-                task.execute();
+                final ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                final NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                final NetworkInfo vpnInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_VPN);
+                if (wifiInfo.isConnected() || vpnInfo.isConnected()) {
+                    final ScanForLanServerBackgroundTask task =
+                            new ScanForLanServerBackgroundTask(LauncherActivity.this);
+                    task.execute();
+                } else {
+                    showError(getString(R.string.unknown_host_title), getString(R.string.unknown_host_message));
+                }
+
             }
         });
 
