@@ -82,8 +82,12 @@
     <string name="about_title">About</string>
     <string name="about_content">
     Android version of the board card game Schotten-Totten\n\n
-    Developed by: BaBa\n
-    Tested by: Bastien and Lucie
+    Developed by:\n
+        <i>\t\tBaBa</i>\n
+    Tested by:\n
+        <i>\t\tBastien and Lucie</i>\n
+    Graphics by:\n
+        <i>\t\tTomA</i>
     </string>
 
     <string name="rules">
