@@ -10,7 +10,7 @@ public abstract class AbstractBackgroundTask extends AsyncTask<Void, Void, Strin
     protected final Activity activity;
 
     public AbstractBackgroundTask(final Activity activity) {
-        waitingDialog = new ProgressDialog(activity);
+        waitingDialog = new ProgressDialog(activity, R.style.CustomAlertDialog);
         waitingDialog.setTitle(activity.getString(R.string.contacting_server));
         waitingDialog.setMessage(activity.getString(R.string.please_wait));
         this.activity = activity;
