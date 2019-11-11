@@ -66,16 +66,23 @@ public class LauncherActivity extends Activity {
         createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent createIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                createIntent.putExtra(getString(R.string.server_url_key), getString(R.string.localhost_url));
-                createIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
-                createIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.ONE.toString());
-                startActivity(createIntent);
+                final ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                final NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                final NetworkInfo vpnInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_VPN);
+                if (wifiInfo.isConnected() || vpnInfo.isConnected()) {
+                    final Intent createIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                    createIntent.putExtra(getString(R.string.server_url_key), getString(R.string.localhost_url));
+                    createIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
+                    createIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.ONE.toString());
+                    startActivity(createIntent);
+                } else {
+                    showError(getString(R.string.unknown_host_title), getString(R.string.unknown_host_message));
+                }
             }
         });
+
         // join lan game
         final TextView joinOnlineLauncherText = findViewById(R.id.joinOnlineLauncherText);
-
         joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +96,6 @@ public class LauncherActivity extends Activity {
                 } else {
                     showError(getString(R.string.unknown_host_title), getString(R.string.unknown_host_message));
                 }
-
             }
         });
 
