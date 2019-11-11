@@ -59,6 +59,7 @@ public class SoloGameActivity extends GameActivity {
         // check victory
         try {
             endOfTheGame(gameManager.getWinner());
+            return;
         } catch (final NoPlayerException e) {
             // nothing to do, just continue to play
         }
