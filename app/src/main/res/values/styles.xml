@@ -1,37 +1,24 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Base.Theme.AppCompat">
         <!-- Customize your theme here. -->
         <item name="actionBarSize">40dp</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/gloria_hallelujah</item>
+        <item name="fontFamily">@font/gloria_hallelujah</item>
     </style>
 
-    <style name="FullscreenTheme" parent="AppTheme">
-        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
-    </style>
-
-    <style name="FullscreenActionBarStyle" parent="Base.Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar" parent="AppTheme">
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
+    <style name="AppTheme.NoTitleBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="CustomAlertDialog" parent="AppTheme">
-        <item name="android:backgroundTint">@android:color/darker_gray</item>
         <item name="android:fontFamily">@font/finger_paint</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:buttonTint">@color/colorAccent</item>
+        <item name="android:buttonTint">@android:color/white</item>
     </style>
 
 </resources>
