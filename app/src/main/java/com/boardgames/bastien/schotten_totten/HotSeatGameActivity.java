@@ -53,7 +53,7 @@ public class HotSeatGameActivity extends GameActivity {
             @Override
             public void onShow(DialogInterface dialog) {
                 final Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
-                button.setTextSize((float)30);
+                button.setTextSize((float)22);
             }
         });
 
