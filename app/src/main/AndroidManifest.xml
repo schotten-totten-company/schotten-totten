@@ -34,6 +34,7 @@
         <activity android:name=".MemoActivity"
             android:screenOrientation="portrait"
             android:largeHeap="true"
+            android:theme="@style/AppTheme.NoTitleBar"
             android:launchMode="standard">
         </activity>
 
