@@ -12,6 +12,7 @@ import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -355,18 +356,17 @@ public abstract class GameActivity extends AppCompatActivity {
             final ImageView handCardView = handView.get(i);
             updateHandCard(handCardView, handToUpdate.getCards().get(i));
 
-            handCardView.setOnLongClickListener(new View.OnLongClickListener() {
+            handCardView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public boolean onLongClick(View v) {
-                    if (isClickEnabled) {
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (isClickEnabled && event.getAction() == MotionEvent.ACTION_DOWN) {
                         final ClipData data = ClipData.newPlainText("index", String.valueOf(handIndex));
                         v.startDrag(data, new View.DragShadowBuilder(v), v, 0);
-                        v.setVisibility(View.INVISIBLE);
+                        //v.setVisibility(View.INVISIBLE);
                         return true;
                     } else {
                         return false;
                     }
-
                 }
             });
 
@@ -375,6 +375,7 @@ public abstract class GameActivity extends AppCompatActivity {
                 public boolean onDrag(View v, DragEvent event) {
                     switch (event.getAction()) {
                         case DragEvent.ACTION_DRAG_STARTED:
+                            ((View) event.getLocalState()).setVisibility(View.INVISIBLE);
                             return true;
                         case DragEvent.ACTION_DRAG_ENTERED:
                             return true;
@@ -397,6 +398,7 @@ public abstract class GameActivity extends AppCompatActivity {
                             }
                             return true;
                         case DragEvent.ACTION_DRAG_ENDED:
+                            ((View) event.getLocalState()).setVisibility(View.VISIBLE);
                             return true;
                         default:
                             return true;
