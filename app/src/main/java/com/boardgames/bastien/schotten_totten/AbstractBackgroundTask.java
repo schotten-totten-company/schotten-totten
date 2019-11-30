@@ -3,6 +3,7 @@ package com.boardgames.bastien.schotten_totten;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.view.WindowManager;
 
 public abstract class AbstractBackgroundTask extends AsyncTask<Void, Void, String> {
 
@@ -13,6 +14,7 @@ public abstract class AbstractBackgroundTask extends AsyncTask<Void, Void, Strin
         waitingDialog = new ProgressDialog(activity, R.style.CustomAlertDialog);
         waitingDialog.setTitle(activity.getString(R.string.contacting_server));
         waitingDialog.setMessage(activity.getString(R.string.please_wait));
+        waitingDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         this.activity = activity;
     }
 
