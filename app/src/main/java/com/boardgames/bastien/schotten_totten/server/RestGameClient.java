@@ -29,7 +29,10 @@ public class RestGameClient {
     public RestGameClient(final String url, final String guid) {
         this.url = url;
         this.guid = guid;
-        restTemplate = new RestTemplate();
+        final SimpleClientHttpRequestFactory clientHttpRequestFactory = new SimpleClientHttpRequestFactory();
+        clientHttpRequestFactory.setConnectTimeout(10000);
+        clientHttpRequestFactory.setReadTimeout(10000);
+        restTemplate = new RestTemplate(clientHttpRequestFactory);
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     }
 
