@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.ContextThemeWrapper;
@@ -66,10 +67,8 @@ public class LauncherActivity extends Activity {
         createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                final NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-                final NetworkInfo vpnInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_VPN);
-                if (wifiInfo.isConnected() || vpnInfo.isConnected()) {
+                final WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                if (wifiMgr.isWifiEnabled()) {
                     final Intent createIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
                     createIntent.putExtra(getString(R.string.server_url_key), getString(R.string.localhost_url));
                     createIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
@@ -86,10 +85,8 @@ public class LauncherActivity extends Activity {
         joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                final NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-                final NetworkInfo vpnInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_VPN);
-                if (wifiInfo.isConnected() || vpnInfo.isConnected()) {
+                final WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                if (wifiMgr.isWifiEnabled()) {
                     final ScanForLanServerBackgroundTask task =
                             new ScanForLanServerBackgroundTask(LauncherActivity.this);
                     task.execute();
