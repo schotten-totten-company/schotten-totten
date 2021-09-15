@@ -2,7 +2,7 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MemoActivity extends AppCompatActivity {
 

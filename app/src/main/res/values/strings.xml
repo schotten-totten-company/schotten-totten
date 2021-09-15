@@ -23,8 +23,8 @@
     <string name="error_title">Error:\u0020</string>
 
     <string name="unknown_host_title">No local network connection</string>
-    <string name="unknown_host_message">Not connected on WLAN or VLAN,
-        please first connect to a WiFi or PPTP VPN local network.</string>
+    <string name="unknown_host_message">Not connected on WLAN,
+        please first connect to a WiFi local network.</string>
     <string name="no_local_server_title">No local server found</string>
     <string name="no_local_server_message">No local server found on your local network.</string>
 

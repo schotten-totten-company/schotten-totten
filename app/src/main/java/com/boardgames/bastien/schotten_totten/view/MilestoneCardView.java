@@ -3,7 +3,7 @@ package com.boardgames.bastien.schotten_totten.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 /**
  * Created by Bastien on 10/12/2016.

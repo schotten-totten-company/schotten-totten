@@ -2,7 +2,7 @@ package com.boardgames.bastien.schotten_totten.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.boradgames.bastien.schotten_totten.core.model.Card;
 
