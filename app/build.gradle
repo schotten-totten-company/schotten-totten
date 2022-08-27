@@ -18,15 +18,14 @@ android {
         }
     }
 
-    compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 32
     defaultConfig {
         multiDexEnabled true
         applicationId "com.boardgames.bastien.schotten_totten"
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 45
-        versionName "4.5"
+        minSdkVersion 26
+        targetSdkVersion 32
+        versionCode 46
+        versionName "4.6"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
@@ -38,7 +37,12 @@ android {
     productFlavors {
     }
     packagingOptions {
-        exclude 'META-INF/*'
+        jniLibs {
+            excludes += ['META-INF/*']
+        }
+        resources {
+            excludes += ['META-INF/*']
+        }
     }
 
     compileOptions {
@@ -46,20 +50,18 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    testImplementation 'junit:junit:4.12'
-    implementation 'org.apache.commons:commons-collections4:4.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.10.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
     implementation 'org.springframework.android:spring-android-core:1.0.1.RELEASE'
     implementation 'org.nanohttpd:nanohttpd-nanolets:2.3.1'
-    //implementation 'org.springframework.android:spring-android:1.0.1.RELEASE'
-    implementation ('com.github.schotten-totten-company:schotten-totten-core:1.9.1'){changing=true}
+    implementation ('com.github.schotten-totten-company:schotten-totten-core:1.9.2'){changing=true}
 }
