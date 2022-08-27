@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.InputType;
@@ -31,6 +29,7 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class LauncherActivity extends Activity {
 
@@ -122,7 +121,7 @@ public class LauncherActivity extends Activity {
 
 
         });
-        // guit
+        // quit
         findViewById(R.id.quitLauncherText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,7 +172,7 @@ public class LauncherActivity extends Activity {
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        final String currentDate = new SimpleDateFormat(" (dd-MM-yyyy, HH:mm:ss)").format(new Date());
+        final String currentDate = new SimpleDateFormat(" (dd-MM-yyyy, HH:mm:ss)", Locale.FRANCE).format(new Date());
         final String message = getString(R.string.game_name) + currentDate;
         input.setText(message);
         builder.setView(input);
@@ -279,8 +278,7 @@ public class LauncherActivity extends Activity {
     private void chooseAI() {
         try {
             // show waiting pop up
-            final List<String> list = null;
-            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog));
+            final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog));
             builder.setTitle(getString(R.string.choose_ai_title));
 
             final LinearLayout layout = new LinearLayout(this);
