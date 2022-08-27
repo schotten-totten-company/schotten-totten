@@ -64,8 +64,7 @@
     <string name="it_is_your_turn_message">, it is your turn to play.</string>
     <string name="not_your_turn_message">Your opponent is playing ...</string>
 
-    <string name="online_url">https://schotten-totten.herokuapp.com</string>
-    <!--<string name="online_url">http://192.168.1.3:8080</string>-->
+    <string name="online_url">http://schotten-totten.babaonline.ovh:8057</string>
     <string name="localhost_url">http://localhost:8080</string>
     <string name="server_url_key">serverUrl</string>
     <string name="game_name_key">gameName</string>
