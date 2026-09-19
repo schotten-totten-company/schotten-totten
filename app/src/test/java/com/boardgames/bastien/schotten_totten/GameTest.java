@@ -11,9 +11,9 @@ import com.boradgames.bastien.schotten_totten.core.model.Milestone;
 import com.boradgames.bastien.schotten_totten.core.model.MilestonePlayerType;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public class GameTest {
 
     private Game testGame;
 
-    @Before
+    @BeforeEach
     public void before() throws HandFullException, EmptyDeckException, GameCreationException {
         testGame = new Game("p1", "p2");
     }
@@ -62,18 +62,18 @@ public class GameTest {
     public void player1WinsWith3MilestonesInARow() throws MilestoneSideMaxReachedException, NoPlayerException {
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(0), Card.NUMBER.EIGHT, PlayingPlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
-        Assert.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
-        Assert.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
+        Assertions.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
+        Assertions.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
+        Assertions.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(1), Card.NUMBER.FIVE, PlayingPlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(1).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
-        Assert.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
-        Assert.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
+        Assertions.assertTrue(testGame.getGameBoard().getMilestones().get(1).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
+        Assertions.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
+        Assertions.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(2), Card.NUMBER.ONE, PlayingPlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(2).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
-        Assert.assertTrue(testGame.getWinner().equals(MilestonePlayerType.ONE));
+        Assertions.assertTrue(testGame.getGameBoard().getMilestones().get(2).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
+        Assertions.assertTrue(testGame.getWinner().equals(MilestonePlayerType.ONE));
 
     }
 
@@ -81,23 +81,23 @@ public class GameTest {
     public void player1WinsWith3MilestonesInARow_2() throws MilestoneSideMaxReachedException, NoPlayerException {
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(0), Card.NUMBER.EIGHT, PlayingPlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
-        Assert.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
-        Assert.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
+        Assertions.assertTrue(testGame.getGameBoard().getMilestones().get(0).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
+        Assertions.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
+        Assertions.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(5), Card.NUMBER.ONE, PlayingPlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(5).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
-        Assert.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
-        Assert.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
+        Assertions.assertTrue(testGame.getGameBoard().getMilestones().get(5).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
+        Assertions.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
+        Assertions.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(4), Card.NUMBER.ONE, PlayingPlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(4).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
-        Assert.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
-        Assert.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
+        Assertions.assertTrue(testGame.getGameBoard().getMilestones().get(4).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
+        Assertions.assertFalse(testGame.getWinner().equals(MilestonePlayerType.ONE));
+        Assertions.assertTrue(testGame.getWinner().equals(MilestonePlayerType.NONE));
 
         addThreeOfAKind(testGame.getGameBoard().getMilestones().get(6), Card.NUMBER.ONE, PlayingPlayerType.ONE);
-        Assert.assertTrue(testGame.getGameBoard().getMilestones().get(6).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
-        Assert.assertTrue(testGame.getWinner().equals(MilestonePlayerType.ONE));
+        Assertions.assertTrue(testGame.getGameBoard().getMilestones().get(6).reclaim(PlayingPlayerType.ONE, new ArrayList<Card>()));
+        Assertions.assertTrue(testGame.getWinner().equals(MilestonePlayerType.ONE));
 
     }
 

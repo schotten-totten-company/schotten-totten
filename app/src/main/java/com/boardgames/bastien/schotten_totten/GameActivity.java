@@ -1,13 +1,16 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.ContextThemeWrapper;
+import androidx.appcompat.view.ContextThemeWrapper;
+
 import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +35,7 @@ import com.boradgames.bastien.schotten_totten.core.model.Milestone;
 import com.boradgames.bastien.schotten_totten.core.model.MilestonePlayerType;
 import com.boradgames.bastien.schotten_totten.core.model.Player;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -68,6 +72,31 @@ public abstract class GameActivity extends AppCompatActivity {
         handLayout = findViewById(R.id.handLayout);
         textView = findViewById(R.id.textView);
         gameLayout = findViewById(R.id.gameLayout);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(GameActivity.this, R.style.CustomAlertDialog));
+
+                builder.setTitle(getString(R.string.quit_title));
+
+                // Set up the buttons
+                builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 
     @Override
@@ -79,44 +108,13 @@ public abstract class GameActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-//            case R.id.action_settings:
-//                // User chose the "Settings" item, show the app settings UI...
-//                return true;
-
-            case R.id.action_favorite:
-                startActivity(new Intent(getApplicationContext(), MemoActivity.class));
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
+        final int itemId = item.getItemId();
+        if (itemId == R.id.action_favorite) {
+            startActivity(new Intent(getApplicationContext(), MemoActivity.class));
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog));
-        builder.setTitle(getString(R.string.quit_title));
-
-        // Set up the buttons
-        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                finish();
-            }
-        });
-        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
     }
 
     protected void initUI(final PlayingPlayerType updatePointOfView) {

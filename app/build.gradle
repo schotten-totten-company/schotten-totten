@@ -2,38 +2,48 @@ apply plugin: 'com.android.application'
 
 android {
 
-    allprojects {
-        afterEvaluate { project ->
-            def propsFile = rootProject.file('keystore.properties')
-            def configName = 'release'
+    namespace 'com.boardgames.bastien.schotten_totten'
 
-            if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
-                def props = new Properties()
-                props.load(new FileInputStream(propsFile))
-                android.signingConfigs[configName].storeFile = file(props['storeFile'])
-                android.signingConfigs[configName].storePassword = props['storePassword']
-                android.signingConfigs[configName].keyAlias = props['keyAlias']
-                android.signingConfigs[configName].keyPassword = props['keyPassword']
+    signingConfigs {
+        release {
+            def keystorePropertiesFile = rootProject.file('keystore.properties')
+            if (keystorePropertiesFile.exists()) {
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+                storeFile = file(keystoreProperties['storeFile'])
+                storePassword = keystoreProperties['storePassword']
+                keyAlias = keystoreProperties['keyAlias']
+                keyPassword = keystoreProperties['keyPassword']
             }
         }
     }
 
-    compileSdkVersion 32
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
+    compileSdkVersion 37
     defaultConfig {
         multiDexEnabled true
         applicationId "com.boardgames.bastien.schotten_totten"
-        minSdkVersion 26
-        targetSdkVersion 32
-        versionCode 46
-        versionName "4.6"
+        minSdk 26
+        targetSdk 37
+        versionCode 50
+        versionName '5.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+
     productFlavors {
     }
     packagingOptions {
@@ -50,18 +60,20 @@ android {
 }
 
 dependencies {
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.8.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.android.material:material:1.6.1'
-    testImplementation 'junit:junit:4.13.2'
-    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'com.google.android.material:material:1.14.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.14.4'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.14.4'
+    implementation 'org.apache.commons:commons-collections4:4.6.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.2'
     implementation 'org.springframework.android:spring-android-core:1.0.1.RELEASE'
     implementation 'org.nanohttpd:nanohttpd-nanolets:2.3.1'
-    implementation ('com.github.schotten-totten-company:schotten-totten-core:1.9.2'){changing=true}
+    dependencies {
+        implementation('com.github.schotten-totten-company:schotten-totten-core:2.0.2') {
+            changing = true
+        }
+    }
 }
