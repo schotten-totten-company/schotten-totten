@@ -4,6 +4,10 @@ android {
 
     namespace 'com.boardgames.bastien.schotten_totten'
 
+    buildFeatures {
+        viewBinding true
+    }
+
     signingConfigs {
         release {
             def keystorePropertiesFile = rootProject.file('keystore.properties')

@@ -10,14 +10,14 @@ public class ScanIpCallable implements Callable<String> {
     private final int index;
     private final String mySubLan;
     private final String url;
-    private final String gamename;
+    private final String gameName;
     private final String matchingContent;
 
-    public ScanIpCallable(final int index, final String mySubLan, final String url, final String gamename, final String matchingContent) {
+    public ScanIpCallable(final int index, final String mySubLan, final String url, final String gameName, final String matchingContent) {
         this.index = index;
         this.mySubLan = mySubLan;
         this.url = url;
-        this.gamename = gamename;
+        this.gameName = gameName;
         this.matchingContent = matchingContent;
     }
 
@@ -25,7 +25,7 @@ public class ScanIpCallable implements Callable<String> {
     public String call() throws Exception {
         final String ipToScan = mySubLan + index;
         final RestGameClient restGameClient =
-                new RestGameClient(url, gamename);
+                new RestGameClient(url, gameName);
         try {
             final String pingResult = restGameClient.ping();
             if (pingResult.contains(matchingContent)) {

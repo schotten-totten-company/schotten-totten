@@ -24,9 +24,9 @@ public class SoloGameActivity extends GameActivity {
             final String aiName = getIntent().getStringExtra(getString(R.string.chosen_ai_name_key));
             final GameAI luAI = new GameAiLucieImpl(PlayingPlayerType.TWO);
             final GameAI baAI = new GameAiImpl(PlayingPlayerType.TWO);
-            if (aiName.equals(luAI.getName())) {
+            if (aiName != null && luAI.getName() != null && aiName.equals(luAI.getName())) {
                 ai = luAI;
-            } else if (aiName.equals(baAI.getName())) {
+            } else if (aiName != null && baAI.getName() != null && aiName.equals(baAI.getName())) {
                 ai = baAI;
             } else {
                 ai = baAI;

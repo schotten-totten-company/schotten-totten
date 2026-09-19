@@ -1,7 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -40,21 +39,16 @@ public class HotSeatGameActivity extends GameActivity {
         alertDialog.setTitle(getString(R.string.end_of_the_turn_title));
         alertDialog.setMessage(getString(R.string.end_of_the_turn_hotseat_message) + gameManager.getPlayingPlayer().getName());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        updateUI(gameManager.getPlayingPlayer().getPlayerType());
-                        enableClick();
-                        dialog.dismiss();
-                    }
+                (dialog, which) -> {
+                    updateUI(gameManager.getPlayingPlayer().getPlayerType());
+                    enableClick();
+                    dialog.dismiss();
                 });
         alertDialog.setCancelable(false);
 
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                final Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
-                button.setTextSize((float)22);
-            }
+        alertDialog.setOnShowListener(dialog -> {
+            final Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
+            button.setTextSize((float)22);
         });
 
         updateUI(gameManager.getPlayingPlayer().getPlayerType());

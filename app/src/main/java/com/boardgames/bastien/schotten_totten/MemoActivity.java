@@ -2,6 +2,8 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MemoActivity extends AppCompatActivity {
@@ -10,6 +12,13 @@ public class MemoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memo);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        });
 
         // straightFlushCard
         findViewById(R.id.straightFlushCard1).setBackgroundColor(Color.BLUE);
@@ -36,11 +45,6 @@ public class MemoActivity extends AppCompatActivity {
         findViewById(R.id.wildHandCard2).setBackgroundColor(Color.RED);
         findViewById(R.id.wildHandCard3).setBackgroundColor(Color.GREEN);
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
     }
 
 }

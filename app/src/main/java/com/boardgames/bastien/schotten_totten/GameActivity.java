@@ -1,5 +1,6 @@
 package com.boardgames.bastien.schotten_totten;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.view.ViewCompat;
 
 import android.view.DragEvent;
 import android.view.Menu;
@@ -35,7 +37,6 @@ import com.boradgames.bastien.schotten_totten.core.model.Milestone;
 import com.boradgames.bastien.schotten_totten.core.model.MilestonePlayerType;
 import com.boradgames.bastien.schotten_totten.core.model.Player;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -53,8 +54,12 @@ public abstract class GameActivity extends AppCompatActivity {
     protected View gameLayout;
 
     private final List<MilestoneView> milestoneView = new ArrayList<>();
-    private final List<ImageView> handView = new ArrayList<>();
 
+    private final List<ImageView> milestoneImageViewList = new ArrayList<>();
+    private final List<ImageView> milestonePlayerImageViewList = new ArrayList<>();
+    private final List<ImageView> milestoneOpponentImageViewList = new ArrayList<>();
+
+    private final List<ImageView> handView = new ArrayList<>();
 
     protected void disableClick() {
         isClickEnabled = false;
@@ -72,6 +77,36 @@ public abstract class GameActivity extends AppCompatActivity {
         handLayout = findViewById(R.id.handLayout);
         textView = findViewById(R.id.textView);
         gameLayout = findViewById(R.id.gameLayout);
+
+        milestoneImageViewList.add(0, findViewById(R.id.m0Milestone));
+        milestoneImageViewList.add(1, findViewById(R.id.m1Milestone));
+        milestoneImageViewList.add(2, findViewById(R.id.m2Milestone));
+        milestoneImageViewList.add(3, findViewById(R.id.m3Milestone));
+        milestoneImageViewList.add(4, findViewById(R.id.m4Milestone));
+        milestoneImageViewList.add(5, findViewById(R.id.m5Milestone));
+        milestoneImageViewList.add(6, findViewById(R.id.m6Milestone));
+        milestoneImageViewList.add(7, findViewById(R.id.m7Milestone));
+        milestoneImageViewList.add(8, findViewById(R.id.m8Milestone));
+
+        milestonePlayerImageViewList.add(0, findViewById(R.id.m0CapturedMilestonePlayerSide));
+        milestonePlayerImageViewList.add(1, findViewById(R.id.m1CapturedMilestonePlayerSide));
+        milestonePlayerImageViewList.add(2, findViewById(R.id.m2CapturedMilestonePlayerSide));
+        milestonePlayerImageViewList.add(3, findViewById(R.id.m3CapturedMilestonePlayerSide));
+        milestonePlayerImageViewList.add(4, findViewById(R.id.m4CapturedMilestonePlayerSide));
+        milestonePlayerImageViewList.add(5, findViewById(R.id.m5CapturedMilestonePlayerSide));
+        milestonePlayerImageViewList.add(6, findViewById(R.id.m6CapturedMilestonePlayerSide));
+        milestonePlayerImageViewList.add(7, findViewById(R.id.m7CapturedMilestonePlayerSide));
+        milestonePlayerImageViewList.add(8, findViewById(R.id.m8CapturedMilestonePlayerSide));
+
+        milestoneOpponentImageViewList.add(0, findViewById(R.id.m0CapturedMilestoneOpponentSide));
+        milestoneOpponentImageViewList.add(1, findViewById(R.id.m1CapturedMilestoneOpponentSide));
+        milestoneOpponentImageViewList.add(2, findViewById(R.id.m2CapturedMilestoneOpponentSide));
+        milestoneOpponentImageViewList.add(3, findViewById(R.id.m3CapturedMilestoneOpponentSide));
+        milestoneOpponentImageViewList.add(4, findViewById(R.id.m4CapturedMilestoneOpponentSide));
+        milestoneOpponentImageViewList.add(5, findViewById(R.id.m5CapturedMilestoneOpponentSide));
+        milestoneOpponentImageViewList.add(6, findViewById(R.id.m6CapturedMilestoneOpponentSide));
+        milestoneOpponentImageViewList.add(7, findViewById(R.id.m7CapturedMilestoneOpponentSide));
+        milestoneOpponentImageViewList.add(8, findViewById(R.id.m8CapturedMilestoneOpponentSide));
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -121,31 +156,26 @@ public abstract class GameActivity extends AppCompatActivity {
 
         final List<Milestone> milestones = gameManager.getMilestones();
         for (int i = 0; i < milestones.size(); i++) {
-            final int id = getResources().getIdentifier("m" + i + "Milestone", "id", getPackageName());
-            final ImageView m = findViewById(id);
-            final int milestonePlayerSideId = getResources().getIdentifier("m" + i + "CapturedMilestonePlayerSide", "id", getPackageName());
-            final int milestoneOpponentId = getResources().getIdentifier("m" + i + "CapturedMilestoneOpponentSide", "id", getPackageName());
-            final ImageView mPlayer = findViewById(milestonePlayerSideId);
-            final ImageView mOpponent = findViewById(milestoneOpponentId);
             final List<PlayablePlaceImageView> pSide = new ArrayList<>();
-            for (int j = 0; j < milestones.get(i).MAX_CARDS_PER_SIDE; j++) {
+            for (int j = 0; j < Milestone.MAX_CARDS_PER_SIDE; j++) {
                 final int pSideId = getResources().getIdentifier("m" + i + "Card" + j + "PlayerSide", "id", getPackageName());
-                pSide.add(new PlayablePlaceImageView((ImageView) findViewById(pSideId)));
+                pSide.add(new PlayablePlaceImageView((ImageView)findViewById(pSideId)));
             }
             final List<PlayablePlaceImageView> oSide = new ArrayList<>();
-            for (int j = 0; j < milestones.get(i).MAX_CARDS_PER_SIDE; j++) {
+            for (int j = 0; j < Milestone.MAX_CARDS_PER_SIDE; j++) {
                 final int oSideId = getResources().getIdentifier("m" + i + "Card" + j + "OpponentSide", "id", getPackageName());
                 oSide.add(new PlayablePlaceImageView((ImageView)findViewById(oSideId)));
             }
-            milestoneView.add(new MilestoneView(m, mPlayer, mOpponent, pSide, oSide));
+            milestoneView.add(new MilestoneView(milestoneImageViewList.get(i), milestonePlayerImageViewList.get(i), milestoneOpponentImageViewList.get(i), pSide, oSide));
         }
 
         final Player updatePointOfViewPlayer = this.gameManager.getPlayer(updatePointOfView);
-        final int handSize = updatePointOfViewPlayer.getHand().getHandSize();
-        for (int i = 0; i < handSize; i++) {
-            final int id = getResources().getIdentifier("h" + i, "id", getPackageName());
-            handView.add((ImageView)findViewById(id));
-        }
+        handView.add(findViewById(R.id.h0));
+        handView.add(findViewById(R.id.h1));
+        handView.add(findViewById(R.id.h2));
+        handView.add(findViewById(R.id.h3));
+        handView.add(findViewById(R.id.h4));
+        handView.add(findViewById(R.id.h5));
 
         updateTextField(gameManager.getPlayingPlayer().getName());
 
@@ -318,6 +348,7 @@ public abstract class GameActivity extends AppCompatActivity {
         passButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomin));
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     protected void initHand(final Player updatePointOfViewPlayer) {
 
         // set update listener on drag and drop
@@ -355,14 +386,16 @@ public abstract class GameActivity extends AppCompatActivity {
             handCardView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (isClickEnabled && event.getAction() == MotionEvent.ACTION_DOWN) {
-                        final ClipData data = ClipData.newPlainText("index", String.valueOf(handIndex));
-                        v.startDrag(data, new View.DragShadowBuilder(v), v, 0);
-                        //v.setVisibility(View.INVISIBLE);
-                        return true;
-                    } else {
+                    if (!isClickEnabled) {
                         return false;
                     }
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        v.performClick();
+                        final ClipData data = ClipData.newPlainText("index", String.valueOf(handIndex));
+                        ViewCompat.startDragAndDrop(v, data, new View.DragShadowBuilder(v), v, 0);
+                        return true;
+                    }
+                    return false;
                 }
             });
 
@@ -440,7 +473,7 @@ public abstract class GameActivity extends AppCompatActivity {
         final List<PlayablePlaceImageView> opponentSide = milestoneView.get(i).getOpponentSide();
 
         // reset all cards on both sides
-        for (int j = 0; j < milestone.MAX_CARDS_PER_SIDE; j++) {
+        for (int j = 0; j < Milestone.MAX_CARDS_PER_SIDE; j++) {
             resetPlayedCard(playerSide.get(j).getImageView());
             resetPlayedCard(opponentSide.get(j).getImageView());
         }
@@ -473,7 +506,7 @@ public abstract class GameActivity extends AppCompatActivity {
         }
 
         // reset dragndrop listeners on both sides
-        for (int j = 0; j < milestone.MAX_CARDS_PER_SIDE; j++) {
+        for (int j = 0; j < Milestone.MAX_CARDS_PER_SIDE; j++) {
             playerSide.get(j).setIsPlaceToPlay(false);
             opponentSide.get(j).setIsPlaceToPlay(false);
         }

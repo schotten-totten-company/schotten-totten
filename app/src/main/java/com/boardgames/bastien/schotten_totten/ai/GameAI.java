@@ -21,7 +21,7 @@ public abstract class GameAI {
 
     protected PlayingPlayerType playingPlayerType = PlayingPlayerType.TWO;
 
-    protected class Indexes {
+    protected static class Indexes {
         private final int handIndex;
         private final int milestoneIndex;
 
