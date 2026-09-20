@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gameboard_backgroung"
+    android:fitsSystemWindows="true"
     tools:context="com.boardgames.bastien.schotten_totten.HotSeatGameActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
