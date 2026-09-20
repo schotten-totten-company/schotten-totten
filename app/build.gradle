@@ -8,6 +8,14 @@ android {
         viewBinding true
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def appName = "SchottenTotten"
+            def versionName = variant.versionName
+            outputFileName = "${appName}-${variant.buildType.name}-${versionName}.apk"
+        }
+    }
+
     signingConfigs {
         release {
             def keystorePropertiesFile = rootProject.file('keystore.properties')
