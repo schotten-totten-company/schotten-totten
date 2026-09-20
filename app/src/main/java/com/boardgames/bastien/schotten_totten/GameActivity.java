@@ -125,7 +125,9 @@ public abstract class GameActivity extends AppCompatActivity {
             @Override
             public void handleOnBackPressed() {
                 final AlertDialog.Builder builder = generateBackPressedBuilder();
-                builder.show();
+                if (!GameActivity.this.isFinishing() && !GameActivity.this.isDestroyed()) {
+                    builder.show();
+                }
             }
         });
     }

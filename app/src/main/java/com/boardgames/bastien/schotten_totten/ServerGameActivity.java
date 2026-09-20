@@ -14,16 +14,13 @@ import com.boardgames.bastien.schotten_totten.server.LanGameServer;
 import com.boardgames.bastien.schotten_totten.server.OnlineGameManager;
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.exceptions.NoPlayerException;
-import com.boradgames.bastien.schotten_totten.core.model.Game;
 import com.boradgames.bastien.schotten_totten.core.model.Player;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -67,16 +64,14 @@ public class ServerGameActivity extends GameActivity {
                 task.execute();
             }
 
-            final Game g = Executors.newSingleThreadExecutor().submit(() -> gameClient.getGame()).get();
-
-            this.gameManager = new OnlineGameManager(g, this.gameName);
+            this.gameManager = new OnlineGameManager(gameClient.getGame(), this.gameName);
             initUI(type);
             updateTextField(type.toString());
             if (!this.gameManager.getPlayingPlayer().getPlayerType().equals(type)) {
                 disableClick();
                 waitForOtherPlayerToPlay();
             }
-        } catch (final IOException | ExecutionException | InterruptedException e) {
+        } catch (final IOException e) {
             showErrorMessage(e);
         }
     }
@@ -161,13 +156,13 @@ public class ServerGameActivity extends GameActivity {
 
         // Set up the buttons
         builder.setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-            dialog.dismiss();
             lanGameServer.closeAllConnections();
             lanGameServer.stop();
             // wait 4 seconds, thus the other player is notified
             final WaitingBackgroundTask task =
                     new WaitingBackgroundTask(ServerGameActivity.this, 3333);
             task.execute();
+            dialog.dismiss();
         });
         builder.setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.cancel());
 
