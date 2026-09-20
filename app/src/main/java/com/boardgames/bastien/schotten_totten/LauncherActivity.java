@@ -3,13 +3,11 @@ package com.boardgames.bastien.schotten_totten;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.ContextThemeWrapper;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,7 +23,6 @@ import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -45,89 +42,51 @@ public class LauncherActivity extends Activity {
 
         // hot seat
         final TextView hotSeatLauncherText = findViewById(R.id.hotSeatLauncherText);
-        hotSeatLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enterPlayersNames();
-            }
-        });
+        hotSeatLauncherText.setOnClickListener(v -> enterPlayersNames());
 
         // solo vs IA
         final TextView soloLauncherText = findViewById(R.id.soloLauncherText);
-        soloLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseAI();
-            }
-        });
+        soloLauncherText.setOnClickListener(v -> chooseAI());
 
         // create lan game
         final TextView createOnLineLauncherText = findViewById(R.id.createOnLineLauncherText);
-        createOnLineLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                if (wifiMgr.isWifiEnabled()) {
-                    final Intent createIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                    createIntent.putExtra(getString(R.string.server_url_key), getString(R.string.localhost_url));
-                    createIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
-                    createIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.ONE.toString());
-                    startActivity(createIntent);
-                } else {
-                    showError(getString(R.string.unknown_host_title), getString(R.string.unknown_host_message));
-                }
+        createOnLineLauncherText.setOnClickListener(v -> {
+            final WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            if (wifiMgr.isWifiEnabled()) {
+                final Intent createIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                createIntent.putExtra(getString(R.string.server_url_key), getString(R.string.localhost_url));
+                createIntent.putExtra(getString(R.string.game_name_key), getString(R.string.lan_game));
+                createIntent.putExtra(getString(R.string.type_key), PlayingPlayerType.ONE.toString());
+                startActivity(createIntent);
+            } else {
+                showError(getString(R.string.unknown_host_title), getString(R.string.unknown_host_message));
             }
         });
 
         // join lan game
         final TextView joinOnlineLauncherText = findViewById(R.id.joinOnlineLauncherText);
-        joinOnlineLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                if (wifiMgr.isWifiEnabled()) {
-                    final ScanForLanServerBackgroundTask task =
-                            new ScanForLanServerBackgroundTask(LauncherActivity.this);
-                    task.execute();
-                } else {
-                    showError(getString(R.string.unknown_host_title), getString(R.string.unknown_host_message));
-                }
+        joinOnlineLauncherText.setOnClickListener(v -> {
+            final WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            if (wifiMgr.isWifiEnabled()) {
+                final ScanForLanServerBackgroundTask task =
+                        new ScanForLanServerBackgroundTask(LauncherActivity.this);
+                task.execute();
+            } else {
+                showError(getString(R.string.unknown_host_title), getString(R.string.unknown_host_message));
             }
         });
 
         // create online game
         final TextView createServerLauncherText = findViewById(R.id.createServerLauncherTest);
-        createServerLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enterGameName();
-            }
-        });
+        createServerLauncherText.setOnClickListener(v -> enterGameName());
         // join online game
         final TextView joinServerLauncherText = findViewById(R.id.joinServerLauncherText);
-        joinServerLauncherText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                joinGame();
-            }
-        });
+        joinServerLauncherText.setOnClickListener(v -> joinGame());
 
         // about
-        findViewById(R.id.aboutLauncherText).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAboutDialog();
-            }
-
-
-        });
+        findViewById(R.id.aboutLauncherText).setOnClickListener(v -> showAboutDialog());
         // quit
-        findViewById(R.id.quitLauncherText).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishAffinity();
-            }
-        });
+        findViewById(R.id.quitLauncherText).setOnClickListener(v -> finishAffinity());
 
     }
 
@@ -178,29 +137,21 @@ public class LauncherActivity extends Activity {
         builder.setView(input);
 
         // Set up the buttons
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                final String gameName = input.getText().toString().trim();
-                final CreateOnlineGameBackgroundTask task =
-                        new CreateOnlineGameBackgroundTask(LauncherActivity.this, gameName);
-                task.execute();
-            }
+        builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+            dialog.dismiss();
+            final String gameName = input.getText().toString().trim();
+            final CreateOnlineGameBackgroundTask task =
+                    new CreateOnlineGameBackgroundTask(LauncherActivity.this, LauncherActivity.this.onlineUrl, gameName);
+            task.execute();
+
         });
-        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
+        builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.cancel());
+        builder.setOnDismissListener(dialog -> {
         });
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                //waitingDialog.dismiss();
-            }
-        });
-        builder.show();
+
+        if (!this.isFinishing() && !this.isDestroyed()) {
+            builder.show();
+        }
     }
 
     private void joinGame() {
@@ -215,17 +166,13 @@ public class LauncherActivity extends Activity {
             final LinearLayout layout = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
 
-            // Set up the input
             final Spinner spinner = new Spinner(this);
-            final Field popup = Spinner.class.getDeclaredField("mPopup");
-            popup.setAccessible(true);
-            // Get private mPopup member variable and try cast to ListPopupWindow
-            android.widget.ListPopupWindow popupWindow =
-                    (android.widget.ListPopupWindow) popup.get(spinner);
-            popupWindow.setHeight(1000);
+            final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
+                    this,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    list
+            );
 
-            final ArrayAdapter<String> spinnerArrayAdapter =
-                    new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
             spinner.setAdapter(spinnerArrayAdapter);
             layout.addView(spinner);
 
@@ -243,32 +190,27 @@ public class LauncherActivity extends Activity {
             builder.setView(layout);
 
             // Set up the buttons
-            builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    final String gameName = spinner.getSelectedItem().toString();
-                    final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
-                    joinIntent.putExtra(getString(R.string.game_name_key), gameName);
-                    final RadioButton selectedButton =
-                            radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
-                    joinIntent.putExtra(getString(R.string.type_key), selectedButton.getText().toString());
-                    joinIntent.putExtra(getString(R.string.server_url_key), onlineUrl);
-                    startActivity(joinIntent);
-                    // dismiss waiting pop up
-                    //waitingDialog.dismiss();
+            builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+                final String gameName = spinner.getSelectedItem().toString();
+                final Intent joinIntent = new Intent(LauncherActivity.this, ServerGameActivity.class);
+                joinIntent.putExtra(getString(R.string.game_name_key), gameName);
+                final RadioButton selectedButton =
+                        radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+                joinIntent.putExtra(getString(R.string.type_key), selectedButton.getText().toString());
+                joinIntent.putExtra(getString(R.string.server_url_key), onlineUrl);
+                startActivity(joinIntent);
+                // dismiss waiting pop up
+                //waitingDialog.dismiss();
 
-                }
             });
-            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                    // dismiss waiting pop up
-                    //waitingDialog.dismiss();
-                }
+            builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
+                dialog.cancel();
             });
 
-            builder.show();
+            spinnerArrayAdapter.notifyDataSetChanged();
+            if (!this.isFinishing() && !this.isDestroyed()) {
+                builder.show();
+            }
 
         } catch (Exception e) {
             showError(e);
@@ -298,25 +240,19 @@ public class LauncherActivity extends Activity {
             builder.setView(layout);
 
             // Set up the buttons
-            builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    final Intent joinIntent = new Intent(LauncherActivity.this, SoloGameActivity.class);
-                    final RadioButton selectedButton =
-                            radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
-                    joinIntent.putExtra(getString(R.string.chosen_ai_name_key), selectedButton.getText().toString());
-                    startActivity(joinIntent);
+            builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+                final Intent joinIntent = new Intent(LauncherActivity.this, SoloGameActivity.class);
+                final RadioButton selectedButton =
+                        radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+                joinIntent.putExtra(getString(R.string.chosen_ai_name_key), selectedButton.getText().toString());
+                startActivity(joinIntent);
 
-                }
             });
-            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+            builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.cancel());
 
-            builder.show();
+            if (!this.isFinishing() && !this.isDestroyed()) {
+                builder.show();
+            }
 
         } catch (Exception e) {
             showError(e);
@@ -343,25 +279,19 @@ public class LauncherActivity extends Activity {
         builder.setView(layout);
 
         // Set up the buttons
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String player1Name = player1NameInput.getText().toString().trim();
-                final String player2Name = player2NameInput.getText().toString().trim();
-                final Intent hotSeatIntent = new Intent(LauncherActivity.this, HotSeatGameActivity.class);
-                hotSeatIntent.putExtra(getString(R.string.player1_name_key), player1Name);
-                hotSeatIntent.putExtra(getString(R.string.player2_name_key), player2Name);
-                startActivity(hotSeatIntent);
-            }
+        builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+            final String player1Name = player1NameInput.getText().toString().trim();
+            final String player2Name = player2NameInput.getText().toString().trim();
+            final Intent hotSeatIntent = new Intent(LauncherActivity.this, HotSeatGameActivity.class);
+            hotSeatIntent.putExtra(getString(R.string.player1_name_key), player1Name);
+            hotSeatIntent.putExtra(getString(R.string.player2_name_key), player2Name);
+            startActivity(hotSeatIntent);
         });
-        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.cancel());
 
-        builder.show();
+        if (!this.isFinishing() && !this.isDestroyed()) {
+            builder.show();
+        }
     }
 
     public final void showError(final Exception e) {
@@ -375,27 +305,26 @@ public class LauncherActivity extends Activity {
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                (dialog, which) -> dialog.dismiss());
         alertDialog.setCancelable(false);
-        alertDialog.show();
-    }
+        if (!this.isFinishing() && !this.isDestroyed()) {
+            if (!alertDialog.isShowing()) {
+                alertDialog.show();
+            }
+        }    }
 
     private void showAboutDialog() {
         final AlertDialog alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.CustomAlertDialog)).create();
         alertDialog.setTitle(getString(R.string.about_title));
         alertDialog.setMessage(getString(R.string.about_content));
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                (dialog, which) -> dialog.dismiss());
         alertDialog.setCancelable(true);
-        alertDialog.show();
+        if (!this.isFinishing() && !this.isDestroyed()) {
+            if (!alertDialog.isShowing()) {
+                alertDialog.show();
+            }
+        }
     }
 
 }

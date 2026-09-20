@@ -2,6 +2,8 @@ package com.boardgames.bastien.schotten_totten;
 
 import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 
+import org.springframework.web.client.RestClientException;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
@@ -33,7 +35,7 @@ public class ScanIpCallable implements Callable<String> {
             } else {
                 return "";
             }
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (ExecutionException | InterruptedException | RestClientException e) {
             // timeout, not the right host
             return "";
         }

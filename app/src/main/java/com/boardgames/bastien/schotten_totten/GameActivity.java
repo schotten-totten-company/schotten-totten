@@ -2,7 +2,6 @@ package com.boardgames.bastien.schotten_totten;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -69,6 +68,20 @@ public abstract class GameActivity extends AppCompatActivity {
         isClickEnabled = true;
     }
 
+    protected AlertDialog.Builder generateBackPressedBuilder() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(GameActivity.this, R.style.CustomAlertDialog));
+
+        builder.setTitle(getString(R.string.quit_title));
+
+        // Set up the buttons
+        builder.setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+            dialog.dismiss();
+            finish();
+        });
+        builder.setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.cancel());
+        return builder;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,24 +124,7 @@ public abstract class GameActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(GameActivity.this, R.style.CustomAlertDialog));
-
-                builder.setTitle(getString(R.string.quit_title));
-
-                // Set up the buttons
-                builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        finish();
-                    }
-                });
-                builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                final AlertDialog.Builder builder = generateBackPressedBuilder();
                 builder.show();
             }
         });
@@ -159,12 +155,12 @@ public abstract class GameActivity extends AppCompatActivity {
             final List<PlayablePlaceImageView> pSide = new ArrayList<>();
             for (int j = 0; j < Milestone.MAX_CARDS_PER_SIDE; j++) {
                 final int pSideId = getResources().getIdentifier("m" + i + "Card" + j + "PlayerSide", "id", getPackageName());
-                pSide.add(new PlayablePlaceImageView((ImageView)findViewById(pSideId)));
+                pSide.add(new PlayablePlaceImageView(findViewById(pSideId)));
             }
             final List<PlayablePlaceImageView> oSide = new ArrayList<>();
             for (int j = 0; j < Milestone.MAX_CARDS_PER_SIDE; j++) {
                 final int oSideId = getResources().getIdentifier("m" + i + "Card" + j + "OpponentSide", "id", getPackageName());
-                oSide.add(new PlayablePlaceImageView((ImageView)findViewById(oSideId)));
+                oSide.add(new PlayablePlaceImageView(findViewById(oSideId)));
             }
             milestoneView.add(new MilestoneView(milestoneImageViewList.get(i), milestonePlayerImageViewList.get(i), milestoneOpponentImageViewList.get(i), pSide, oSide));
         }
@@ -188,57 +184,49 @@ public abstract class GameActivity extends AppCompatActivity {
     }
 
     protected void initPassButton() {
-        passButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                endOfTurn();
-            }
-        });
+        passButton.setOnClickListener(v -> endOfTurn());
         passButton.setVisibility(View.INVISIBLE);
     }
 
     protected void initBoard(final Player updatePointOfViewPlayer) {
         for (int milestonesIndex = 0; milestonesIndex < gameManager.getMilestones().size(); milestonesIndex++) {
             updateMilestoneView(milestonesIndex, updatePointOfViewPlayer.getPlayerType());
-            milestoneView.get(milestonesIndex).getMilestone().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isClickEnabled) {
-                        // animate
-                        v.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomout));
+            milestoneView.get(milestonesIndex).getMilestone().setOnClickListener(v -> {
+                if (isClickEnabled) {
+                    // animate
+                    v.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomout));
 
-                        final ImageView cardView = ((ImageView) v);
-                        final int index = Integer.parseInt(getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
-                        final Milestone m = gameManager.getMilestones().get(index);
-                        // check if the milestone has already been captured
-                        if (!m.getCaptured().equals(MilestonePlayerType.NONE)) {
-                            showAlertMessage(getString(R.string.milestone_already_captured_message));
-                            return;
-                        }
-                        // reclaim
-                        final Player playingPlayer = gameManager.getPlayingPlayer();
-                        final PlayingPlayerType playingPlayerType = playingPlayer.getPlayerType();
+                    final ImageView cardView = ((ImageView) v);
+                    final int index = Integer.parseInt(getResources().getResourceEntryName(cardView.getId()).substring(1, 2));
+                    final Milestone m = gameManager.getMilestones().get(index);
+                    // check if the milestone has already been captured
+                    if (!m.getCaptured().equals(MilestonePlayerType.NONE)) {
+                        showAlertMessage(getString(R.string.milestone_already_captured_message));
+                        return;
+                    }
+                    // reclaim
+                    final Player playingPlayer = gameManager.getPlayingPlayer();
+                    final PlayingPlayerType playingPlayerType = playingPlayer.getPlayerType();
 
-                        // test reclaim
-                        try {
-                            final boolean reclaim =
-                                    gameManager.reclaimMilestone(playingPlayerType, index);
-                            if (reclaim) {
-                                // capture the milestone
-                                updateMilestoneView(index, playingPlayerType);
+                    // test reclaim
+                    try {
+                        final boolean reclaim =
+                                gameManager.reclaimMilestone(playingPlayerType, index);
+                        if (reclaim) {
+                            // capture the milestone
+                            updateMilestoneView(index, playingPlayerType);
 
-                                // check victory
-                                try {
-                                    endOfTheGame(gameManager.getWinner());
-                                } catch (final NoPlayerException e) {
-                                    // nothing to do, just continue to play
-                                }
-                            } else {
-                                showAlertMessage(getString(R.string.cannot_capture_milestone_message));
+                            // check victory
+                            try {
+                                endOfTheGame(gameManager.getWinner());
+                            } catch (final NoPlayerException e) {
+                                // nothing to do, just continue to play
                             }
-                        } catch (final NotYourTurnException e) {
-                            showErrorMessage(e);
+                        } else {
+                            showAlertMessage(getString(R.string.cannot_capture_milestone_message));
                         }
+                    } catch (final NotYourTurnException e) {
+                        showErrorMessage(e);
                     }
                 }
             });
@@ -336,12 +324,7 @@ public abstract class GameActivity extends AppCompatActivity {
 
     protected void endOfTheGame(final Player winner) {
         showAlertMessage(getString(R.string.end_of_the_game_title), winner.getName() + getString(R.string.end_of_the_game_message), false, false);
-        passButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        passButton.setOnClickListener(v -> finish());
         textView.setText(getString(R.string.end_of_the_game_title));
         disableClick();
         passButton.setVisibility(View.VISIBLE);
@@ -352,27 +335,18 @@ public abstract class GameActivity extends AppCompatActivity {
     protected void initHand(final Player updatePointOfViewPlayer) {
 
         // set update listener on drag and drop
-        textView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                switch (event.getAction()) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        return true;
-                    case DragEvent.ACTION_DRAG_ENTERED:
-                        return true;
-                    case DragEvent.ACTION_DRAG_EXITED:
-                        return true;
-                    case DragEvent.ACTION_DROP:
+        textView.setOnDragListener((v, event) -> {
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DROP:
+                    updateHand(gameManager.getPlayingPlayer().getHand());
+                    return false;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    if (!event.getResult()) {
                         updateHand(gameManager.getPlayingPlayer().getHand());
-                        return false;
-                    case DragEvent.ACTION_DRAG_ENDED:
-                        if (!event.getResult()) {
-                            updateHand(gameManager.getPlayingPlayer().getHand());
-                        }
-                        return true;
-                    default:
-                        return true;
-                }
+                    }
+                    return true;
+                default:
+                    return true;
             }
         });
 
@@ -383,66 +357,46 @@ public abstract class GameActivity extends AppCompatActivity {
             final ImageView handCardView = handView.get(i);
             updateHandCard(handCardView, handToUpdate.getCards().get(i));
 
-            handCardView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (!isClickEnabled) {
-                        return false;
-                    }
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        v.performClick();
-                        final ClipData data = ClipData.newPlainText("index", String.valueOf(handIndex));
-                        ViewCompat.startDragAndDrop(v, data, new View.DragShadowBuilder(v), v, 0);
-                        return true;
-                    }
+            handCardView.setOnTouchListener((v, event) -> {
+                if (!isClickEnabled) {
                     return false;
                 }
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    v.performClick();
+                    final ClipData data = ClipData.newPlainText("index", String.valueOf(handIndex));
+                    ViewCompat.startDragAndDrop(v, data, new View.DragShadowBuilder(v), v, 0);
+                    return true;
+                }
+                return false;
             });
 
-            handCardView.setOnDragListener(new View.OnDragListener() {
-                @Override
-                public boolean onDrag(View v, DragEvent event) {
-                    final View droppedView = (View) event.getLocalState();
-                    switch (event.getAction()) {
-                        case DragEvent.ACTION_DRAG_STARTED:
-                            droppedView.post(new Runnable(){
-                                @Override
-                                public void run() {
-                                    droppedView.setVisibility(View.INVISIBLE);
-                                }
-                            });
-                            return true;
-                        case DragEvent.ACTION_DROP:
-                            // Dropped
-                            try {
-                                final int selectedCardIndex = Integer.parseInt(event.getClipData().getItemAt(0).getText().toString());
-                                final Card cardToMove = handToUpdate.getCards().get(selectedCardIndex);
-                                final Card cardToReplace = handToUpdate.getCards().get(handIndex);
-                                handToUpdate.getCards().remove(selectedCardIndex);
-                                handToUpdate.addCard(cardToReplace, selectedCardIndex);
-                                handToUpdate.getCards().remove(handIndex);
-                                handToUpdate.addCard(cardToMove, handIndex);
-                                updateHand(gameManager.getPlayingPlayer().getHand());
-                            } catch (HandFullException e) {
-                                // should not occurs
-                                showErrorMessage(e);
-                            }
-                            return true;
-                        case DragEvent.ACTION_DRAG_ENDED:
-                            droppedView.post(new Runnable(){
-                                @Override
-                                public void run() {
-                                    droppedView.setVisibility(View.VISIBLE);
-                                }
-                            });
-                            return true;
-//                        case DragEvent.ACTION_DRAG_ENTERED:
-//                            return true;
-//                        case DragEvent.ACTION_DRAG_EXITED:
-//                            return true;
-                        default:
-                            return true;
-                    }
+            handCardView.setOnDragListener((v, event) -> {
+                final View droppedView = (View) event.getLocalState();
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        droppedView.post(() -> droppedView.setVisibility(View.INVISIBLE));
+                        return true;
+                    case DragEvent.ACTION_DROP:
+                        // Dropped
+                        try {
+                            final int selectedCardIndex = Integer.parseInt(event.getClipData().getItemAt(0).getText().toString());
+                            final Card cardToMove = handToUpdate.getCards().get(selectedCardIndex);
+                            final Card cardToReplace = handToUpdate.getCards().get(handIndex);
+                            handToUpdate.getCards().remove(selectedCardIndex);
+                            handToUpdate.addCard(cardToReplace, selectedCardIndex);
+                            handToUpdate.getCards().remove(handIndex);
+                            handToUpdate.addCard(cardToMove, handIndex);
+                            updateHand(gameManager.getPlayingPlayer().getHand());
+                        } catch (HandFullException e) {
+                            // should not happen
+                            showErrorMessage(e);
+                        }
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        droppedView.post(() -> droppedView.setVisibility(View.VISIBLE));
+                        return true;
+                    default:
+                        return true;
                 }
             });
         }
@@ -478,7 +432,7 @@ public abstract class GameActivity extends AppCompatActivity {
             resetPlayedCard(opponentSide.get(j).getImageView());
         }
 
-        // update update player 1 side according to the point of view
+        // update player 1 side according to the point of view
         final Card lastPlayedCard = gameManager.getLastPlayedCard();
         for (int iP1 = 0; iP1 < milestone.getPlayer1Side().size(); iP1++) {
             final List<PlayablePlaceImageView> side = (updatePointOfView.equals(PlayingPlayerType.ONE)) ?
@@ -492,7 +446,7 @@ public abstract class GameActivity extends AppCompatActivity {
             }
         }
 
-        // update update player 2 side according to the point of view
+        // update player 2 side according to the point of view
         for (int iP2 = 0; iP2 < milestone.getPlayer2Side().size(); iP2++) {
             final List<PlayablePlaceImageView> side = (updatePointOfView.equals(PlayingPlayerType.TWO)) ?
                     playerSide: opponentSide;
@@ -505,12 +459,12 @@ public abstract class GameActivity extends AppCompatActivity {
             }
         }
 
-        // reset dragndrop listeners on both sides
+        // reset drag n drop listeners on both sides
         for (int j = 0; j < Milestone.MAX_CARDS_PER_SIDE; j++) {
             playerSide.get(j).setIsPlaceToPlay(false);
             opponentSide.get(j).setIsPlaceToPlay(false);
         }
-        // update dragndrop listeners
+        // update drag n drop listeners
         final int modelPlayingPlayerSideSize = (updatePointOfView.equals(PlayingPlayerType.ONE)) ?
                 milestone.getPlayer1Side().size() : milestone.getPlayer2Side().size();
         if (milestone.getCaptured().equals(MilestonePlayerType.NONE) && modelPlayingPlayerSideSize < Milestone.MAX_CARDS_PER_SIDE) {
@@ -658,17 +612,17 @@ public abstract class GameActivity extends AppCompatActivity {
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        gameLayout.setVisibility(View.VISIBLE);
-                        dialog.dismiss();
-                        if (finish) {
-                            finish();
-                        }
+                (dialog, which) -> {
+                    gameLayout.setVisibility(View.VISIBLE);
+                    dialog.dismiss();
+                    if (finish) {
+                        finish();
                     }
                 });
         alertDialog.setCancelable(false);
-        alertDialog.show();
+        if (!this.isFinishing() && !this.isDestroyed()) {
+            alertDialog.show();
+        }
 
     }
 }

@@ -16,25 +16,21 @@
         android:usesCleartextTraffic="true">
 
         <activity android:name=".HotSeatGameActivity"
-            android:screenOrientation="portrait"
             android:largeHeap="true"
             android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".SoloGameActivity"
-            android:screenOrientation="portrait"
             android:largeHeap="true"
             android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".ServerGameActivity"
-            android:screenOrientation="portrait"
             android:largeHeap="true"
             android:launchMode="singleTask">
         </activity>
 
         <activity android:name=".MemoActivity"
-            android:screenOrientation="portrait"
             android:largeHeap="true"
             android:theme="@style/AppTheme.NoTitleBar"
             android:launchMode="standard">
@@ -42,7 +38,6 @@
 
         <activity android:name=".LauncherActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:largeHeap="true"
             android:launchMode="singleTop">
             <intent-filter>

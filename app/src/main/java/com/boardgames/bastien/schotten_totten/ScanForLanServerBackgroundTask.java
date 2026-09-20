@@ -1,9 +1,8 @@
 package com.boardgames.bastien.schotten_totten;
 
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
 
-import com.boardgames.bastien.schotten_totten.server.RestGameClient;
 import com.boradgames.bastien.schotten_totten.core.model.PlayingPlayerType;
 
 import java.net.InetAddress;
@@ -19,31 +18,21 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
+
+    private final AtomicBoolean isCanceled = new AtomicBoolean(false);
 
     public ScanForLanServerBackgroundTask(LauncherActivity activity) {
         super(activity);
     }
 
-    @Override
-    protected void onPreExecute() {
-        waitingDialog.setCanceledOnTouchOutside(false);
-        waitingDialog.setCancelable(true);
-        waitingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                while (!ScanForLanServerBackgroundTask.this.isCancelled()) {
-                    ScanForLanServerBackgroundTask.this.cancel(true);
-                }
-            }
-        });
-        waitingDialog.show();
-    }
 
     @Override
-    protected void onPostExecute(String serverIp) {
-        ScanForLanServerBackgroundTask.this.cancel(true);
+    protected void onSuccess(String serverIp) {
+        final Activity activity = activityRef.get();
+        ScanForLanServerBackgroundTask.this.isCanceled.set(true);
         // start game
         if (!serverIp.isEmpty()) {
             final Intent joinIntent = new Intent(activity, ServerGameActivity.class);
@@ -55,36 +44,36 @@ public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
             // no server found
             ((LauncherActivity)activity).showError(activity.getString(R.string.no_local_server_title), activity.getString(R.string.no_local_server_message));
         }
-        if (waitingDialog.isShowing()) {
+        if (waitingDialog != null && waitingDialog.isShowing()) {
             waitingDialog.dismiss();
         }
     }
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected String doInBackground() {
         // get ip
         try {
             final String myIp = getIPAddress();
             final String mySubLan = myIp.substring(0, myIp.lastIndexOf('.') + 1);
 
-            final ExecutorService executorService = Executors.newFixedThreadPool(16);
             final List<Callable<String>> scanCallableList = new ArrayList<>();
 
             // create scan list
+            final Activity activity = activityRef.get();
             for (int i = 0; i < 256; i++) {
                 scanCallableList.add(new ScanIpCallable(i, mySubLan,
                         activity.getString(R.string.http_prefix) + mySubLan + i + activity.getString(R.string.localhost_port),
                         activity.getString(R.string.lan_game), activity.getString(R.string.SCHOTTEN)));
             }
 
-            if (ScanForLanServerBackgroundTask.this.isCancelled()) {
+            if (ScanForLanServerBackgroundTask.this.isCanceled.get()) {
                 return "";
             }
 
-            try {
+            try (final ExecutorService executorService = Executors.newFixedThreadPool(16)) {
                 // invoke threads and get result
                 for (final Future<String> result : executorService.invokeAll(scanCallableList, 60, TimeUnit.SECONDS)) {
-                    if (ScanForLanServerBackgroundTask.this.isCancelled()) {
+                    if (ScanForLanServerBackgroundTask.this.isCanceled.get()) {
                         return "";
                     }
                     if (!result.get().isEmpty()) {
@@ -93,20 +82,15 @@ public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
                 }
             } catch (final InterruptedException e) {
                 // interrupted by user, return nothing
-                if (ScanForLanServerBackgroundTask.this.isCancelled()) {
+                if (ScanForLanServerBackgroundTask.this.isCanceled.get()) {
                     return "";
                 }
             }
 
         } catch (final UnknownHostException | SocketException | ExecutionException e) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ((LauncherActivity)activity).showError(e);
-                }
-            });
+            final Activity activity = activityRef.get();
+            activity.runOnUiThread(() -> ((LauncherActivity)activity).showError(e));
         }
-
         return "";
     }
 
@@ -115,6 +99,7 @@ public class ScanForLanServerBackgroundTask extends AbstractBackgroundTask {
                 Collections.list(NetworkInterface.getNetworkInterfaces());
 
         // find vpn
+        final Activity activity = activityRef.get();
         for (final NetworkInterface i : interfaces) {
             if (i.getName().equals(activity.getString(R.string.vpn_interface_name))) {
                 for (final InetAddress a : Collections.list(i.getInetAddresses())) {

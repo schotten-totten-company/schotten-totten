@@ -12,8 +12,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -36,116 +36,78 @@ public class RestGameClient {
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
     }
 
-    public String ping() throws InterruptedException, ExecutionException {
-        try {
-            return Executors.newSingleThreadExecutor().submit(new Callable<String>() {
-                @Override
-                public String call() {
-                    final RestTemplate restTemplateForPing = new RestTemplate();
-                    restTemplateForPing.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    if (restTemplateForPing.getRequestFactory() instanceof SimpleClientHttpRequestFactory) {
-                        ((SimpleClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setConnectTimeout(1000);
-                        ((SimpleClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setReadTimeout(5000);
-                    } else if (restTemplateForPing.getRequestFactory() instanceof HttpComponentsClientHttpRequestFactory) {
-                        ((HttpComponentsClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setReadTimeout(5000);
-                        ((HttpComponentsClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setConnectTimeout(1000);
-                    }
-                    return restTemplateForPing.getForObject(url + "/ping", String.class);
+    public String ping() throws ExecutionException, InterruptedException {
+        try (final ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            return executor.submit(() -> {
+                final RestTemplate restTemplateForPing = new RestTemplate();
+                restTemplateForPing.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                if (restTemplateForPing.getRequestFactory() instanceof SimpleClientHttpRequestFactory) {
+                    ((SimpleClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setConnectTimeout(1000);
+                    ((SimpleClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setReadTimeout(5000);
+                } else if (restTemplateForPing.getRequestFactory() instanceof HttpComponentsClientHttpRequestFactory) {
+                    ((HttpComponentsClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setReadTimeout(5000);
+                    ((HttpComponentsClientHttpRequestFactory) restTemplateForPing.getRequestFactory()).setConnectTimeout(1000);
                 }
+                return restTemplateForPing.getForObject(url + "/ping", String.class);
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             throw e;
         }
     }
 
     public boolean createGame() {
-        try {
-            return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
-                @Override
-                public Boolean call() {
-                    return restTemplate.getForObject(url + "/createGame?"
-                            + "gamename=" + guid, Boolean.class);
-                }
-            }).get();
+        try (final ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            return executor.submit(() -> restTemplate.getForObject(url + "/createGame?"
+                    + "gamename=" + guid, Boolean.class)).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
     public List<String> listGames() {
-        try {
-            return Executors.newSingleThreadExecutor().submit(new Callable<List<String>>() {
-                @Override
-                public List<String> call() {
-                    final ResponseEntity<String[]> list =
-                            restTemplate.getForEntity(url + "/listGames", String[].class);
-                    return Arrays.asList(list.getBody());
-                }
+        try (final ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            return executor.submit(() -> {
+                final ResponseEntity<String[]> list =
+                        restTemplate.getForEntity(url + "/listGames", String[].class);
+                return Arrays.asList(list.getBody());
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
     public boolean deleteGame() {
-        try {
-            return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
-                @Override
-                public Boolean call() {
-                    return restTemplate.getForObject(url + "/deleteGame?"
-                            + "gamename=" + guid, Boolean.class);
-                }
-            }).get();
+        try (final ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            return executor.submit(() -> restTemplate.getForObject(url + "/deleteGame?"
+                    + "gamename=" + guid, Boolean.class)).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
     public boolean updateGame(final Game game) {
-        try {
-            return Executors.newSingleThreadExecutor().submit(new Callable<Boolean>() {
-                @Override
-                public Boolean call() {
-                    return restTemplate.postForObject(url + "/updateGame?"
-                            + "gamename=" + guid, game, Boolean.class);
-                }
-            }).get();
+        try (final ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            return executor.submit(() -> restTemplate.postForObject(url + "/updateGame?"
+                    + "gamename=" + guid, game, Boolean.class)).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
     public Game getGame() {
-        try {
-            return Executors.newSingleThreadExecutor().submit(new Callable<Game>() {
-                @Override
-                public Game call() {
-                    return restTemplate.getForObject(url + "/getGame?"
-                            + "gamename=" + guid, Game.class);
-                }
-            }).get();
+        try (final ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            return executor.submit(() -> restTemplate.getForObject(url + "/getGame?"
+                    + "gamename=" + guid, Game.class)).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
     public Player getPlayingPlayer() {
-        try {
-            return Executors.newSingleThreadExecutor().submit(new Callable<Player>() {
-                @Override
-                public Player call() {
-                    return restTemplate.getForObject(url + "/getPlayingPlayer?"
-                            + "gamename=" + guid, Player.class);
-                }
-            }).get();
+        try (final ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            return executor.submit(() -> restTemplate.getForObject(url + "/getPlayingPlayer?"
+                    + "gamename=" + guid, Player.class)).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
